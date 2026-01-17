@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+     <!-- links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/dashboard/css/stylesdash.css" />
+    <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+   <div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar glass-card">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="logo-circle">M</div>
+      <div>
+        <div class="text-white fw-semibold">MMS</div>
+        <div class="small-note">Member Portal</div>
+      </div>
+    </div>
+
+    <nav class="d-grid gap-2">
+      <a class="nav-pill  text-decoration-none" href="/member/portal">
+        <span><i class="fas fa-home"></i></span> <span>Overview</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/activities">
+        <span><i class="fa-solid fa-dumbbell"></i></span> <span>Activities</span>
+      </a>
+      <a class="nav-pill active text-decoration-none" href="/member/nutrition">
+        <span><i class="fa-solid fa-apple-whole"></i></span> <span>Nutrition</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/personal-details">
+        <span><i class="fa-solid fa-id-card"></i></span> <span>Personal Details</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/edit-profile">
+        <span><i class="fa-solid fa-user-gear"></i></span> <span>Edit Profile</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/billing">
+        <span><i class="fa-solid fa-credit-card"></i></span> <span>Membership & Billing</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/reports">
+        <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="mt-4 p-3 rounded-4 glass-card">
+      <div class="fw-semibold mb-1 text-white">Quick Tip</div>
+      <div class="small-note">
+        Small progress daily beats “I’ll start Monday” every time.
+      </div>
+    </div>
+
+    <div class="mt-4 small-note">
+      Logged in as <span class="text-white" id="memberName">Member</span>
+    </div>
+  </aside>
+
+
+    <!-- /member/nutrition -->
+<main class="content">
+  <!-- Topbar -->
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <button class="btn btn-outline-light sidebar-toggle" id="toggleSidebar" type="button">
+          <i class="fa-solid fa-bars"></i> Menu
+        </button>
+      </div>
+
+      <h1 class="h3 text-white mb-1">Nutrition</h1>
+      <div class="muted">Set goals, track weight, and keep your nutrition profile updated.</div>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <button class="btn btn-outline-light" type="button" data-bs-toggle="modal" data-bs-target="#addCheckInModal">
+        + Add Check-in
+      </button>
+      <button class="btn btn-primary" type="button" id="saveNutritionBtn">
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <!-- Goal + Weight Summary -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-7">
+      <section class="card glass-card rounded-4 shadow-sm">
+        <div class="card-body p-4">
+          <div class="d-flex align-items-center justify-content-between mb-3">
+            <div>
+              <h2 class="h5 text-white mb-1">Nutrition Goals</h2>
+              <div class="small-note">What are we trying to do right now?</div>
+            </div>
+            <span class="badge text-bg-primary" id="goalBadge">Active</span>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small-note">Primary Goal</label>
+              <select class="form-select" id="goalPrimary">
+                <option value="lose">Lose Fat</option>
+                <option value="gain">Gain Muscle</option>
+                <option value="maintain" selected>Maintain</option>
+                <option value="recomp">Recomp</option>
+                <option value="performance">Performance</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small-note">Daily Calorie Target (optional)</label>
+              <input class="form-control" id="caloriesTarget" type="number" placeholder="e.g. 2200" min="0" />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small-note">Protein (g)</label>
+              <input class="form-control" id="macroProtein" type="number" placeholder="e.g. 140" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small-note">Carbs (g)</label>
+              <input class="form-control" id="macroCarbs" type="number" placeholder="e.g. 250" min="0" />
+            </div>
+            <div class="col-md-4">
+              <label class="form-label small-note">Fats (g)</label>
+              <input class="form-control" id="macroFats" type="number" placeholder="e.g. 70" min="0" />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Notes</label>
+              <textarea class="form-control" id="nutritionNotes" rows="3"
+                placeholder="e.g. Increase water intake, reduce sugar snacks, meal prep Sundays..."></textarea>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-lg-5">
+      <section class="card glass-card rounded-4 shadow-sm h-100">
+        <div class="card-body p-4">
+          <h2 class="h5 text-white mb-1">Progress Snapshot</h2>
+          <div class="small-note mb-3">Quick view of your check-ins.</div>
+
+          <div class="d-grid gap-3">
+            <div class="p-3 rounded-4 glass-card">
+              <div class="small-note">Current Weight</div>
+              <div class="display-6 fw-semibold text-white mb-0" id="currentWeight">72</div>
+              <div class="small-note">kg</div>
+            </div>
+
+            <div class="p-3 rounded-4 glass-card">
+              <div class="small-note">Target Weight</div>
+              <div class="display-6 fw-semibold text-white mb-0" id="targetWeightDisplay">78</div>
+              <div class="small-note">kg</div>
+            </div>
+
+            <div class="p-3 rounded-4 glass-card">
+              <div class="small-note">Last Check-in</div>
+              <div class="h4 fw-semibold text-white mb-0" id="lastCheckIn">16 Jan 2026</div>
+              <div class="small-note">Keep it consistent.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Nutrition Profile -->
+  <div class="row g-3">
+    <div class="col-lg-6">
+      <section class="card glass-card rounded-4 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h5 text-white mb-1">Diet Preferences</h2>
+          <div class="small-note mb-3">This helps trainers (and you) keep things aligned.</div>
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label small-note">Diet Type</label>
+              <select class="form-select" id="dietType">
+                <option value="">Select</option>
+                <option value="balanced" selected>Balanced</option>
+                <option value="high-protein">High Protein</option>
+                <option value="low-carb">Low Carb</option>
+                <option value="keto">Keto</option>
+                <option value="vegan">Vegan</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="pescatarian">Pescatarian</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small-note">Meals per day</label>
+              <select class="form-select" id="mealsPerDay">
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Foods to avoid</label>
+              <input class="form-control" id="foodsAvoid" placeholder="e.g. sugary drinks, deep-fried foods..." />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Supplements (optional)</label>
+              <input class="form-control" id="supplements" placeholder="e.g. whey, creatine, magnesium..." />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Hydration goal (litres/day)</label>
+              <input class="form-control" id="hydrationGoal" type="number" min="0" step="0.1" placeholder="e.g. 2.5" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="col-lg-6">
+      <section class="card glass-card rounded-4 shadow-sm">
+        <div class="card-body p-4">
+          <h2 class="h5 text-white mb-1">Allergies & Restrictions</h2>
+          <div class="small-note mb-3">Safety first. Keep this accurate.</div>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small-note">Allergies</label>
+              <input class="form-control" id="allergies" placeholder="e.g. peanuts, dairy, shellfish..." />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Medical / dietary restrictions</label>
+              <textarea class="form-control" id="restrictions" rows="3"
+                placeholder="e.g. lactose intolerant, high blood pressure (diet related), gluten sensitivity..."></textarea>
+              <div class="small-note mt-2">This is not medical advice — it’s just tracking info.</div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Preferred check-in day</label>
+              <select class="form-select" id="checkInDay">
+                <option value="monday">Monday</option>
+                <option value="tuesday">Tuesday</option>
+                <option value="wednesday">Wednesday</option>
+                <option value="thursday">Thursday</option>
+                <option value="friday">Friday</option>
+                <option value="saturday" selected>Saturday</option>
+                <option value="sunday">Sunday</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Check-ins Table -->
+  <section class="card glass-card rounded-4 shadow-sm mt-4">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
+        <div>
+          <h2 class="h5 text-white mb-1">Check-in History</h2>
+          <div class="small-note">Track weight and measurements over time.</div>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <input class="form-control" style="max-width: 220px;" id="checkInSearch" placeholder="Search date/notes..." />
+          <select class="form-select" style="max-width: 200px;" id="checkInSort">
+            <option value="newest" selected>Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Weight (kg)</th>
+              <th>Waist (cm)</th>
+              <th>Notes</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="checkInTable">
+            <tr>
+              <td>16 Jan 2026</td>
+              <td>72</td>
+              <td>82</td>
+              <td class="small-note">Good energy, sleep improved.</td>
+              <td class="text-end">
+                <button class="btn btn-outline-light btn-sm">Edit</button>
+                <button class="btn btn-outline-danger btn-sm">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>09 Jan 2026</td>
+              <td>72.5</td>
+              <td>83</td>
+              <td class="small-note">Missed 2 days tracking.</td>
+              <td class="text-end">
+                <button class="btn btn-outline-light btn-sm">Edit</button>
+                <button class="btn btn-outline-danger btn-sm">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Add Check-in Modal -->
+  <div class="modal fade" id="addCheckInModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-white">Add Check-in</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small-note">Date</label>
+              <input class="form-control" type="date" id="checkInDate" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small-note">Weight (kg)</label>
+              <input class="form-control" type="number" min="0" step="0.1" id="checkInWeight" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small-note">Waist (cm)</label>
+              <input class="form-control" type="number" min="0" step="0.1" id="checkInWaist" />
+            </div>
+            <div class="col-12">
+              <label class="form-label small-note">Notes</label>
+              <textarea class="form-control" rows="3" id="checkInNotes"
+                placeholder="e.g. cravings, sleep, energy, consistency..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-0">
+          <button class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" id="saveCheckInBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</main>
+</div>
+
+<script>
+  // Optional: hook buttons later to API calls.
+  document.getElementById("saveNutritionBtn")?.addEventListener("click", () => {
+    // TODO: send nutrition profile to backend
+    alert("Nutrition profile saved (hook API next).");
+  });
+
+  document.getElementById("saveCheckInBtn")?.addEventListener("click", () => {
+    // TODO: append to table + send to backend
+    alert("Check-in saved (hook API next).");
+  });
+</script>
+
+    
+</body>
+</html>

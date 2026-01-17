@@ -1,89 +1,83 @@
+let members = [];
 
-      // --- Demo data (replace with API later) ---
-      let members = [
-        {
-          id: crypto.randomUUID(),
-          firstName: "Sbu",
-          lastName: "Msimango",
-          email: "sbu@example.com",
-          phone: "+27 71 234 5678",
-          tier: "Gold",
-          joinDate: "2026-01-05",
-        },
-        {
-          id: crypto.randomUUID(),
-          firstName: "Lerato",
-          lastName: "Nkosi",
-          email: "lerato@example.com",
-          phone: "+27 82 555 1122",
-          tier: "Platinum",
-          joinDate: "2026-01-08",
-        },
-        {
-          id: crypto.randomUUID(),
-          firstName: "Jane",
-          lastName: "Jazz",
-          email: "jane@example.com",
-          phone: "+27 82 555 1122",
-          tier: "Bronze",
-          joinDate: "2026-01-08",
-        },
-        {
-          id: crypto.randomUUID(),
-          firstName: "Harry",
-          lastName: "Smith",
-          email: "harry@example.com",
-          phone: "+27 82 555 1122",
-          tier: "Platinum",
-          joinDate: "2026-01-08",
-        },
-      ];
+async function loadMembers() {
+  try {
+    const res = await fetch("/api/members");
+    if (!res.ok) throw new Error("Failed to fetch members");
 
-      // --- Helpers ---
-      const tbody = document.getElementById("membersTbody");
-      const emptyState = document.getElementById("emptyState");
-      const searchInput = document.getElementById("searchInput");
-      const tierFilter = document.getElementById("tierFilter");
+    const dbMembers = await res.json();
 
-      function escapeHtml(str) {
-        return String(str).replace(/[&<>"']/g, (m) => ({
-          "&": "&amp;",
-          "<": "&lt;",
-          ">": "&gt;",
-          '"': "&quot;",
-          "'": "&#039;",
-        }[m]));
-      }
+    // Transform DB shape -> UI shape
+    members = dbMembers.map(u => ({
+      id: String(u.id),                
+      firstName: u.firstname,
+      lastName: u.lastname,
+      email: u.email,
+      phone: u.phone,
+      tier: u.tier || "Bronze",           
+      joinDate: (u.joindate || "").toString().slice(0, 10), // "YYYY-MM-DD"
+    }));
 
-      function renderStats(list) {
-        const total = list.length;
-        const gold = list.filter(m => m.tier === "Gold").length;
-        const platinum = list.filter(m => m.tier === "Platinum").length;
-        const bronze = list.filter(m => m.tier === "Bronze").length;
+    renderTable(); // <-- this is your real render function
+  } catch (err) {
+    console.error(err);
+  }
+}
 
-        document.getElementById("statTotal").textContent = total;
-        document.getElementById("statGold").textContent = gold;
-        document.getElementById("statPlatinum").textContent = platinum;
-        document.getElementById("statBronze").textContent = bronze;
-      }
+document.addEventListener("DOMContentLoaded", loadMembers);
 
-      function getFilteredMembers() {
-        const q = searchInput.value.trim().toLowerCase();
-        const tier = tierFilter.value;
 
-        return members.filter(m => {
-          const haystack = `${m.firstName} ${m.lastName} ${m.email} ${m.phone} ${m.tier}`.toLowerCase();
-          const matchSearch = q === "" ? true : haystack.includes(q);
-          const matchTier = tier === "" ? true : m.tier === tier;
-          return matchSearch && matchTier;
-        });
-      }
 
-      function renderTable() {
-        const list = getFilteredMembers();
-        renderStats(members);
+document.addEventListener("DOMContentLoaded", () => {
+  loadMembers();
+});
 
-        tbody.innerHTML = list.map(m => `
+
+// --- Helpers ---
+const tbody = document.getElementById("membersTbody");
+const emptyState = document.getElementById("emptyState");
+const searchInput = document.getElementById("searchInput");
+const tierFilter = document.getElementById("tierFilter");
+
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, (m) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;",
+  }[m]));
+}
+
+function renderStats(list) {
+  const total = list.length;
+  const gold = list.filter(m => m.tier === "Gold").length;
+  const platinum = list.filter(m => m.tier === "Platinum").length;
+  const bronze = list.filter(m => m.tier === "Bronze").length;
+
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statGold").textContent = gold;
+  document.getElementById("statPlatinum").textContent = platinum;
+  document.getElementById("statBronze").textContent = bronze;
+}
+
+function getFilteredMembers() {
+  const q = searchInput.value.trim().toLowerCase();
+  const tier = tierFilter.value;
+
+  return members.filter(m => {
+    const haystack = `${m.firstName} ${m.lastName} ${m.email} ${m.phone} ${m.tier}`.toLowerCase();
+    const matchSearch = q === "" ? true : haystack.includes(q);
+    const matchTier = tier === "" ? true : m.tier === tier;
+    return matchSearch && matchTier;
+  });
+}
+
+function renderTable() {
+  const list = getFilteredMembers();
+  renderStats(members);
+
+  tbody.innerHTML = list.map(m => `
           <tr>
             <td>
               <div class="fw-semibold text-white">${escapeHtml(m.firstName)} ${escapeHtml(m.lastName)}</div>
@@ -104,68 +98,131 @@
           </tr>
         `).join("");
 
-        emptyState.style.display = members.length === 0 ? "block" : "none";
-      }
+  emptyState.style.display = members.length === 0 ? "block" : "none";
+}
 
-      // --- Actions ---
-      window.deleteMember = (id) => {
-        members = members.filter(m => m.id !== id);
-        renderTable();
-      };
+// --- Actions ---
+window.deleteMember = async (id) => {
+  try {
+    const ok = confirm("Delete this member?");
+    if (!ok) return;
 
-      window.editMember = (id) => {
-        // Simple edit for demo: prompt-based
-        const m = members.find(x => x.id === id);
-        if (!m) return;
+    const res = await fetch(`/api/members/${id}`, { method: "DELETE" });
+    if (!res.ok) throw new Error("Failed to delete");
 
-        const newTier = prompt("Update tier (Bronze / Gold / Platinum):", m.tier);
-        if (!newTier) return;
+    // update UI
+    members = members.filter(m => m.id !== id);
+    renderTable();
+  } catch (err) {
+    console.error(err);
+    alert("Could not delete member.");
+  }
+};
 
-        const allowed = ["Bronze", "Gold", "Platinum"];
-        if (!allowed.includes(newTier)) {
-          alert("Invalid tier.");
-          return;
-        }
-        m.tier = newTier;
-        renderTable();
-      };
+window.editMember = async (id) => {
+  const m = members.find(x => x.id === id);
+  if (!m) return;
 
-      // --- Add Member Modal Form ---
-      const addMemberForm = document.getElementById("addMemberForm");
-      addMemberForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
+  const newTier = prompt("Update tier (Bronze / Gold / Platinum):", m.tier);
+  if (!newTier) return;
 
-        if (!addMemberForm.checkValidity()) {
-          addMemberForm.classList.add("was-validated");
-          return;
-        }
+  const allowed = ["Bronze", "Gold", "Platinum"];
+  if (!allowed.includes(newTier)) {
+    alert("Invalid tier.");
+    return;
+  }
 
-        const member = {
-          id: crypto.randomUUID(),
-          firstName: document.getElementById("firstName").value.trim(),
-          lastName: document.getElementById("lastName").value.trim(),
-          email: document.getElementById("email").value.trim(),
-          phone: document.getElementById("phone").value.trim(),
-          tier: document.getElementById("tier").value,
-          joinDate: document.getElementById("joinDate").value,
-        };
+  try {
+    const res = await fetch(`/api/members/${id}/tier`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tier: newTier }),
+    });
 
-        members.unshift(member);
-        addMemberForm.reset();
-        addMemberForm.classList.remove("was-validated");
+    if (!res.ok) throw new Error("Failed to update tier");
 
-        // close modal
-        const modalEl = document.getElementById("addMemberModal");
-        const modal = bootstrap.Modal.getInstance(modalEl);
-        modal.hide();
+    // update UI locally
+    m.tier = newTier;
+    renderTable();
+  } catch (err) {
+    console.error(err);
+    alert("Could not update tier.");
+  }
+};
 
-        renderTable();
-      });
 
-      // filters
-      searchInput.addEventListener("input", renderTable);
-      tierFilter.addEventListener("change", renderTable);
+// --- Add Member Modal Form ---
+addMemberForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
 
-      document.getElementById("year").textContent = new Date().getFullYear();
-      renderTable();
+  if (!addMemberForm.checkValidity()) {
+    addMemberForm.classList.add("was-validated");
+    return;
+  }
+
+  try {
+    const payload = {
+      firstname: document.getElementById("firstName").value.trim(),
+      lastname: document.getElementById("lastName").value.trim(),
+      email: document.getElementById("email").value.trim(),
+      phone: document.getElementById("phone").value.trim(),
+      tier: document.getElementById("tier").value,
+    };
+
+    const res = await fetch("/api/members", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      console.error("ADD MEMBER failed:", res.status, data);
+  alert(data.message || `Could not add member (HTTP ${res.status})`);
+      return;
+    }
+
+    // Convert DB response -> UI shape and add to top
+    const newMember = {
+      id: String(data.id),
+      firstName: data.firstname,
+      lastName: data.lastname,
+      email: data.email,
+      phone: data.phone,
+      tier: data.tier || "Bronze",
+      joinDate: new Date(data.joindate).toISOString().slice(0, 10)
+    };
+
+    members.unshift(newMember);
+
+    addMemberForm.reset();
+    addMemberForm.classList.remove("was-validated");
+
+    const modalEl = document.getElementById("addMemberModal");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal.hide();
+
+    renderTable();
+  } catch (err) {
+    console.error(err);
+    alert("Could not add member.");
+  }
+});
+
+
+  // close modal
+  const modalEl = document.getElementById("addMemberModal");
+  const modal = bootstrap.Modal.getInstance(modalEl);
+  modal.hide();
+
+  renderTable();
+
+
+// filters
+searchInput.addEventListener("input", renderTable);
+tierFilter.addEventListener("change", renderTable);
+
+document.getElementById("year").textContent = new Date().getFullYear();
+renderTable();

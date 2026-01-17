@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member Portal</title>
+
+    <!-- links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/dashboard/css/stylesdash.css" />
+    <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+  <div class="app-shell">
+
+  <!-- Sidebar -->
+  <aside class="sidebar glass-card">
+    <div class="d-flex align-items-center gap-3 mb-4">
+      <div class="logo-circle">M</div>
+      <div>
+        <div class="text-white fw-semibold">MMS</div>
+        <div class="small-note">Member Portal</div>
+      </div>
+    </div>
+
+    <nav class="d-grid gap-2">
+      <a class="nav-pill  text-decoration-none" href="/member/portal">
+        <span><i class="fas fa-home"></i></span> <span>Overview</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/activities">
+        <span><i class="fa-solid fa-dumbbell"></i></span> <span>Activities</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/nutrition">
+        <span><i class="fa-solid fa-apple-whole"></i></span> <span>Nutrition</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/personal-details">
+        <span><i class="fa-solid fa-id-card"></i></span> <span>Personal Details</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/edit-profile">
+        <span><i class="fa-solid fa-user-gear"></i></span> <span>Edit Profile</span>
+      </a>
+      <a class="nav-pill active text-decoration-none" href="/member/billing">
+        <span><i class="fa-solid fa-credit-card"></i></span> <span>Membership & Billing</span>
+      </a>
+      <a class="nav-pill text-decoration-none" href="/member/reports">
+        <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
+      </a>
+    </nav>
+
+    <div class="mt-4 p-3 rounded-4 glass-card">
+      <div class="fw-semibold mb-1 text-white">Quick Tip</div>
+      <div class="small-note">
+        Small progress daily beats “I’ll start Monday” every time.
+      </div>
+    </div>
+
+    <div class="mt-4 small-note">
+      Logged in as <span class="text-white" id="memberName">Member</span>
+    </div>
+  </aside>
+
+  <!-- Backdrop for mobile -->
+  <div class="backdrop" id="backdrop"></div>
+
+  <!-- /member/billing -->
+<main class="content">
+  <!-- Topbar -->
+  <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+    <div>
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <button class="btn btn-outline-light sidebar-toggle" id="toggleSidebar" type="button">
+          <i class="fa-solid fa-bars"></i> Menu
+        </button>
+      </div>
+
+      <h1 class="h3 text-white mb-1">Membership & Billing</h1>
+      <div class="muted">View your plan, payment status, and invoices.</div>
+    </div>
+
+    <div class="d-flex gap-2 flex-wrap">
+      <button class="btn btn-outline-light" type="button" data-bs-toggle="modal" data-bs-target="#upgradeModal">
+        Upgrade / Change Plan
+      </button>
+      <button class="btn btn-primary" type="button" id="payNowBtn">
+        Pay Now
+      </button>
+    </div>
+  </div>
+
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-6 col-xl-3">
+      <div class="card glass-card rounded-4 shadow-sm">
+        <div class="card-body">
+          <div class="small-note">Current Tier</div>
+          <div class="h4 fw-semibold text-white mb-0" id="billTier">Silver</div>
+          <div class="small-note">Plan type: Monthly</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card glass-card rounded-4 shadow-sm">
+        <div class="card-body">
+          <div class="small-note">Status</div>
+          <div class="h4 fw-semibold text-white mb-0" id="billStatus">Active</div>
+          <div class="small-note">No restrictions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card glass-card rounded-4 shadow-sm">
+        <div class="card-body">
+          <div class="small-note">Next Payment Due</div>
+          <div class="h4 fw-semibold text-white mb-0" id="billDueDate">28 Feb 2026</div>
+          <div class="small-note">Amount: <span id="billAmount">R399</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-xl-3">
+      <div class="card glass-card rounded-4 shadow-sm">
+        <div class="card-body">
+          <div class="small-note">Billing Method</div>
+          <div class="h4 fw-semibold text-white mb-0" id="billMethod">EFT</div>
+          <div class="small-note">Ref: <span id="billRef">M-0001</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Status Banner -->
+  <section class="card glass-card rounded-4 shadow-sm mb-4">
+    <div class="card-body p-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+      <div>
+        <div class="text-white fw-semibold" id="paymentBannerTitle">Payment Status: Paid</div>
+        <div class="small-note" id="paymentBannerNote">
+          You’re all good. Next payment due on <span class="text-white">28 Feb 2026</span>.
+        </div>
+      </div>
+
+      <div class="d-flex gap-2 flex-wrap">
+        <button class="btn btn-outline-light" type="button" data-bs-toggle="modal" data-bs-target="#paymentDetailsModal">
+          Payment details
+        </button>
+        <button class="btn btn-primary" type="button" id="downloadStatementBtn">
+          Download Statement
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Invoices -->
+  <section class="card glass-card rounded-4 shadow-sm">
+    <div class="card-body p-4">
+      <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
+        <div>
+          <h2 class="h5 text-white mb-1">Invoices</h2>
+          <div class="small-note">Your payment history and downloadable invoices.</div>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <input class="form-control" style="max-width: 220px;" id="invoiceSearch" placeholder="Search invoice..." />
+          <select class="form-select" style="max-width: 200px;" id="invoiceFilter">
+            <option value="all" selected>All</option>
+            <option value="paid">Paid</option>
+            <option value="due">Due</option>
+            <option value="overdue">Overdue</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>Invoice</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="invoiceTable">
+            <tr>
+              <td class="text-white">INV-1042</td>
+              <td class="small-note">05 Jan 2026</td>
+              <td class="text-white">R399</td>
+              <td><span class="badge text-bg-success">Paid</span></td>
+              <td class="text-end">
+                <button class="btn btn-outline-light btn-sm">View</button>
+                <button class="btn btn-outline-light btn-sm">Download</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-white">INV-1041</td>
+              <td class="small-note">05 Dec 2025</td>
+              <td class="text-white">R399</td>
+              <td><span class="badge text-bg-success">Paid</span></td>
+              <td class="text-end">
+                <button class="btn btn-outline-light btn-sm">View</button>
+                <button class="btn btn-outline-light btn-sm">Download</button>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-white">INV-1043</td>
+              <td class="small-note">05 Feb 2026</td>
+              <td class="text-white">R399</td>
+              <td><span class="badge text-bg-warning">Due</span></td>
+              <td class="text-end">
+                <button class="btn btn-outline-light btn-sm">View</button>
+                <button class="btn btn-primary btn-sm">Pay</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="small-note mt-3">
+        Tip: Use your reference <span class="text-white" id="billRefTip">M-0001</span> when paying via EFT.
+      </div>
+    </div>
+  </section>
+
+  <!-- Plan Change Modal -->
+  <div class="modal fade" id="upgradeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-white">Change Plan</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="small-note mb-3">Select the plan you want. Admin will confirm if needed.</div>
+
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label small-note">New Tier</label>
+              <select class="form-select" id="newTier">
+                <option value="bronze">Bronze</option>
+                <option value="silver" selected>Silver</option>
+                <option value="gold">Gold</option>
+                <option value="platinum">Platinum</option>
+              </select>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Reason (optional)</label>
+              <textarea class="form-control" rows="3" id="planReason"
+                placeholder="e.g. I want more classes per week..."></textarea>
+            </div>
+
+            <div class="col-12">
+              <div class="p-3 rounded-4 glass-card">
+                <div class="text-white fw-semibold mb-1">Heads up</div>
+                <div class="small-note">
+                  Plan changes may take effect from the next billing cycle, depending on gym policy.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer border-0">
+          <button class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+          <button class="btn btn-primary" id="requestPlanChangeBtn">Request change</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Details Modal -->
+  <div class="modal fade" id="paymentDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content glass-card">
+        <div class="modal-header border-0">
+          <h5 class="modal-title text-white">Payment Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12">
+              <div class="small-note">Reference</div>
+              <div class="text-white fw-semibold" id="payRefModal">M-0001</div>
+            </div>
+
+            <div class="col-12">
+              <div class="small-note">Preferred Method</div>
+              <div class="text-white fw-semibold" id="payMethodModal">EFT</div>
+              <div class="small-note mt-2">Card numbers are not stored in MMS.</div>
+            </div>
+
+            <div class="col-12">
+              <div class="small-note">Notes</div>
+              <div class="small-note">Pay via EFT using your reference. Upload proof if required (optional feature).</div>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small-note">Upload proof (optional)</label>
+              <input class="form-control" type="file" id="proofUpload" />
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer border-0">
+          <button class="btn btn-outline-light" data-bs-dismiss="modal">Close</button>
+          <button class="btn btn-primary" id="submitProofBtn">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Hook these to API later
+  document.getElementById("payNowBtn")?.addEventListener("click", () => {
+    alert("Pay Now clicked (connect payment flow next).");
+  });
+
+  document.getElementById("downloadStatementBtn")?.addEventListener("click", () => {
+    alert("Statement download (generate PDF next).");
+  });
+
+  document.getElementById("requestPlanChangeBtn")?.addEventListener("click", () => {
+    const tier = document.getElementById("newTier").value;
+    alert(`Plan change requested: ${tier} (hook API next).`);
+    const modalEl = document.getElementById("upgradeModal");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal?.hide();
+  });
+
+  document.getElementById("submitProofBtn")?.addEventListener("click", () => {
+    alert("Proof submitted (hook API next).");
+    const modalEl = document.getElementById("paymentDetailsModal");
+    const modal = bootstrap.Modal.getInstance(modalEl);
+    modal?.hide();
+  });
+</script>
+
+
+  </div>
+  </body>
+  </html>

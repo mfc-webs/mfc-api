@@ -6,6 +6,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const viewDashboard = async (req, res, next) => {
 
-   res.sendFile(path.join(__dirname, "..", "..", "views", "dashboard", "dashboard.html"));
+   res.sendFile(path.join(__dirname, "..", "..", "views", "dashboard", "admin-dashboard.html"));
 
 };
