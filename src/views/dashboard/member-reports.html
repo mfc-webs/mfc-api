@@ -15,50 +15,8 @@
   <div class="app-shell">
 
   <!-- Sidebar -->
-  <aside class="sidebar glass-card">
-    <div class="d-flex align-items-center gap-3 mb-4">
-      <div class="logo-circle">M</div>
-      <div>
-        <div class="text-white fw-semibold">MMS</div>
-        <div class="small-note">Member Portal</div>
-      </div>
-    </div>
+      <%- include("partials/sidebar.html") %>
 
-    <nav class="d-grid gap-2">
-      <a class="nav-pill  text-decoration-none" href="/member/portal">
-        <span><i class="fas fa-home"></i></span> <span>Overview</span>
-      </a>
-      <a class="nav-pill text-decoration-none" href="/member/activities">
-        <span><i class="fa-solid fa-dumbbell"></i></span> <span>Activities</span>
-      </a>
-      <a class="nav-pill text-decoration-none" href="/member/nutrition">
-        <span><i class="fa-solid fa-apple-whole"></i></span> <span>Nutrition</span>
-      </a>
-      <a class="nav-pill text-decoration-none" href="/member/personal-details">
-        <span><i class="fa-solid fa-id-card"></i></span> <span>Personal Details</span>
-      </a>
-      <a class="nav-pill text-decoration-none" href="/member/edit-profile">
-        <span><i class="fa-solid fa-user-gear"></i></span> <span>Edit Profile</span>
-      </a>
-      <a class="nav-pill text-decoration-none" href="/member/billing">
-        <span><i class="fa-solid fa-credit-card"></i></span> <span>Membership & Billing</span>
-      </a>
-      <a class="nav-pill active text-decoration-none" href="/member/reports">
-        <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
-      </a>
-    </nav>
-
-    <div class="mt-4 p-3 rounded-4 glass-card">
-      <div class="fw-semibold mb-1 text-white">Quick Tip</div>
-      <div class="small-note">
-        Small progress daily beats “I’ll start Monday” every time.
-      </div>
-    </div>
-
-    <div class="mt-4 small-note">
-      Logged in as <span class="text-white" id="memberName">Member</span>
-    </div>
-  </aside>
 
   <!-- Backdrop for mobile -->
   <div class="backdrop" id="backdrop"></div>

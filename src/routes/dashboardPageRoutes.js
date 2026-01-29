@@ -9,8 +9,14 @@ import { viewMemberPersonalDetails } from "../controllers/member/personalDetails
 import { viewEditProfile } from "../controllers/member/editProfile.controller.js";
 import { viewMemberBlling } from "../controllers/member/billing.controller.js";
 import { viewMemberReports } from "../controllers/member/reports.controller.js";
+import { requireAuth } from "../middleware/requireAuth.js";
+import { hydrateMember } from "../middleware/hydrateMember.js";
+
 
 const router = express.Router();
+
+router.use("/member", requireAuth, hydrateMember);
+
 
 // admin dashboard
 
@@ -19,11 +25,11 @@ router.get("/admin/dashboard", viewDashboard);
 // member dashboard/portals
 
 router.get("/member/portal", viewMemberPortal);
-router.get("/member/activities", viewMemberActivities);
-router.get("/member/nutrition", viewMemberNutrition);
-router.get("/member/personal-details", viewMemberPersonalDetails);
-router.get("/member/edit-profile", viewEditProfile);
-router.get("/member/billing", viewMemberBlling);
-router.get("/member/reports", viewMemberReports);
+router.get("/member/activities", requireAuth, viewMemberActivities);
+router.get("/member/nutrition", requireAuth, viewMemberNutrition);
+router.get("/member/personal-details", requireAuth, viewMemberPersonalDetails);
+router.get("/member/edit-profile", requireAuth, viewEditProfile);
+router.get("/member/billing", requireAuth, viewMemberBlling);
+router.get("/member/reports", requireAuth, viewMemberReports);
 
 export default router;

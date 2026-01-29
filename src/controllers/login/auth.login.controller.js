@@ -10,13 +10,15 @@ const __dirname = path.dirname(__filename);
 
 const signToken = (user) =>
   jwt.sign(
-    { sub: user.id, role: user.role },
+    { 
+      sub: user.id, 
+      role: user.role, 
+      email: user.email
+    },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
-  );
-
-
-
+    { 
+      expiresIn: process.env.JWT_EXPIRES_IN || "2h" 
+    });
 
 
 export const loginForm = (req, res) => {
@@ -43,7 +45,6 @@ export const loginMember = async (req, res) => {
     const user = result.rows[0];
     if (!user) return res.status(401).json({ message: "Invalid credentials" });
 
-    // If admin created user without password yet
     if (!user.password) {
       return res.status(403).json({ message: "Account not activated. Please set a password first." });
     }
@@ -53,13 +54,16 @@ export const loginMember = async (req, res) => {
 
     const token = signToken(user);
 
-    // never return password hash
-    delete user.password;
+    // store token (so future requests know who you are)
+    res.cookie("token", token, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 2 * 60 * 60 * 1000, // 2 hours
+    });
 
-    res.sendFile(path.join(req.app.get("views"), "dashboard", "member-portal.html"));
-      return res.status(200);
-    
-    // return res.json({ token, user });
+    // go to the portal route (not a direct file send)
+    return res.redirect("/member/portal");
   } catch (err) {
     console.error("LOGIN ERROR:", err);
     return res.status(500).json({ message: "Server error" });

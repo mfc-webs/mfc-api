@@ -2,34 +2,45 @@
   <!-- Sidebar -->
   <aside class="sidebar glass-card">
     <div class="d-flex align-items-center gap-3 mb-4">
-      <div class="logo-circle">M</div>
+      <div class="logo-circle">
+        <img
+              src="/public/images/profile-pic.jpg"
+              alt="Profile"
+              class="rounded-circle border"
+              style="width: 110px; height: 110px; object-fit: cover; border-color: rgba(255,255,255,.18) !important;"
+              id="profilePreview"
+            />
+      </div>
       <div>
         <div class="text-white fw-semibold">MMS</div>
-        <div class="small-note">Member Portal</div>
+        <div class="small-note"><%= member.firstname %>'s Portal</div>
       </div>
     </div>
 
     <nav class="d-grid gap-2">
-      <a class="nav-pill active text-decoration-none" href="/member/dashboard">
+      <a class="nav-pill text-decoration-none <%= activePage === 'portal' ? 'active' : '' %>" href="/member/portal">
         <span><i class="fas fa-home"></i></span> <span>Overview</span>
       </a>
-      <a class="nav-pill text-decoration-none" href="/member/activities">
+      <!-- <a class="nav-pill text-decoration-none <%= activePage === 'activities' ? 'active' : '' %>" href="/member/activities">
         <span><i class="fa-solid fa-dumbbell"></i></span> <span>Activities</span>
-      </a>
-      <a class="nav-pill text-decoration-none" href="/member/nutrition">
+      </a> -->
+      <a class="nav-pill text-decoration-none <%= activePage === 'nutrition' ? 'active' : '' %>" href="/member/nutrition">
         <span><i class="fa-solid fa-apple-whole"></i></span> <span>Nutrition</span>
       </a>
-      <a class="nav-pill text-decoration-none" href="/member/personal-details">
+      <a class="nav-pill text-decoration-none <%= activePage === 'personal-details' ? 'active' : '' %>" href="/member/personal-details">
         <span><i class="fa-solid fa-id-card"></i></span> <span>Personal Details</span>
       </a>
-      <a class="nav-pill text-decoration-none" href="/member/edit-profile">
+      <a class="nav-pill text-decoration-none <%= activePage === 'edit-profile' ? 'active' : '' %>" href="/member/edit-profile">
         <span><i class="fa-solid fa-user-gear"></i></span> <span>Edit Profile</span>
       </a>
-      <a class="nav-pill text-decoration-none" href="/member/billing">
+      <!-- <a class="nav-pill text-decoration-none <%= activePage === 'billing' ? 'active' : '' %>" href="/member/billing">
         <span><i class="fa-solid fa-credit-card"></i></span> <span>Membership & Billing</span>
-      </a>
-      <a class="nav-pill text-decoration-none" href="/member/reports">
+      </a> -->
+      <!-- <a class="nav-pill text-decoration-none <%= activePage === 'reports' ? 'active' : '' %>" href="/member/reports">
         <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
+      </a> -->
+      <a class="nav-pill text-decoration-none" href="/logout">
+        <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span> <span>Logout</span>
       </a>
     </nav>
 
@@ -41,6 +52,6 @@
     </div>
 
     <div class="mt-4 small-note">
-      Logged in as <span class="text-white" id="memberName">Member</span>
+      Logged in as <span class="text-white" id="memberName"><%= member.role %></span>
     </div>
   </aside>
