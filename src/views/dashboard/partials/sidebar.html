@@ -4,7 +4,7 @@
     <div class="d-flex align-items-center gap-3 mb-4">
       <div class="logo-circle">
         <img
-              src="/public/images/profile-pic.jpg"
+              src="<%= member.profile_picture %>"
               alt="Profile"
               class="rounded-circle border"
               style="width: 110px; height: 110px; object-fit: cover; border-color: rgba(255,255,255,.18) !important;"
@@ -13,7 +13,7 @@
       </div>
       <div>
         <div class="text-white fw-semibold">MMS</div>
-        <div class="small-note"><%= member.firstname %>'s Portal</div>
+        <div class="small-note"><%= member.display_name || member.firstname %>'s Portal</div>
       </div>
     </div>
 

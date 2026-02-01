@@ -17,7 +17,6 @@
   <!-- Sidebar -->
        <%- include("partials/sidebar.html") %>
 
-
   <!-- Backdrop for mobile -->
   <div class="backdrop" id="backdrop"></div>
 
@@ -56,7 +55,7 @@
 
           <div class="d-flex flex-column align-items-center text-center">
             <img
-              src="<%= member.profile_pic ?? '/public/images/profile-pic.jpg' %>"
+              src="<%= member.profile_picture %>"
               alt="Profile"
               class="rounded-circle border"
               style="width: 110px; height: 110px; object-fit: cover; border-color: rgba(255,255,255,.18) !important;"
@@ -71,12 +70,12 @@
 
             <div class="mt-3 w-100">
               <label class="form-label small-note">Display Name</label>
-              <input class="form-control" id="displayName" placeholder="e.g. Sbu Msimango" value="<%= member.display_name ?? ''%>" />
+              <input class="form-control" id="displayName" placeholder="e.g. Sbu Msimango" value="<%= member.display_name %>" />
             </div>
 
             <div class="mt-3 w-100">
               <label class="form-label small-note">Member Bio (optional)</label>
-              <textarea class="form-control" rows="3" id="bio" placeholder="e.g. Goals, focus, training style..." value="<%= member.bio ?? ''%>"></textarea>
+              <textarea class="form-control" rows="3" id="bio" placeholder="e.g. Goals, focus, training style..."><%= member.bio %></textarea>
             </div>
           </div>
         </div>
@@ -116,19 +115,19 @@
               <div class="row g-2 mt-1">
                 <div class="col-sm-4">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="notifyEmail" checked>
+                    <input class="form-check-input" type="checkbox" id="notifyEmail" <%= member.mail_note ? "checked" : "" %>>
                     <label class="form-check-label" for="notifyEmail">Email</label>
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="notifySms">
+                    <input class="form-check-input" type="checkbox" id="notifySms" <%= member.sms_note ? "checked" : "" %>>
                     <label class="form-check-label" for="notifySms">SMS</label>
                   </div>
                 </div>
                 <div class="col-sm-4">
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="notifyWhatsapp">
+                    <input class="form-check-input" type="checkbox" id="notifyWhatsapp" <%= member.wa_note ? "checked" : "" %>>
                     <label class="form-check-label" for="notifyWhatsapp">WhatsApp</label>
                   </div>
                 </div>
@@ -205,69 +204,7 @@
   </div>
 </main>
 
-<script>
-  // Preview profile image
-  document.getElementById("profileImage")?.addEventListener("change", (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    document.getElementById("profilePreview").src = url;
-  });
-
-  // Toggle password visibility buttons
-  document.querySelectorAll("[data-toggle-pass]")?.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const id = btn.getAttribute("data-toggle-pass");
-      const input = document.getElementById(id);
-      if (!input) return;
-      input.type = input.type === "password" ? "text" : "password";
-    });
-  });
-
-  // Save profile (hook to API later)
-  document.getElementById("saveProfileBtn")?.addEventListener("click", () => {
-    alert("Profile saved (hook API next).");
-  });
-
-  document.getElementById("cancelProfileBtn")?.addEventListener("click", () => {
-    history.back();
-  });
-
-  // Password actions
-  document.getElementById("clearPasswordFieldsBtn")?.addEventListener("click", () => {
-    ["currentPassword","newPassword","confirmPassword"].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.value = "";
-    });
-  });
-
-  document.getElementById("updatePasswordBtn")?.addEventListener("click", () => {
-    const current = document.getElementById("currentPassword").value.trim();
-    const next = document.getElementById("newPassword").value.trim();
-    const confirm = document.getElementById("confirmPassword").value.trim();
-
-    if (!current || !next || !confirm) {
-      alert("Please fill in all password fields.");
-      return;
-    }
-    if (next.length < 8) {
-      alert("New password must be at least 8 characters.");
-      return;
-    }
-    if (next !== confirm) {
-      alert("New password and confirm password do not match.");
-      return;
-    }
-
-    // TODO: API call to update password
-    alert("Password updated (hook API next).");
-  });
-
-  document.getElementById("logoutAllBtn")?.addEventListener("click", () => {
-    // TODO: backend endpoint to revoke tokens/sessions
-    alert("All devices logged out (hook API next).");
-  });
-</script>
+<script src="../assets/dashboard/js/updateMemberProfile.js"></script>
 
 
   </div>
