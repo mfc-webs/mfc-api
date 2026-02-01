@@ -6,17 +6,23 @@ import { viewMemberPortal } from "../controllers/member/portal.controller.js";
 import { viewMemberActivities } from "../controllers/member/activities.controller.js";
 import { viewMemberNutrition } from "../controllers/member/nutrition.controller.js";
 import { viewMemberPersonalDetails } from "../controllers/member/personalDetails.controller.js";
-import { viewEditProfile } from "../controllers/member/editProfile.controller.js";
+import { viewEditProfile, updateMemberProfile } from "../controllers/member/editProfile.controller.js";
 import { viewMemberBlling } from "../controllers/member/billing.controller.js";
 import { viewMemberReports } from "../controllers/member/reports.controller.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { hydrateMember } from "../middleware/hydrateMember.js";
+import { uploadProfilePic } from "../middleware/uploadProfilePic.js";
 
 
 const router = express.Router();
 
+
+
 router.use("/member", requireAuth, hydrateMember);
 
+
+//update member profile detail
+router.post("/member-profile/update", requireAuth, uploadProfilePic, updateMemberProfile);
 
 // admin dashboard
 

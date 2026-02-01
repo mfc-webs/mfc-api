@@ -33,6 +33,8 @@ app.use(cookieParser());
 
 // serve /assets
 app.use("/assets", express.static(path.join(__dirname, "views", "assets")));
+app.use(express.static("public"));
+
 
 
 // ----- routes ---- //
