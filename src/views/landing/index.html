@@ -1,20 +1,315 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Membership Management System</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-  <link rel="stylesheet" href="/assets/landing/css/styles.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mash Fitness Club | Join the Movement</title>
+  <meta name="description" content="Mash Fitness Club — aerobics, strength training, jogging and hikes. Join the community." />
+      <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
 
 
+  <style>
+    :root{
+      --bg1:#ff4d6d;
+      --bg2:#6c5ce7;
+      --bg3:#00d2ff;
+      --ink:#0b1020;
+      --card:#ffffffcc;
+      --muted:#334155;
+      --line:#0b10201a;
+      --radius:22px;
+      --shadow: 0 24px 60px rgba(0,0,0,.18);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--ink);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+      background:
+        radial-gradient(900px 500px at 15% 20%, rgba(255,255,255,.55), transparent 60%),
+        radial-gradient(700px 500px at 90% 15%, rgba(255,255,255,.38), transparent 60%),
+        radial-gradient(900px 600px at 60% 95%, rgba(255,255,255,.42), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2), var(--bg3));
+      background-size: cover;
+      overflow-x:hidden;
+    }
+
+    /* Floating shapes */
+    .shape{
+      position:fixed;
+      inset:auto;
+      width:260px;height:260px;
+      border-radius:40%;
+      filter: blur(0px);
+      opacity:.35;
+      z-index:0;
+      pointer-events:none;
+      mix-blend-mode: overlay;
+      animation: floaty 10s ease-in-out infinite;
+    }
+    .s1{ top:-60px; left:-80px; background: rgba(255,255,255,.55); transform: rotate(14deg); }
+    .s2{ top:10%; right:-90px; background: rgba(255,255,255,.40); width:320px;height:320px; animation-duration: 12s; }
+    .s3{ bottom:-110px; left:18%; background: rgba(255,255,255,.45); width:340px;height:340px; animation-duration: 14s; }
+
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) rotate(12deg); }
+      50%{ transform: translateY(18px) rotate(2deg); }
+    }
+
+    .wrap{
+      width:min(1100px, 100%);
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
+      position:relative;
+      z-index:1;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:var(--card);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero{
+      padding:34px;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.55);
+      font-weight:650;
+      font-size:13px;
+    }
+    .spark{
+      width:10px;height:10px;border-radius:50%;
+      background: linear-gradient(135deg, #00d2ff, #6c5ce7, #ff4d6d);
+      box-shadow:0 0 0 4px rgba(0,0,0,.06);
+    }
+
+    h1{
+      margin:16px 0 10px;
+      font-size:clamp(30px, 4.2vw, 52px);
+      line-height:1.03;
+      letter-spacing:-1px;
+    }
+
+    .lead{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.65;
+      max-width:60ch;
+    }
+
+    .chips{
+      margin-top:18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .chip{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .cta{
+      margin-top:24px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+    }
+
+    a.btn{
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:13px 16px;
+      border-radius:16px;
+      border:1px solid transparent;
+      font-weight:750;
+      letter-spacing:.2px;
+      transition: transform .18s ease, filter .18s ease;
+      min-width:150px;
+      user-select:none;
+    }
+    .btn.primary{
+      color:white;
+      background: linear-gradient(135deg, #0b1020, #1f2a44);
+      box-shadow:0 12px 26px rgba(0,0,0,.18);
+    }
+    .btn.primary:hover{ transform: translateY(-1px); filter:saturate(1.05); }
+
+    .btn.secondary{
+      color: var(--ink);
+      border-color: var(--line);
+      background: rgba(255,255,255,.65);
+    }
+    .btn.secondary:hover{ transform: translateY(-1px); filter:saturate(1.05); }
+
+    .tiny{
+      color: var(--muted);
+      font-size:13px;
+      font-weight:600;
+    }
+
+    .side{
+      padding:26px;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .side h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:-.2px;
+    }
+
+    .card{
+      padding:14px 14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.62);
+      display:flex;
+      gap:12px;
+      align-items:flex-start;
+    }
+    .ico{
+      width:36px;height:36px;
+      border-radius:14px;
+      display:grid;
+      place-items:center;
+      font-size:18px;
+      background: rgba(11,16,32,.08);
+      border:1px solid rgba(11,16,32,.10);
+      flex:0 0 auto;
+    }
+    .card strong{ display:block; }
+    .card .sub{ color:var(--muted); font-size:13px; line-height:1.5; }
+
+    .miniRow{
+      margin-top:auto;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      color:var(--muted);
+      font-size:12px;
+      font-weight:600;
+    }
+
+    .link{
+      color: var(--ink);
+      text-decoration:none;
+      border-bottom: 1px dashed rgba(11,16,32,.35);
+    }
+    .link:hover{ border-bottom-color: rgba(11,16,32,.7); }
+
+    @media (max-width: 920px){
+      .wrap{ grid-template-columns:1fr; }
+      .hero{ padding:28px; }
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Membership Management System</h1>
-  <a href="/signup">Sign Up</a>
-  <a href="/login">Login</a>
-</body>
+  <div class="shape s1" aria-hidden="true"></div>
+  <div class="shape s2" aria-hidden="true"></div>
+  <div class="shape s3" aria-hidden="true"></div>
 
+  <main class="wrap">
+    <section class="panel hero" aria-label="Mash Fitness Club landing">
+      <div class="badge">
+        <h1>Mash Fitness Club </h1>
+      </div>
+
+      <p  class="badge">Train Insane or Stay The Same!</p>
+
+      <p class="lead">
+       MFC — a community-driven fitness group in South Africa that promotes a healthier lifestyle - helping members
+        stay consistent, accountable, and on track with their body goals through:
+      </p>
+
+      <div class="chips" aria-label="Activities">
+        <span class="chip">🔥 Aerobics</span>
+        <span class="chip">💪 Strength Training</span>
+        <span class="chip">🏃 Jogging</span>
+        <span class="chip">🥾 Hikes</span>
+        <span class="chip">📲 Online + In-person Workouts</span>
+      </div>
+
+      <div class="cta" aria-label="Actions">
+        <!-- Change these hrefs to your real routes -->
+        <a class="btn primary" href="/login">Login</a>
+        <a class="btn secondary" href="/signup">Sign Up</a>
+        <span class="tiny">Website launching soon 🚀</span>
+      </div>
+    </section>
+
+    <aside class="panel side" aria-label="Quick info">
+      <h2>What you get</h2>
+
+      <div class="card">
+        <div class="ico" aria-hidden="true">⚡</div>
+        <div>
+          <strong>High-energy sessions</strong>
+          <div class="sub">Training that feels like a vibe — not a chore.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ico" aria-hidden="true">🤝</div>
+        <div>
+          <strong>Accountability + community</strong>
+          <div class="sub">Find your tribe and stay consistent together.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ico" aria-hidden="true">🌿</div>
+        <div>
+          <strong>Outdoor resets</strong>
+          <div class="sub">Trail hikes that recharge your body and mind.</div>
+        </div>
+      </div>
+
+      <div class="miniRow">
+        <span>© <span id="y"></span> Mash Fitness Club</span>
+        <span>
+         <i class="fa-brands fa-tiktok"></i>
+          <a class="link" href="https://www.tiktok.com/@coach_mash/video/7399348233069153542" target="_blank" rel="noreferrer"> TikTok</a>
+        </span>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
 </html>

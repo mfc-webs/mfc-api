@@ -56,36 +56,73 @@
 
 
   // Password actions
-  document.getElementById("clearPasswordFieldsBtn")?.addEventListener("click", () => {
-    ["currentPassword","newPassword","confirmPassword"].forEach(id => {
+ document.addEventListener("DOMContentLoaded", () => {
+  const ids = ["currentPassword", "newPassword", "confirmPassword"];
+
+  const clearPasswords = () => {
+    ids.forEach((id) => {
       const el = document.getElementById(id);
-      if (el) el.value = "";
+      if (!el) return;
+
+      el.value = "";
+      // helps UI update / some libraries / autofill edge cases
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+      el.dispatchEvent(new Event("change", { bubbles: true }));
     });
+  };
+
+  document.getElementById("clearPasswordFieldsBtn")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    clearPasswords();
   });
 
-  document.getElementById("updatePasswordBtn")?.addEventListener("click", () => {
-    const current = document.getElementById("currentPassword").value.trim();
-    const next = document.getElementById("newPassword").value.trim();
-    const confirm = document.getElementById("confirmPassword").value.trim();
+  document.getElementById("updatePasswordBtn")?.addEventListener("click", async (e) => {
+    e.preventDefault();
 
-    if (!current || !next || !confirm) {
+    const currentPassword = document.getElementById("currentPassword")?.value.trim();
+    const newPassword = document.getElementById("newPassword")?.value.trim();
+    const confirmPassword = document.getElementById("confirmPassword")?.value.trim();
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
       alert("Please fill in all password fields.");
       return;
     }
-    if (next.length < 8) {
+    if (newPassword.length < 8) {
       alert("New password must be at least 8 characters.");
       return;
     }
-    if (next !== confirm) {
+    if (newPassword !== confirmPassword) {
       alert("New password and confirm password do not match.");
       return;
     }
 
-    // TODO: API call to update password
-    alert("Password updated (hook API next).");
+    try {
+      const res = await fetch("/member-password/update", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok || !data.ok) {
+        alert(data.message || `Could not update password ❌ (status ${res.status})`);
+        return;
+      }
+
+      clearPasswords();
+      alert("Password updated ✅");
+    } catch (err) {
+      console.error(err);
+      alert("Could not update password ❌");
+    }
   });
+});
+
 
   document.getElementById("logoutAllBtn")?.addEventListener("click", () => {
-    // TODO: backend endpoint to revoke tokens/sessions
     alert("All devices logged out (hook API next).");
   });

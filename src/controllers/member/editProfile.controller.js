@@ -1,6 +1,6 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import path from "path";
+import bcrypt from "bcrypt";
 import { db } from "../../config/db.js";
 
 
@@ -8,9 +8,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const viewEditProfile = async (req, res, next) =>  { 
     return res.render("dashboard/member-edit-profile" , { 
-      activePage: "portal"
+      activePage: "edit-profile"
    });
 };
+
+// general member Account/ profile updates
 
 export const updateMemberProfile = async (req, res) => {
   try {
@@ -53,3 +55,55 @@ export const updateMemberProfile = async (req, res) => {
   }
 };
 
+
+// password updates/change
+
+export const updatePassword = async (req, res) => {
+  try {
+    const userId = req.user?.sub;
+    if (!userId) return res.status(401).json({ ok: false, message: "Unauthorized" });
+
+    const { currentPassword, newPassword, confirmPassword } = req.body;
+
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(400).json({ ok: false, message: "All fields are required" });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({ ok: false, message: "New password must be at least 8 characters" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ ok: false, message: "Passwords do not match" });
+    }
+
+    // Get current hash
+    const { rows } = await db.query(
+      `SELECT password FROM public.users WHERE id = $1 LIMIT 1`,
+      [userId]
+    );
+    const user = rows[0];
+    if (!user?.password) {
+      return res.status(400).json({ ok: false, message: "Account has no password set yet" });
+    }
+
+    // Verify current password
+    const isValid = await bcrypt.compare(currentPassword, user.password);
+    if (!isValid) {
+      return res.status(401).json({ ok: false, message: "Current password is incorrect" });
+    }
+
+    // Hash and update
+    const hash = await bcrypt.hash(newPassword, 10);
+
+    await db.query(
+      `UPDATE public.users SET password = $1 WHERE id = $2`,
+      [hash, userId]
+    );
+
+    return res.status(200).json({ ok: true, message: "Password updated" });
+  } catch (err) {
+    console.error("UPDATE PASSWORD ERROR:", err);
+    return res.status(500).json({ ok: false, message: "Could not update password" });
+  }
+};

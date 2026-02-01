@@ -147,16 +147,14 @@
               <h2 class="h5 text-white mb-1">Security</h2>
               <div class="small-note">Change your password safely.</div>
             </div>
-            <button class="btn btn-outline-light btn-sm" type="button" id="logoutAllBtn" href="/logout">
-              Log out all devices
-            </button>
+           <a class="btn btn-outline-light btn-sm" href="/logout">Log out all devices</a>
           </div>
 
           <div class="row g-3 mt-1">
             <div class="col-md-4">
               <label class="form-label small-note">Current Password</label>
               <div class="input-group">
-                <input class="form-control" type="password" id="currentPassword" placeholder="••••••••">
+                <input class="form-control" type="password" id="currentPassword" placeholder="••••••••" autocomplete="current-password">
                 <button class="btn btn-outline-light" type="button" data-toggle-pass="currentPassword">
                   <i class="fa-solid fa-eye"></i>
                 </button>
@@ -166,7 +164,7 @@
             <div class="col-md-4">
               <label class="form-label small-note">New Password</label>
               <div class="input-group">
-                <input class="form-control" type="password" id="newPassword" placeholder="New password">
+                <input class="form-control" type="password" id="newPassword" placeholder="New password" autocomplete="new-password">
                 <button class="btn btn-outline-light" type="button" data-toggle-pass="newPassword">
                   <i class="fa-solid fa-eye"></i>
                 </button>
@@ -177,7 +175,7 @@
             <div class="col-md-4">
               <label class="form-label small-note">Confirm New Password</label>
               <div class="input-group">
-                <input class="form-control" type="password" id="confirmPassword" placeholder="Confirm">
+                <input class="form-control" type="password" id="confirmPassword" placeholder="Confirm" autocomplete="new-password">
                 <button class="btn btn-outline-light" type="button" data-toggle-pass="confirmPassword">
                   <i class="fa-solid fa-eye"></i>
                 </button>
@@ -204,7 +202,7 @@
   </div>
 </main>
 
-<script src="../assets/dashboard/js/updateMemberProfile.js"></script>
+<script src="../assets/dashboard/js/updateMemberProfile.js" defer></script>
 
 
   </div>
