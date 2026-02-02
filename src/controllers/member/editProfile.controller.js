@@ -28,8 +28,8 @@ export const updateMemberProfile = async (req, res) => {
 
     // if file uploaded, save the public path
     const profile_picture = req.file
-      ? `/uploads/profile-pics/${req.file.filename}`
-      : null;
+  ? `/uploads/profile-pics/${req.file.filename}`
+  : null;
 
     await db.query(
       `
@@ -50,8 +50,9 @@ export const updateMemberProfile = async (req, res) => {
 
     return res.status(200).json({ ok: true, message: "Profile updated" });
   } catch (err) {
-    console.error("UPDATE PROFILE ERROR:", err);
-    return res.status(500).send("Could not update profile");
+    console.error("PROFILE UPDATE ERROR:", err);          // full error
+    console.error("CODE:", err.code, "MSG:", err.message); // pg errors have code/message
+    return res.status(500).send("Server error updating profile");
   }
 };
 

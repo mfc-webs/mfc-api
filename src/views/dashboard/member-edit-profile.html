@@ -55,7 +55,7 @@
 
           <div class="d-flex flex-column align-items-center text-center">
             <img
-              src="<%= member.profile_picture %>"
+              src="<%= member.profile_picture ? member.profile_picture : '/images/profile-pic.jpg' %>"
               alt="Profile"
               class="rounded-circle border"
               style="width: 110px; height: 110px; object-fit: cover; border-color: rgba(255,255,255,.18) !important;"

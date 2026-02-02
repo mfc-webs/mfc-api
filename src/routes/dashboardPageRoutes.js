@@ -22,7 +22,7 @@ router.use("/member", requireAuth, hydrateMember);
 
 
 //update member profile detail
-router.post("/member-profile/update", requireAuth, uploadProfilePic, updateMemberProfile);
+router.post("/member-profile/update", requireAuth, uploadProfilePic.single("profile_picture"), updateMemberProfile);
 router.post("/member-password/update", requireAuth, updatePassword);
 
 // admin dashboard
