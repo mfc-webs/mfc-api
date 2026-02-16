@@ -1,23 +1,27 @@
-import pg from "pg";
-const { Pool } = pg;
+import dotenv from "dotenv";
+import pkg from "pg";
+const { Pool } = pkg;
 
-export const db = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
-   user: "postgres",
-  database: "mms",
-  password: process.env.DB_PASSWORD,
-  port: 5432,
-});
+dotenv.config();
 
 
-// export const db = new pg.Client({
-//     user: "postgres",
-//     host: "localhost",
-//     database: "mms",
-//     password: process.env.DB_PASSWORD,
-//     port: 5432,
-// })
+const isProd = process.env.NODE_ENV === "production";
+
+export const db = new Pool(
+  isProd
+    ? {
+        connectionString: process.env.PROD_DATABASE_URL,
+        ssl: { rejectUnauthorized: false },
+      }
+    : {
+        user: process.env.DB_USER,
+        host: process.env.DB_HOST,
+        database: process.env.DB_NAME,
+        password: process.env.DB_PASSWORD,
+        port: process.env.DB_PORT,
+        ssl: false,
+      }
+);
 
 export async function connectDB() {
   await db.connect();
