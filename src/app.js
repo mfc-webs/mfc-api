@@ -10,9 +10,12 @@ import logger from "./middleware/logger.middleware.js";
 import landingPageRoutes from "./routes/landingPageRoutes.js";
 import dashboardPageRoutes from "./routes/dashboardPageRoutes.js";
 import membersRoutes from "./routes/members.routes.js";
+import dotenv from "dotenv";
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+dotenv.config();
 const app = express();
 
 // database
@@ -24,7 +27,7 @@ app.use(logger);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
+app.set("trust proxy", 1);
 app.engine("html", ejs.renderFile);
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "html");

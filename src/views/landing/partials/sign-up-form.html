@@ -10,7 +10,21 @@
     <link rel="stylesheet" href="/assets/landing/css/styles.css" />
     <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
 
-
+        <style>
+          .popup {
+            position: fixed;
+            top: 8vh;
+            right: 20px;
+            background: #28a746bf;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            z-index: 9000;
+          }
+          .hidden {
+            display: none;
+          }
+        </style>
   </head>
 
   <body>
@@ -24,10 +38,14 @@
           <h1 class="h3 text-white mb-1">Sign Up For Free</h1>
           <p class="muted mb-0">Create account in under a minute for the perks!</p>
         </div>
+        <!-- pop up message -->
+        <div id="popup" class="popup hidden"></div>
+
+        <!-- sign up form -->
 
         <div class="card glass-card shadow-lg rounded-4">
           <div class="card-body p-4 p-md-5">
-            <form class="needs-validation" novalidate action="/signUp" method="POST">
+            <form id="signupForm" class="needs-validation" novalidate action="/signUp">
               <div class="row g-3">
                 <div class="col-md-6">
                   <div class="form-floating">
@@ -248,5 +266,34 @@
         else hint.textContent = "Strong password.";
       });
     </script>
+    <script>
+      document.getElementById("signupForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const formObject = Object.fromEntries(new FormData(this)); // Convert FormData to plain object
+
+        const response = await fetch("/signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formObject),
+          credentials: "include"
+        });
+
+        const data = await response.json();
+        const popup = document.getElementById("popup");
+        popup.innerText = data.message;
+        popup.classList.remove("hidden");
+
+        setTimeout(() => {
+          popup.classList.add("hidden");
+
+          if (data.redirect) {
+            window.location = data.redirect;
+          }
+        }, 5000);
+      });
+    </script>
+
+
   </body>
 </html>
