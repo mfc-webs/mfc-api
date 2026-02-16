@@ -27,7 +27,7 @@
 
         <div class="card glass-card shadow-lg rounded-4">
           <div class="card-body p-4 p-md-5">
-            <form class="needs-validation" novalidate action="/logged-in" method="POST">
+            <form id="loginForm" class="needs-validation" novalidate>
               <div class="row g-3">
                 <div class="col-12">
                   <div class="form-floating">
@@ -55,7 +55,7 @@
                     />
                     <label for="password">Password</label>
                     <button class="btn btn-outline-light" type="button" id="togglePw">
-                      <i class="fa-regular fa-eye"></i>
+                      Show
                     </button>
                   </div>
                 </div>
@@ -70,6 +70,8 @@
                     Login 
                   </button>
                 </div>
+                <div id="popup" class="popup hidden"></div>
+
 
                 <!-- <div class="col-12">
                   <div class="divider my-2"><small>or</small></div>
@@ -143,7 +145,7 @@
       btn.addEventListener("click", () => {
         const isPw = input.type === "password";
         input.type = isPw ? "text" : "password";
-        btn.textContent = isPw ? "Hide" : "👁";
+        btn.textContent = isPw ? "Hide" : "Show";
       });
     }
 
@@ -176,5 +178,49 @@
 
   });
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+  const form = document.getElementById("loginForm");
+  const popup = document.getElementById("popup");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const formObject = Object.fromEntries(
+      new FormData(e.target)
+    );
+
+    const response = await fetch("/logged-in", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formObject),
+      credentials: "include"
+    });
+
+    const data =await response.json();
+
+   showPopup(data.message, data.success, data.redirect) 
+
+  });
+
+  function showPopup(message, isSuccess, redirect) {
+    popup.innerText = message;
+    popup.style.color = isSuccess ? "#28a745" : "#dc3545";
+    popup.classList.remove("hidden");
+
+    setTimeout(() => {
+      popup.classList.add("hidden");
+
+      if (redirect) {
+        window.location = redirect;
+      }
+    }, 2000);
+  }
+  });
+</script>
+
+
   </body>
 </html>
