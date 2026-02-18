@@ -14,7 +14,7 @@
       if (!input) return;
       input.type = input.type === "password" ? "text" : "password";
     });
-  });
+  }); 
 
   // Save profile hook
   document.getElementById("saveProfileBtn")?.addEventListener("click", async () => {
@@ -32,7 +32,7 @@
     const fileInput = document.getElementById("profileImage");
     if (fileInput?.files?.[0]) fd.append("profile_picture", fileInput.files[0]); // IMPORTANT name
 
-    const res = await fetch("/member-profile/update", {
+    const res = await fetch("/member-profile-update", {
       method: "POST",
       body: fd,
     });
@@ -97,7 +97,7 @@
     }
 
     try {
-      const res = await fetch("/member-password/update", {
+      const res = await fetch("/member-password-update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

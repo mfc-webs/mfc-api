@@ -50,20 +50,23 @@
           <div>
             <div class="text-white fw-semibold">Complete your profile</div>
             <div class="small-note">
-              Missing: <span id="missingFields">Emergency contact, Address, Profile photo</span>
+              <!-- Missing:  -->
+              <span id="missingFields">Emergency contact, Address, Profile photo</span>
             </div>
 
             <div class="mt-3">
-              <div class="small-note mb-1">Profile progress</div>
+              <div class="small-note mb-1">
+                <!-- Profile progress -->
+              </div>
               <div class="progress" style="height: 10px;">
-                <div class="progress-bar" style="width: 60%;" id="profileProgress"></div>
+                <!-- <div class="progress-bar" style="width: 60%;" id="profileProgress"></div> -->
               </div>
             </div>
           </div>
 
           <div class="d-flex gap-2 flex-wrap">
-            <a class="btn btn-outline-light" href="/member/personal-details">Update details</a>
-            <a class="btn btn-primary" href="/member/edit-profile">Edit profile</a>
+            <a class="btn btn-outline-light" href="/member/personal-details">Update details <i class='fas fa-external-link-alt'></i></a>
+            <a class="btn btn-primary" href="/member/edit-profile">Edit profile <i class='fas fa-external-link-alt'></i></a>
           </div>
         </div>
       </div>
@@ -76,7 +79,7 @@
           <div class="card-body">
             <div class="small-note">Membership</div>
             <div class="h4 fw-semibold text-white mb-0" id="statTier"><%= member.tier %></div>
-            <div class="small-note">Status: <span id="statStatus"><%= member.status %></span></div>
+            <div class="small-note">Status: <span id="statStatus"><%= member.status  %></span></div>
           </div>
         </div>
       </div>
@@ -95,7 +98,7 @@
         <div class="card glass-card rounded-4 shadow-sm">
           <div class="card-body">
             <div class="small-note">My Classes</div>
-            <div class="h4 fw-semibold text-white mb-0" id="statClasses">3</div>
+            <div class="h4 fw-semibold text-white mb-0" id="statClasses">1</div>
             <div class="small-note">Enrolled</div>
           </div>
         </div>
@@ -105,7 +108,7 @@
         <div class="card glass-card rounded-4 shadow-sm">
           <div class="card-body">
             <div class="small-note">Nutrition Goal</div>
-            <div class="h4 fw-semibold text-white mb-0" id="statGoal">Lean Bulk</div>
+            <div class="h4 fw-semibold text-white mb-0" id="statGoal">Maintain</div>
             <div class="small-note">Current focus</div>
           </div>
         </div>
@@ -128,18 +131,32 @@
             <div class="list-group list-group-flush">
               <div class="list-group-item bg-transparent text-white border-secondary">
                 <div class="d-flex justify-content-between">
-                  <div class="fw-semibold">Boxing</div>
-                  <div class="small-note">Mon • 18:00</div>
+                  <div class="fw-semibold">In-person Aerobics</div>
+                  <div class="small-note">18 Feb • 17:30</div>
                 </div>
-                <div class="small-note">Coach: Neo • Studio A</div>
+                <!-- <div class="small-note">Coach: Neo • Studio A</div> -->
               </div>
 
               <div class="list-group-item bg-transparent text-white border-secondary">
                 <div class="d-flex justify-content-between">
-                  <div class="fw-semibold">HIIT</div>
-                  <div class="small-note">Wed • 17:30</div>
+                  <div class="fw-semibold">In-person Aerobics</div>
+                  <div class="small-note">20 Feb • 17:30</div>
                 </div>
-                <div class="small-note">Coach: Sam • Floor</div>
+                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
+              </div>
+              <div class="list-group-item bg-transparent text-white border-secondary">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-semibold">In-person Aerobics</div>
+                  <div class="small-note">22 Feb • 06:00</div>
+                </div>
+                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
+              </div>
+              <div class="list-group-item bg-transparent text-white border-secondary">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-semibold">2nd Annual hike</div>
+                  <div class="small-note">29 Mar • 06:00</div>
+                </div>
+                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
               </div>
             </div>
           </div>
@@ -161,25 +178,40 @@
               <div class="list-group-item bg-transparent text-white border-secondary">
                 <div class="d-flex justify-content-between">
                   <div class="fw-semibold">Weight updated</div>
-                  <div class="small-note">16 Jan</div>
+                  <div class="small-note">
+                    2026
+                    <!-- 16 Jan -->
+                  </div>
                 </div>
-                <div class="small-note">72kg</div>
+                <div class="small-note">
+                  TBA
+                  <!-- 72kg -->
+                </div>
               </div>
 
               <div class="list-group-item bg-transparent text-white border-secondary">
                 <div class="d-flex justify-content-between">
                   <div class="fw-semibold">Attendance</div>
-                  <div class="small-note">12 Jan</div>
+                  <div class="small-note">
+                    2026
+                    <!-- 16 Jan -->
+                  </div>
                 </div>
-                <div class="small-note">Checked in: HIIT</div>
+                <div class="small-note">Checked in: TBA</div>
               </div>
 
               <div class="list-group-item bg-transparent text-white border-secondary">
                 <div class="d-flex justify-content-between">
                   <div class="fw-semibold">Payment status</div>
-                  <div class="small-note">05 Jan</div>
+                  <div class="small-note">
+                    2026
+                    <!-- 16 Jan -->
+                  </div>
                 </div>
-                <div class="small-note">Paid • Reference: INV-1042</div>
+                <div class="small-note">
+                  TBA
+                  <!-- Paid • Reference: INV-1042 -->
+                </div>
               </div>
             </div>
           </div>
@@ -188,33 +220,30 @@
     </div>
   </main>
 </div>
+  <script>
+      const sidebar = document.querySelector(".sidebar");
+      const toggle = document.getElementById("toggleSidebar");
+      const backdrop = document.getElementById("backdrop");
 
+      function openSidebar() {
+        sidebar.classList.add("open");
+        backdrop.classList.add("show");
+      }
 
+      function closeSidebar() {
+        sidebar.classList.remove("open");
+        backdrop.classList.remove("show");
+      }
 
-    <script>
-  const sidebar = document.querySelector(".sidebar");
-  const toggle = document.getElementById("toggleSidebar");
-  const backdrop = document.getElementById("backdrop");
+      toggle?.addEventListener("click", openSidebar);
+      backdrop?.addEventListener("click", closeSidebar);
 
-  function openSidebar() {
-    sidebar.classList.add("open");
-    backdrop.classList.add("show");
-  }
-
-  function closeSidebar() {
-    sidebar.classList.remove("open");
-    backdrop.classList.remove("show");
-  }
-
-  toggle?.addEventListener("click", openSidebar);
-  backdrop?.addEventListener("click", closeSidebar);
-
-  // Close sidebar when a link is clicked (mobile)
-  document.querySelectorAll(".sidebar a").forEach(a => {
-    a.addEventListener("click", () => {
-      if (window.innerWidth < 992) closeSidebar();
-    });
-  });
+      // Close sidebar when a link is clicked (mobile)
+      document.querySelectorAll(".sidebar a").forEach(a => {
+        a.addEventListener("click", () => {
+          if (window.innerWidth < 992) closeSidebar();
+        });
+      });
 </script>
 
 </body>

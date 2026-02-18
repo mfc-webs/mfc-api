@@ -58,18 +58,4 @@ export const signUp = async (req, res) => {
 
   };
 
-export const loginForm = (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "views", "landing", "partials", "login-form.html"));
-  return res.status(200);
-};
 
-
-
-
-export const loggedIn = (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  res.sendFile(path.join(__dirname, "..", "views", "dashboard", "admin-dashboard.html"));
-  return res.status(200);
-};

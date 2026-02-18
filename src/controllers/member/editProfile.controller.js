@@ -61,7 +61,7 @@ export const updateMemberProfile = async (req, res) => {
 
 export const updatePassword = async (req, res) => {
   try {
-    const userId = req.user?.sub;
+    const userId = req.user.sub;
     if (!userId) return res.status(401).json({ ok: false, message: "Unauthorized" });
 
     const { currentPassword, newPassword, confirmPassword } = req.body;
