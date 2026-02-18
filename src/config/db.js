@@ -25,5 +25,5 @@ export const db = new Pool(
 
 export async function connectDB() {
   await db.connect();
-  console.log("✅ Connected to PostgreSQL");
+  console.log("✅ Connected to PostgreSQL 2026");
 }

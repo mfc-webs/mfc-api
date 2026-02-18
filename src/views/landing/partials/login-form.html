@@ -199,12 +199,27 @@
       credentials: "include"
     });
 
-    const data =await response.json();
 
-   showPopup(data.message, data.success, data.redirect) 
+
+    let data;
+      try {
+        data = await response.json();
+      } catch (err) {
+        console.error("Invalid JSON response");
+        return;
+      }
+
+
+ console.log(response);
+
+
+
+
+    showPopup(data.message, data.success, data.redirect) 
 
   });
 
+ 
   function showPopup(message, isSuccess, redirect) {
     popup.innerText = message;
     popup.style.color = isSuccess ? "#28a745" : "#dc3545";
@@ -220,7 +235,5 @@
   }
   });
 </script>
-
-
   </body>
 </html>

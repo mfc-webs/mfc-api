@@ -19,6 +19,9 @@
   <!-- Sidebar -->
      <%- include("partials/sidebar.html") %>
 
+     <!-- Backdrop for mobile -->
+  <div class="backdrop" id="backdrop"></div>
+
 
     <!-- /member/nutrition -->
 <main class="content">
@@ -27,7 +30,7 @@
     <div>
       <div class="d-flex align-items-center gap-2 mb-2">
         <button class="btn btn-outline-light sidebar-toggle" id="toggleSidebar" type="button">
-          <i class="fa-solid fa-bars"></i> Menu
+          <i class="fa-solid fa-bars"></i> MENU
         </button>
       </div>
 
@@ -325,6 +328,31 @@
     // TODO: append to table + send to backend
     alert("Check-in saved (hook API next).");
   });
+</script>
+<script>
+      const sidebar = document.querySelector(".sidebar");
+      const toggle = document.getElementById("toggleSidebar");
+      const backdrop = document.getElementById("backdrop");
+
+      function openSidebar() {
+        sidebar.classList.add("open");
+        backdrop.classList.add("show");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove("open");
+        backdrop.classList.remove("show");
+      }
+
+      toggle?.addEventListener("click", openSidebar);
+      backdrop?.addEventListener("click", closeSidebar);
+
+      // Close sidebar when a link is clicked (mobile)
+      document.querySelectorAll(".sidebar a").forEach(a => {
+        a.addEventListener("click", () => {
+          if (window.innerWidth < 992) closeSidebar();
+        });
+      });
 </script>
 
     

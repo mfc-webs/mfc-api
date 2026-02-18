@@ -82,13 +82,14 @@ export const loginMember = async (req, res) => {
     // go to the portal route (not a direct file send)
     return res.status(200).json(({
       success: true,
-      message: "Login successful",
+      message: "Login successful!",
       redirect: "/member/portal"
     }));
+    
   } catch (err) {
     return res.status(500).json({ 
      success: false,
-     message: "Something went wrong"
+     message: "Something went wrong!"
     });
   }
 };
