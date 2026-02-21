@@ -272,7 +272,7 @@
                         : "Never" %>
               </div>
             </div>
-            <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#saveMedInfo">
+            <button class="btn btn-primary" type="button" data-bs-target="#saveMedInfo">
               Save Info
             </button>
           </div>
@@ -300,8 +300,8 @@
 
             <div class="col-12">
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="consentShareTrainer">
-                <label class="form-check-label" for="consentShareTrainer" <%= member.consent_share_trainer ? "checked" : "" %>>
+                <input class="form-check-input" type="checkbox" id="consentShareTrainer" <%= member.consent_share_trainer ? "checked" : "" %>>
+                <label class="form-check-label" for="consentShareTrainer">
                   I consent to share these notes with my trainer
                 </label>
               </div>
