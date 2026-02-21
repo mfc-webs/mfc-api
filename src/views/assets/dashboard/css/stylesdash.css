@@ -186,3 +186,19 @@ table {
     pointer-events: auto;
   }
 }
+
+
+/* pop up message style */
+.popup {
+position: fixed;
+top: 8vh;
+right: 20px;
+background: #28a746bf;
+color: white;
+padding: 15px;
+border-radius: 5px;
+z-index: 9000;
+}
+.hidden {
+display: none;
+}
