@@ -144,7 +144,7 @@ export const getEmergencyContacts = async (req, res) => {
     console.error("FETCH EMS ERROR:", err);
     return res.status(500).json({
       ok: false,
-      message: "Failed to fetch emergency contacts"
+      message: "Server error. Failed to fetch emergency contacts."
     });
   }
 };
@@ -172,7 +172,7 @@ export const deleteEmergencyContact = async (req, res) => {
   }
 };
 
-// - - update medical conditions
+//// - - update medical conditions - - ////
 
 export const updateHealthRecord = async (req, res) => {
   const client = await db.connect();
@@ -183,7 +183,7 @@ export const updateHealthRecord = async (req, res) => {
     const medical_conditions = req.body?.medicalConditions || null;
     const injuries = req.body?.injuries || null;
     const health_notes = req.body?.healthNotes || null;
-     const consent_share_trainer = req.body?.consentShareTrainer === true;
+    const consent_share_trainer = req.body?.consentShareTrainer === true;
 
     await client.query("BEGIN");
 
@@ -212,7 +212,7 @@ export const updateHealthRecord = async (req, res) => {
       await client.query(
         `
         INSERT INTO member_health_records
-        (user_id, medical_conditions, injuries, health_notes, consent_share_trainer, created_at, updated_at)
+        (user_id, medical_conditions, injuries, health_notes, consent_share_trainer)
         VALUES ($1, $2, $3, $4, $5)
         ON CONFLICT (user_id)
         DO UPDATE SET
@@ -239,7 +239,7 @@ export const updateHealthRecord = async (req, res) => {
 
     return res.status(500).json({
       ok: false,
-      message: "Failed to save medical condition!"
+      message: "Server error. Failed to save medical condition."
     });
   } finally {
     client.release();
