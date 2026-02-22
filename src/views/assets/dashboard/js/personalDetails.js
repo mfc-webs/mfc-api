@@ -273,36 +273,41 @@ function showPopup(message, type = "success", duration = 4000) {
 
 
 // - - health record updates handler
+document.addEventListener("DOMContentLoaded", () => {
+  const saveBtn = document.querySelector('[data-bs-target="#saveMedInfo"]');
 
-document.querySelector('[data-bs-target="#saveMedInfo"]').addEventListener("click", async () => {
+  if (saveBtn) {
+    saveBtn.addEventListener("click", async () => {
 
-  const data = {
-    medicalConditions: document.getElementById("medicalConditions").value,
-    injuries: document.getElementById("injuries").value,
-    healthNotes: document.getElementById("healthNotes").value,
-    consentShareTrainer: document.getElementById("consentShareTrainer").checked
+      const data = {
+        medicalConditions: document.getElementById("medicalConditions").value,
+        injuries: document.getElementById("injuries").value,
+        healthNotes: document.getElementById("healthNotes").value,
+        consentShareTrainer: document.getElementById("consentShareTrainer").checked
 
-  };
+      };
 
-  try {
-    const res = await fetch("/member-health-record", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
+      try {
+        const res = await fetch("/member-health-record", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+
+        if (!res.ok || !result.ok) {
+          showPopup(result?.message || "Failed to save health info.", "error");
+          return;
+        }
+
+        showPopup(result.message, "success");
+
+      } catch (err) {
+        showPopup("Server error occurred.", "error");
+      }
     });
-
-    const result = await res.json();
-
-    if (!res.ok || !result.ok) {
-      showPopup(result?.message || "Failed to save health info.", "error");
-      return;
-    }
-
-    showPopup(result.message, "success");
-
-  } catch (err) {
-    showPopup("Server error occurred.", "error");
   }
 });
