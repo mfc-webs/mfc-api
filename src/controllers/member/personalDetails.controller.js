@@ -212,8 +212,15 @@ export const updateHealthRecord = async (req, res) => {
       await client.query(
         `
         INSERT INTO member_health_records
-        (user_id, medical_conditions, injuries, health_notes, created_at, updated_at)
-        VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+        (user_id, medical_conditions, injuries, health_notes, consent_share_trainer, created_at, updated_at)
+        VALUES ($1, $2, $3, $4, $5)
+        ON CONFLICT (user_id)
+        DO UPDATE SET
+          medical_conditions = EXCLUDED.medical_conditions,
+          injuries_limitations = EXCLUDED.injuries_limitations,
+          health_notes = EXCLUDED.health_notes,
+          consent_share_trainer = EXCLUDED.consent_share_trainer,
+          updated_at = CURRENT_TIMESTAMP
         `,
         [userId, medical_conditions, injuries, health_notes, consent_share_trainer]
       );
