@@ -217,7 +217,7 @@ export const updateHealthRecord = async (req, res) => {
         ON CONFLICT (user_id)
         DO UPDATE SET
           medical_conditions = EXCLUDED.medical_conditions,
-          injuries_limitations = EXCLUDED.injuries_limitations,
+          injuries = EXCLUDED.injuries,
           health_notes = EXCLUDED.health_notes,
           consent_share_trainer = EXCLUDED.consent_share_trainer,
           updated_at = CURRENT_TIMESTAMP
