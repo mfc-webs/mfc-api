@@ -8,7 +8,13 @@ export async function getMemberWithProfile(userId) {
 
       -- member edit profile columns
 
-      mp.profile_picture, mp.display_name, mp.bio, mp.mail_note, mp.sms_note, mp.wa_note, mp.updated_at AS mp_updated_at,
+          mp.profile_picture, 
+          mp.display_name, 
+          mp.bio, 
+          mp.mail_note, 
+          mp.sms_note, 
+          mp.wa_note, 
+          mp.updated_at AS mp_updated_at,
 
       -- member personal details columns
 
@@ -19,14 +25,25 @@ export async function getMemberWithProfile(userId) {
           mcd.province, 
           mcd.postal_code, 
           mcd.notes,
+          mcd.birthdate AS "birthdate",
+          mcd.gender,
           
       -- member emergency contact details
 
-      mec.ecname, mec.relationship, mec.phone, mec.priority, mec.ems_notes, mec.updated_at AS ems_updated_at, 
+          mec.ecname, 
+          mec.relationship, 
+          mec.phone, 
+          mec.priority, 
+          mec.ems_notes, 
+          mec.updated_at AS ems_updated_at, 
 
       -- member health records 
 
-      mhr.medical_conditions, mhr.injuries, mhr.health_notes, mhr.consent_share_trainer, mhr.updated_at AS health_updated_at
+          mhr.medical_conditions, 
+          mhr.injuries, mhr.health_notes, 
+          mhr.consent_share_trainer, 
+          mhr.medication, 
+          mhr.updated_at AS health_updated_at
 
 
     FROM public.users u
