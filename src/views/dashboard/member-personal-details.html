@@ -105,7 +105,32 @@
               <input class="form-control" id="altPhone" placeholder="+27 ..." value="<%= member.alt_phone %>"/>
             </div>
 
-            <div class="col-12">
+            <div class="col-md-3">
+              <label class="form-label small-note">Date of Birth</label>
+              <%  if (member.birthdate) {
+                  const date = new Date(member.birthdate);
+                  const year = date.getFullYear();
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  const day = String(date.getDate()).padStart(2, "0");
+
+                  member.birthdate = `${year}-${month}-${day}`;
+                } %>
+              <input type="date" class="form-control" id="birthDate"  name="birthdate" placeholder="e.g. 2001/12/01" value="<%= member.birthdate || "" %>"/>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label small-note">Gender</label>
+              <% const gender = ['Select', 'Male', 'Female', 'Other' ] %>
+              <select class="form-select" id="gender" style=" background-color: #3d5c7e73;">
+                <% gender.forEach(function(gender) { %>
+                 <option value="<%= gender %>" <%= member.gender === gender ? "selected" : "Select" %> >
+                    <%= gender %>
+                  </option>
+                <% }) %>
+              </select>
+            </div>
+
+            <div class="col-6">
               <label class="form-label small-note">Street Address</label>
               <input class="form-control" id="street" placeholder="House no, street name" value="<%= member.street_address %>"/>
             </div>
@@ -254,7 +279,7 @@
       <h2 class="accordion-header">
         <button class="accordion-button collapsed bg-transparent text-white" type="button"
           data-bs-toggle="collapse" data-bs-target="#collapseHealth">
-          <i class="fa-solid fa-heart-pulse me-2"></i> Health Notes (Optional)
+          <i class="fa-solid fa-heart-pulse me-2"></i> Health Record (Optional)
         </button>
       </h2>
       <div id="collapseHealth" class="accordion-collapse collapse" data-bs-parent="#personalAccordion">
@@ -277,16 +302,22 @@
             </button>
           </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <label class="form-label small-note">Medical Conditions (optional)</label>
               <input class="form-control" id="medicalConditions" placeholder="e.g. asthma, hypertension..."
               value="<%= member.medical_conditions || '' %>" />
             </div>
 
-            <div class="col-md-6">
-              <label class="form-label small-note">Injuries / Limitations (optional)</label>
+            <div class="col-md-4">
+              <label class="form-label small-note">Surgeries, Injuries or Limitations (optional)</label>
               <input class="form-control" id="injuries" placeholder="e.g. knee pain, shoulder limitation..."
                value="<%= member.injuries || '' %>" />
+            </div>
+
+            <div class="col-md-4">
+              <label class="form-label small-note">Are You on Any Medication (optional)</label>
+              <input class="form-control" id="medication" placeholder="e.g. Pain medication, Antibiotics, Antihypertensives, etc,"
+               value="<%= member.medication || '' %>" />
             </div>
 
             <div class="col-12">

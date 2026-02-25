@@ -93,8 +93,8 @@ function renderTable() {
             </td>
             <td>${escapeHtml(m.joindate)}</td>
             <td class="text-end">
-              <button class="btn btn-sm btn-outline-secondary" onclick="editMember('${m.id}')">Edit</button>
-              <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteMember('${m.id}')">Delete</button>
+              <button class="btn btn-sm btn-outline-secondary" onclick="editMember('${m.id}')"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteMember('${m.id}')"><i class="fas fa-trash"></i></button>
             </td>
           </tr>
         `).join("");
