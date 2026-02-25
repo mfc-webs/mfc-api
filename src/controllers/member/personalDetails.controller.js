@@ -1,6 +1,5 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import bcrypt from "bcrypt";
 import { db } from "../../config/db.js";
 
 

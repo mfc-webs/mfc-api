@@ -1,32 +1,52 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
-import path from "path";
-import { db } from "../../config/db.js";
+import * as dietaryService from '../../services/memberDietary.service.js';
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const viewMemberNutrition = async (req, res, next) => {
-  try {
-      const userId = req.user.sub; // because I used { sub: user.id } in JWT
-  
-      const { rows } = await db.query(
-        `SELECT id, firstname, lastname, email, phone, tier, joindate, role
-         FROM public.users
-         WHERE id = $1
-         LIMIT 1`,
-        [userId]
-      );
-  
-      const member = rows[0];
-      if (!member) return res.redirect("/login");
-  
 return res.render("dashboard/member-nutrition", {
-    member,
     activePage: "nutrition",
   });
+}
+
+// - - - Dietary information controller
+
+export async function getMemberDietary(req, res) {
+  try {
+    const userId = req.user.sub;
+    const dietary = await dietaryService.getDietaryInfo(userId);
+    res.json({ success: true, dietary });
   } catch (err) {
-    console.error("PORTAL ERROR:", err);
-    return res.status(500).send("Server error");
+    console.error('Dietary info error:', err);
+    res.status(500).json({ success: false, message: 'Error fetching dietary info.' });
   }
-};
+}
+
+export async function updateMemberDietary(req, res) {
+  try {
+    if (!req.user || !req.user.sub) {
+      return res.status(401).json({
+        success: false,
+        message: "User not authenticated."
+      });
+    }
+
+    const userId = req.user.sub;
+    const dietary = await dietaryService.updateDietaryInfo(userId, req.body);
+
+    res.json({
+      success: true,
+      message: "Dietary info saved successfully.",
+      dietary
+    });
+
+  } catch (err) {
+    console.error("Dietary update error:", err);
+    res.status(500).json({
+      success: false,
+      message: "Server error."
+    });
+  }
+}

@@ -1,5 +1,5 @@
-import { db } from "../config/db.js";
 import { getMemberWithProfile } from "../services/member.service.js";
+import * as dietaryService from "../services/memberDietary.service.js";
 
 export const hydrateMember = async (req, res, next) => {
   try {
@@ -7,6 +7,12 @@ export const hydrateMember = async (req, res, next) => {
     if (!userId) return res.redirect("/login");
 
     const member = await getMemberWithProfile(userId);
+
+    const dietary = await dietaryService.getDietaryInfo(req.user.sub);
+
+    member.dietary = dietary; // ✅ attach dietary info
+
+
     if (!member) return res.redirect("/login");
 
     res.locals.member = member;
