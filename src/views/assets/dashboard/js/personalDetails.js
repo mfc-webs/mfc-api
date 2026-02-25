@@ -47,6 +47,8 @@ document.getElementById("savePersonalBtn")?.addEventListener("click", async () =
 
         whatsapp_number: document.getElementById("wa-phone")?.value || "",
         alt_phone: document.getElementById("altPhone")?.value || "",
+        birthDate: document.getElementById("birthDate")?.value || "",
+        gender: document.getElementById("gender")?.value || "",
         street_address: document.getElementById("street")?.value || "",
         city: document.getElementById("city")?.value || "",
         province: document.getElementById("province")?.value || "",
@@ -283,6 +285,7 @@ document.addEventListener("DOMContentLoaded", () => {
         medicalConditions: document.getElementById("medicalConditions").value,
         injuries: document.getElementById("injuries").value,
         healthNotes: document.getElementById("healthNotes").value,
+        medication: document.getElementById("medication").value,
         consentShareTrainer: document.getElementById("consentShareTrainer").checked
 
       };

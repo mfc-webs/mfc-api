@@ -187,18 +187,34 @@ table {
   }
 }
 
+/* Admin dashboard styles */
 
-/* pop up message style */
-.popup {
-position: fixed;
-top: 8vh;
-right: 20px;
-background: #28a746bf;
-color: white;
-padding: 15px;
-border-radius: 5px;
-z-index: 9000;
-}
-.hidden {
-display: none;
-}
+ .content {
+     flex: 1;
+     padding: 30px;
+ }
+
+ .activity-card {
+     transition: 0.2s;
+ }
+
+ .activity-card:hover {
+     transform: translateY(-3px);
+ }
+
+ .timetable-column {
+     min-height: 250px;
+     /* background: #ffffff; */
+     border: 1px solid #dee2e6;
+     padding: 15px;
+     border-radius: 8px;
+ }
+
+ .timetable-slot {
+     background: #7272727e;
+     color: white;
+     padding: 8px;
+     border-radius: 6px;
+     margin-bottom: 8px;
+     cursor: grab;
+ }

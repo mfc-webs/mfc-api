@@ -34,7 +34,7 @@
         </button>
       </div>
 
-      <h1 class="h3 text-white mb-1">Nutrition</h1>
+      <h1 class="h3 text-white mb-1">Wellness & Lifestyle</h1>
       <div class="muted">keep your profile updated.</div>
       <!-- <p>Set goals, track weight, and keep your nutrition profile updated.</p> -->
     </div>
@@ -66,6 +66,7 @@
             <div class="col-md-6">
               <label class="form-label small-note">Primary Goal</label>
               <select class="form-select" id="goalPrimary" style=" background-color: #3d5c7e73;">
+                <option value="select">Select</option>
                 <option value="lose">Lose Fat</option>
                 <option value="gain">Gain Muscle</option>
                 <option value="maintain" selected>Maintain</option>
@@ -74,7 +75,11 @@
               </select>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
+              <label class="form-label small-note">Current Weight (kg)</label>
+              <input class="form-control" id="caloriesTarget1" type="number" placeholder="e.g. 2200" min="0" />
+            </div>
+            <div class="col-md-3">
               <label class="form-label small-note">Weight Target (kg)</label>
               <input class="form-control" id="caloriesTarget" type="number" placeholder="e.g. 2200" min="0" />
             </div>
@@ -147,6 +152,8 @@
                 <option value="">Select</option>
                 <option value="balanced" selected>Balanced</option>
                 <option value="high-protein">High Protein</option>
+                <option value="low-protein">Low Protein</option>
+                <option value="high-carb">High Carb</option>
                 <option value="low-carb">Low Carb</option>
                 <option value="keto">Keto</option>
                 <option value="vegan">Vegan</option>
@@ -155,7 +162,7 @@
               </select>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
               <label class="form-label small-note">Meals per day</label>
               <select class="form-select" id="mealsPerDay">
                 <option value="2">2</option>
@@ -163,6 +170,10 @@
                 <option value="4">4</option>
                 <option value="5">5</option>
               </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label small-note">Water per day (L)</label>
+              <input type="number" class="form-control" min="0" id="waterPerDay" placeholder="e.g. 2" />
             </div>
 
             <div class="col-12">
@@ -317,44 +328,6 @@
 </main>
 </div>
 
-<script>
-  // Optional: hook buttons later to API calls.
-  document.getElementById("saveNutritionBtn")?.addEventListener("click", () => {
-    // TODO: send nutrition profile to backend
-    alert("Nutrition profile saved (hook API next).");
-  });
-
-  document.getElementById("saveCheckInBtn")?.addEventListener("click", () => {
-    // TODO: append to table + send to backend
-    alert("Check-in saved (hook API next).");
-  });
-</script>
-<script>
-      const sidebar = document.querySelector(".sidebar");
-      const toggle = document.getElementById("toggleSidebar");
-      const backdrop = document.getElementById("backdrop");
-
-      function openSidebar() {
-        sidebar.classList.add("open");
-        backdrop.classList.add("show");
-      }
-
-      function closeSidebar() {
-        sidebar.classList.remove("open");
-        backdrop.classList.remove("show");
-      }
-
-      toggle?.addEventListener("click", openSidebar);
-      backdrop?.addEventListener("click", closeSidebar);
-
-      // Close sidebar when a link is clicked (mobile)
-      document.querySelectorAll(".sidebar a").forEach(a => {
-        a.addEventListener("click", () => {
-          if (window.innerWidth < 992) closeSidebar();
-        });
-      });
-</script>
-
-    
+<script src="../assets/dashboard/js/memberNutrition.js"></script>    
 </body>
 </html>

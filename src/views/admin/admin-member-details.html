@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin • Member Details</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../assets/dashboard/css/stylesdash.css"/>
+  <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
+</head>
+<body>
+ <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="d-flex align-items-center gap-3 mb-4">
+          <div class="brand-badge">MMS</div>
+          <div>
+            <div class="text-white fw-semibold">MMS</div>
+            <div class="small-note">Admin Dashboard</div>
+          </div>
+        </div>
+
+        <nav class="d-grid gap-2">
+          <a class="nav-pill active text-decoration-none" href="#">
+            <span><i class="fas fa-home"></i></span> <span>Overview</span>
+          </a>
+          <a class="nav-pill text-decoration-none" href="#members">
+            <span><i class="fa-solid fa-users"></i></span> <span>Members</span>
+          </a>
+          <a class="nav-pill text-decoration-none" href="#tiers">
+            <span><i class="fa-solid fa-tag"></i></span> <span>Tiers</span>
+          </a>
+          <a class="nav-pill text-decoration-none" href="#reports">
+            <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
+          </a>
+          <a class="nav-pill text-decoration-none" href="#settings">
+            <span><i class="fa-solid fa-gears"></i></span> <span>Settings</span>
+          </a>
+        </nav>
+        <button class="btn btn-outline-light d-lg-none mb-3" id="toggleSidebar">
+          <i class="fa-solid fa-bars"></i> Menu
+        </button>
+
+
+        <div class="mt-4 p-3 rounded-4 glass-card">
+          <div class="fw-semibold mb-1">Quick Tip</div>
+          <div class="small-note">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus molestias vel temporibus.
+          </div>
+        </div>
+
+        <div class="mt-4 small-note">
+          Logged in as <span class="text-white">Admin</span>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="content">
+          <div class="container-fluid py-4">
+          <!-- Header -->
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+            <div>
+              <h1 class="h3 text-white mb-1">Member Details</h1>
+              <div class="muted">Manage member profile, membership, and engagement.</div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-light"><i class="fa-solid fa-key"></i> Reset Password</button>
+              <button class="btn btn-warning"><i class="fa-solid fa-user-slash"></i> Suspend</button>
+              <button class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</button>
+              <button class="btn btn-primary"><i class="fa-solid fa-save"></i> Save Changes</button>
+            </div>
+          </div>
+
+          <div class="row g-4">
+
+            <!-- LEFT COLUMN -->
+            <div class="col-lg-8">
+
+              <!-- Basic Info -->
+              <div class="card glass-card rounded-4 shadow-sm mb-4">
+                <div class="card-body">
+                  <h5 class="text-white mb-3">Basic Information</h5>
+
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label small-note">First Name</label>
+                      <input type="text" class="form-control" value="John">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label small-note">Last Name</label>
+                      <input type="text" class="form-control" value="Doe">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label small-note">Email</label>
+                      <input type="email" class="form-control" value="john@email.com">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label small-note">Phone</label>
+                      <input type="text" class="form-control" value="+123456789">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label small-note">Date of Birth</label>
+                      <input type="date" class="form-control">
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label small-note">Gender</label>
+                      <select class="form-select">
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Other</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Address -->
+              <div class="card glass-card rounded-4 shadow-sm mb-4">
+                <div class="card-body">
+                  <h5 class="text-white mb-3">Address</h5>
+
+                  <div class="row g-3">
+                    <div class="col-12">
+                      <input class="form-control" placeholder="Street Address">
+                    </div>
+                    <div class="col-md-6">
+                      <input class="form-control" placeholder="City">
+                    </div>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="Province/State">
+                    </div>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="Postal Code">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Emergency Contact -->
+              <div class="card glass-card rounded-4 shadow-sm mb-4">
+                <div class="card-body">
+                  <h5 class="text-white mb-3">Emergency Contact</h5>
+
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <input class="form-control" placeholder="Contact Name">
+                    </div>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="Relationship">
+                    </div>
+                    <div class="col-md-3">
+                      <input class="form-control" placeholder="Phone">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Health Notes -->
+              <div class="card glass-card rounded-4 shadow-sm mb-4">
+                <div class="card-body">
+                  <h5 class="text-white mb-3">Health Notes</h5>
+
+                  <textarea class="form-control mb-3" rows="3" placeholder="Medical conditions..."></textarea>
+                  <textarea class="form-control" rows="3" placeholder="Injuries or limitations..."></textarea>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN -->
+            <div class="col-lg-4">
+
+              <!-- Membership -->
+              <div class="card glass-card rounded-4 shadow-sm mb-4">
+                <div class="card-body">
+                  <h5 class="text-white mb-3">Membership</h5>
+
+                  <label class="form-label small-note">Tier</label>
+                  <select class="form-select mb-3">
+                    <option>Bronze</option>
+                    <option>Silver</option>
+                    <option>Gold</option>
+                  </select>
+
+                  <label class="form-label small-note">Status</label>
+                  <select class="form-select mb-3">
+                    <option>Active</option>
+                    <option>Suspended</option>
+                    <option>Expired</option>
+                  </select>
+
+                  <label class="form-label small-note">Start Date</label>
+                  <input type="date" class="form-control mb-3">
+
+                  <label class="form-label small-note">Renewal Date</label>
+                  <input type="date" class="form-control">
+                </div>
+              </div>
+
+              <!-- Engagement Summary -->
+              <div class="card glass-card rounded-4 shadow-sm">
+                <div class="card-body">
+                  <h5 class="text-white mb-3">Engagement</h5>
+                  <div class="small-note">Total Check-ins</div>
+                  <div class="h4 text-white">32</div>
+
+                  <div class="small-note mt-3">Classes Enrolled</div>
+                  <div class="h4 text-white">5</div>
+
+                  <div class="small-note mt-3">Last Attendance</div>
+                  <div class="text-white">12 Feb 2026</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          </div>
+      </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -22,6 +22,8 @@ export const updatepersonalDetails = async (req, res,) => {
     const userId = req.user?.sub;
     const whatsapp_number = req.body?.whatsapp_number || null;
     const alt_phone = req.body?.alt_phone || null;
+    const birthdate = req.body?.birthDate || null;
+    const gender = req.body?.gender || null;
     const street_address = req.body?.street_address || null;
     const city = req.body?.city || null;
     const province = req.body?.province || null;
@@ -31,8 +33,8 @@ export const updatepersonalDetails = async (req, res,) => {
 
   await db.query(
     `
-    INSERT INTO public.member_contact_details (user_id, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO public.member_contact_details (user_id, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes, gender, birthdate)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     ON CONFLICT (user_id)
     DO UPDATE SET
     whatsapp_number = EXCLUDED.whatsapp_number, 
@@ -42,9 +44,11 @@ export const updatepersonalDetails = async (req, res,) => {
     province = EXCLUDED.province, 
     postal_code = EXCLUDED.postal_code, 
     notes = EXCLUDED.notes,
+    gender = EXCLUDED.gender, 
+    birthdate = EXCLUDED.birthdate,
     updated_at = NOW()
     `,
-    [userId, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes]
+    [userId, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes, gender, birthdate]
   );
     return res.status(200).json({ ok: true, message: "Personal details updated" });
   } catch (err) {
@@ -183,6 +187,7 @@ export const updateHealthRecord = async (req, res) => {
     const medical_conditions = req.body?.medicalConditions || null;
     const injuries = req.body?.injuries || null;
     const health_notes = req.body?.healthNotes || null;
+    const medication = req.body?.medication || null;
     const consent_share_trainer = req.body?.consentShareTrainer === true;
 
     await client.query("BEGIN");
@@ -202,27 +207,29 @@ export const updateHealthRecord = async (req, res) => {
             injuries = $2,
             health_notes = $3,
             consent_share_trainer = $4,
+            medication = $5,
             updated_at = NOW()
-        WHERE user_id = $5
+        WHERE user_id = $6
         `,
-        [medical_conditions, injuries, health_notes, consent_share_trainer, userId]
+        [medical_conditions, injuries, health_notes, consent_share_trainer, medication, userId]
       );
     } else {
       // Insert new
       await client.query(
         `
         INSERT INTO member_health_records
-        (user_id, medical_conditions, injuries, health_notes, consent_share_trainer)
-        VALUES ($1, $2, $3, $4, $5)
+        (user_id, medical_conditions, injuries, health_notes, consent_share_trainer, medication,)
+        VALUES ($1, $2, $3, $4, $5, $6)
         ON CONFLICT (user_id)
         DO UPDATE SET
           medical_conditions = EXCLUDED.medical_conditions,
           injuries = EXCLUDED.injuries,
           health_notes = EXCLUDED.health_notes,
           consent_share_trainer = EXCLUDED.consent_share_trainer,
+          medication = EXCLUDED.medication,
           updated_at = CURRENT_TIMESTAMP
         `,
-        [userId, medical_conditions, injuries, health_notes, consent_share_trainer]
+        [userId, medical_conditions, injuries, health_notes, consent_share_trainer, medication,]
       );
     }
 

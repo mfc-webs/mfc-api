@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Activities</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- SortableJS (Drag & Drop) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+
+    <link rel="stylesheet" href="../assets/dashboard/css/stylesdash.css" />
+    <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+
+<div class="app">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <div class="brand-badge">MMS</div>
+            <div>
+                <div class="text-white fw-semibold">MMS</div>
+                <div class="small-note">Admin Dashboard</div>
+            </div>
+        </div>
+    
+        <nav class="d-grid gap-2">
+            <a class="nav-pill active text-decoration-none" href="#">
+                <span><i class="fas fa-home"></i></span> <span>Overview</span>
+            </a>
+            <a class="nav-pill text-decoration-none" href="#tasks">
+                <span><i class="fa-solid fa-tasks"></i></span> <span>Activities</span>
+            </a>
+            <a class="nav-pill text-decoration-none" href="#members">
+                <span><i class="fa-solid fa-users"></i></span> <span>Members</span>
+            </a>
+            <a class="nav-pill text-decoration-none" href="#tiers">
+                <span><i class="fa-solid fa-tag"></i></span> <span>Tiers</span>
+            </a>
+            <a class="nav-pill text-decoration-none" href="#reports">
+                <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
+            </a>
+            <a class="nav-pill text-decoration-none" href="#settings">
+                <span><i class="fa-solid fa-gears"></i></span> <span>Settings</span>
+            </a>
+        </nav>
+        <button class="btn btn-outline-light d-lg-none mb-3" id="toggleSidebar">
+            <i class="fa-solid fa-bars"></i> Menu
+        </button>
+    
+    
+        <div class="mt-4 p-3 rounded-4 glass-card">
+            <div class="fw-semibold mb-1">Quick Tip</div>
+            <div class="small-note">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus molestias vel temporibus.
+            </div>
+        </div>
+    
+        <div class="mt-4 small-note">
+            Logged in as <span class="text-white">Admin</span>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content text-light">
+
+        <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Activities</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">
+                <i class="fas fa-plus-circle"></i> Create Activity
+            </button>
+        </div>
+
+        <!-- ACTIVITY CARDS -->
+        <div class="row g-4 mb-5">
+
+            <div class="col-md-4">
+                <div class="card glass-card rounded-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Yoga Flow</h5>
+                        <p class="card-text">Beginner-friendly yoga class.</p>
+
+                        <ul class="list-unstyled small">
+                            <li><strong>Date:</strong> 12 June 2026</li>
+                            <li><strong>Time:</strong> 10:00 AM</li>
+                            <li><strong>Trainer:</strong> Sarah Lee</li>
+                            <li><strong>Duration:</strong> 60 mins</li>
+                            <li><strong>Bookings:</strong> 14 / 20</li>
+                            <li><strong>Location:</strong> Studio A</li>
+                            <li><strong>Status:</strong> 
+                                <span class="badge bg-success">Upcoming</span>
+                            </li>
+                        </ul>
+
+                        <div class="d-flex justify-content-between mt-3">
+                            <button class="btn btn-sm btn-outline-light" data-bs-toggle="modal" data-bs-target="#activityModal">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- DRAG & DROP TIMETABLE -->
+        <h4 class="mb-3">Weekly Timetable (Drag & Drop)</h4>
+
+        <div class="row g-3">
+
+            <div class="col-md-3 shadow-sm">
+                <h6>Monday</h6>
+                <div class="timetable-column shadow-sm" id="monday">
+                    <div class="glass-card timetable-slot">Yoga 10:00</div>
+                    <div class="timetable-slot">HIIT 18:00</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <h6>Tuesday</h6>
+                <div class="timetable-column" id="tuesday"></div>
+            </div>
+
+            <div class="col-md-3">
+                <h6>Wednesday</h6>
+                <div class="timetable-column" id="wednesday"></div>
+            </div>
+
+            <div class="col-md-3">
+                <h6>Thursday</h6>
+                <div class="timetable-column" id="thursday"></div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<!-- ACTIVITY MODAL -->
+<div class="modal fade" id="activityModal" tabindex="-1">
+    <div class="modal-dialog   shadow-sm">
+        <div class="modal-content modal-lg glass-card ">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Create / Edit Activity</h5>
+                <button class="btn-close text-light" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <form>
+
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label">Class Name</label>
+                            <input type="text" class="form-control">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Trainer Name</label>
+                            <input type="text" class="form-control">
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Default Duration (mins)</label>
+                            <input type="number" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Time</label>
+                            <input type="time" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Capacity</label>
+                            <input type="number" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Location</label>
+                            <input type="text" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            <select class="form-select">
+                                <option>Upcoming</option>
+                                <option>In-Session</option>
+                                <option>Cancelled</option>
+                                <option>Completed</option>
+                            </select>
+                        </div>
+
+                        <!-- Recurring Option -->
+                        <div class="col-12 mt-3">
+                            <h6>Recurring Options</h6>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Recurring</label>
+                            <select class="form-select">
+                                <option value="no">No</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="biweekly">Bi-Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Repeat Until</label>
+                            <input type="date" class="form-control">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Max Participants</label>
+                            <input type="number" class="form-control">
+                        </div>
+
+                        <!-- Additional Recommended Fields -->
+                        <div class="col-md-6">
+                            <label class="form-label">Waitlist Enabled</label>
+                            <select class="form-select">
+                                <option>Yes</option>
+                                <option>No</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Cancellation Deadline (hours before)</label>
+                            <input type="number" class="form-control">
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary">Save</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Drag & Drop Initialization -->
+<script>
+    const columns = document.querySelectorAll('.timetable-column');
+    columns.forEach(column => {
+        new Sortable(column, {
+            group: 'shared',
+            animation: 150
+        });
+    });
+</script>
+
+</body>
+</html>
