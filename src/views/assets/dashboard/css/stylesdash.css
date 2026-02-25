@@ -218,3 +218,16 @@ table {
      margin-bottom: 8px;
      cursor: grab;
  }
+
+.popup {
+position: fixed;
+top: 8vh;
+right: 20px;
+color: white;
+padding: 15px;
+border-radius: 5px;
+z-index: 9000;
+}
+.hidden {
+display: none;
+}
