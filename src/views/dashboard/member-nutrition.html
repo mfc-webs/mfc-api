@@ -380,7 +380,7 @@
               <% const diet_type = ['Select', 'Balanced', 'High Protein', 'Low Protein', 'High Carb', 'Low Carb', 'Keto', 'Vegan', 'Vegetarian', 'Pescatarian',] %>
               <select class="form-select" id="dietType" style="background-color:#3d5c7e73;">
                 <% diet_type.forEach(function(diet_type) { %>
-                 <option value="<%= diet_type %>" <%= member.dietary.diet_type === diet_type ? "selected" : "" %> >
+                 <option value="<%= diet_type %>" <%= member?.dietary?.diet_type === diet_type ? "selected" : "" %> >
                     <%= diet_type %>
                   </option>
                 <% }) %>
@@ -393,7 +393,7 @@
               <% const meals_per_day = ['0', '1', '2', '3', '4', '5', '6', '7'] %>
               <select class="form-select" id="mealsPerDay" style="background-color:#3d5c7e73;">
                 <% meals_per_day.forEach(function(meals_per_day) { %>
-                 <option value="<%= meals_per_day %>" <%=  String(member.dietary.meals_per_day) === meals_per_day ? "selected" : "" %> >
+                 <option value="<%= meals_per_day %>" <%=  String(member?.dietary?.meals_per_day) === meals_per_day ? "selected" : "" %> >
                     <%= meals_per_day %>
                   </option>
                 <% }) %>
@@ -401,22 +401,22 @@
             </div>
             <div class="col-md-6">
               <label class="form-label small-note">Water per day (L)</label>
-              <input type="number" class="form-control" min="0" step="0.1" id="waterPerDay" placeholder="e.g. 2" value="<%= member.dietary.water_per_day %>"/>
+              <input type="number" class="form-control" min="0" step="0.1" id="waterPerDay" placeholder="e.g. 2" value="<%= member?.dietary?.water_per_day %>"/>
             </div>
 
             <div class="col-12">
               <label class="form-label small-note">Foods to avoid</label>
-              <input class="form-control" id="foodsAvoid" placeholder="e.g. sugary drinks, deep-fried foods..." value="<%= member.dietary.foods_avoid %>"/>
+              <input class="form-control" id="foodsAvoid" placeholder="e.g. sugary drinks, deep-fried foods..." value="<%= member?.dietary?.foods_avoid %>"/>
             </div>
 
             <div class="col-12">
               <label class="form-label small-note">Supplements (optional)</label>
-              <input class="form-control" id="supplements" placeholder="e.g. whey, creatine, magnesium..." value="<%= member.dietary.supplements %>"/>
+              <input class="form-control" id="supplements" placeholder="e.g. whey, creatine, magnesium..." value="<%= member?.dietary?.supplements %>"/>
             </div>
 
             <div class="col-12">
               <label class="form-label small-note">Hydration goal (litres/day)</label>
-              <input class="form-control" id="hydrationGoal" type="number" min="0" step="0.1" placeholder="e.g. 2.5" value="<%= member.dietary.hydration_goal %>" />
+              <input class="form-control" id="hydrationGoal" type="number" min="0" step="0.1" placeholder="e.g. 2.5" value="<%= member?.dietary?.hydration_goal %>" />
             </div>
           </div>
         </div>
@@ -432,13 +432,13 @@
           <div class="row g-3">
             <div class="col-12">
               <label class="form-label small-note">Allergies</label>
-              <input class="form-control" id="allergies" placeholder="e.g. peanuts, dairy, shellfish..." value="<%= member.dietary.allergies %>" />
+              <input class="form-control" id="allergies" placeholder="e.g. peanuts, dairy, shellfish..." value="<%= member?.dietary?.allergies %>" />
             </div>
 
             <div class="col-12">
               <label class="form-label small-note">Medical / dietary restrictions</label>
               <textarea class="form-control" id="restrictions" rows="3"
-                placeholder="e.g. lactose intolerant, high blood pressure (diet related), gluten sensitivity..."><%= member.dietary.restrictions %> </textarea>
+                placeholder="e.g. lactose intolerant, high blood pressure (diet related), gluten sensitivity..."><%= member?.dietary?.restrictions %> </textarea>
               <div class="small-note mt-2">This is not medical advice — it’s just tracking info.</div>
             </div>
 
@@ -447,7 +447,7 @@
               <% const preferred_checkin_day = ['Select', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %>
               <select class="form-select" id="checkInDay" style="background-color:#3d5c7e73;">
                 <% preferred_checkin_day.forEach(function(preferred_checkin_day) { %>
-                 <option value="<%= preferred_checkin_day %>" <%= member.dietary.preferred_checkin_day === preferred_checkin_day ? "selected" : "" %> >
+                 <option value="<%= preferred_checkin_day %>" <%= member?.dietary?.preferred_checkin_day === preferred_checkin_day ? "selected" : "" %> >
                     <%= preferred_checkin_day %>
                   </option>
                 <% }) %>
