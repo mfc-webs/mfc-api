@@ -390,7 +390,7 @@
 
             <div class="col-md-6">
               <label class="form-label small-note">Meals per day</label>
-              <% const meals_per_day = ['Select', '1', '2', '3', '4', '5', '6', '7'] %>
+              <% const meals_per_day = ['0', '1', '2', '3', '4', '5', '6', '7'] %>
               <select class="form-select" id="mealsPerDay" style="background-color:#3d5c7e73;">
                 <% meals_per_day.forEach(function(meals_per_day) { %>
                  <option value="<%= meals_per_day %>" <%= member.dietary.meals_per_day === meals_per_day ? "selected" : "" %> >
