@@ -11,7 +11,7 @@ return res.render("dashboard/member-nutrition", {
   });
 }
 
-// - - - Dietary information controller
+// - - - Dietary information controller - - - //
 
 export async function getMemberDietary(req, res) {
   try {

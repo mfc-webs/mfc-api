@@ -25,10 +25,67 @@
 
 
   
-  // Optional: hook buttons later to API calls.
-  document.getElementById("saveNutritionBtn")?.addEventListener("click", () => {
-    
+  //  - - - member physique hamdler
+
+  document.getElementById("saveNutritionBtn").addEventListener("click", async () => {
+
+  const currentActivities = Array.from(
+    document.querySelectorAll('.btn-check:checked')
+  )
+  .filter(cb => cb.closest(".col-md-6")?.querySelector("label")?.innerText.includes("Current Activities"))
+  .map(cb => cb.value);
+
+  const trainingStyles = Array.from(
+    document.querySelectorAll('.btn-check:checked')
+  )
+  .filter(cb => cb.closest(".col-md-6")?.querySelector("label")?.innerText.includes("Preferred Training Styles"))
+  .map(cb => cb.value);
+
+  const payload = {
+    primary_goal: document.getElementById("goalPrimary").value || null,
+    current_weight: document.getElementById("caloriesTarget1").value || null,
+    target_weight: document.getElementById("caloriesTarget").value || null,
+    height: document.getElementById("height").value || null,
+    waist: document.getElementById("waist").value || null,
+    protein: document.getElementById("macroProtein").value || null,
+    carbs: document.getElementById("macroCarbs").value || null,
+    fats: document.getElementById("macroFats").value || null,
+    notes: document.getElementById("nutritionNotes").value || null,
+    occupation: document.getElementById("occupation").value || null,
+    stress_level: document.getElementById("stressLevel").value || null,
+    sleep_hours: document.getElementById("sleepHours").value || null,
+    activity_level: document.getElementById("activityLevel").value || null,
+    exercise_frequency: document.getElementById("exerciseFrequency").value || null,
+    sitting_hours: document.getElementById("sittingHours").value || null,
+    current_activities: currentActivities,
+    training_styles: trainingStyles
+  };
+try {
+  const response = await fetch("/member/physiqueLifestyle", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+    credentials: "include"
   });
+
+  const result = await response.json();
+
+   console.log(result)
+    if (result.success) {
+      showPopup(result.message, "success");
+    } else {
+      showPopup(result.message, "error");
+    }
+  } catch (err) {
+    showPopup(result.message, "error");
+  }
+
+});
+
+
+  // - - - Dietary info Handler- - - //
 
   document.getElementById("saveDietBtn").addEventListener("click", async () => {
   const payload = {
@@ -66,6 +123,10 @@
   }
 });
   
+
+
+
+//  - - - tabulate data - - - //
 
   document.getElementById("saveCheckInBtn")?.addEventListener("click", () => {
     // TODO: append to table + send to backend

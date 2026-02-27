@@ -38,22 +38,16 @@
       <div class="muted">keep your profile updated.</div>
       <!-- <p>Set goals, track weight, and keep your nutrition profile updated.</p> -->
     </div>
-
-    <div class="d-flex gap-2 flex-wrap">
-      <button class="btn btn-outline-light" type="button" data-bs-toggle="modal" data-bs-target="#addCheckInModal">
+      <!-- <button class="btn btn-outline-light" type="button" data-bs-toggle="modal" data-bs-target="#addCheckInModal">
         + Add Check-in
-      </button>
-      <button class="btn btn-primary" type="button" id="saveNutritionBtn">
-        Save Changes
-      </button>
-    </div>
+      </button> -->
   </div>
-
+  
   <!-- Goal + Weight Summary -->
   <div class="row g-3 mb-4">
     <div class="col-lg-12">
       <section class="card glass-card rounded-4 shadow-sm">
-        <div class="card-body p-4">
+        <div class="card-body p-3">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <div>
               <h2 class="h5 text-white mb-1">Physique Goals</h2>
@@ -65,51 +59,52 @@
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label small-note">Primary Goal</label>
-              <select class="form-select" id="goalPrimary" style=" background-color: #3d5c7e73;">
-                <option value="select">Select</option>
-                <option value="lose">Lose Fat</option>
-                <option value="gain">Gain Muscle</option>
-                <option value="maintain" selected>Maintain</option>
-                <option value="recomp">Recomp</option>
-                <option value="performance">Performance</option>
-              </select>
+                <% const primaryGoals = ['Select', 'Lose Fat', 'Gain Muscle', 'Maintain', 'Recomp', 'Performance'] %>
+                <select class="form-select" id="goalPrimary" style="background-color: #3d5c7e73;">
+                  <% primaryGoals.forEach(goal => { %>
+                    <option value="<%= goal %>" 
+                      <%= member?.physique?.primary_goal === goal ? "selected" : "" %>>
+                      <%= goal %>
+                    </option>
+                  <% }) %>
+                </select>
             </div>
 
             <div class="col-md-3">
               <label class="form-label small-note">Current Weight (kg)</label>
-              <input class="form-control" id="caloriesTarget1" type="number" placeholder="e.g. 2200" min="0" />
+              <input class="form-control" id="caloriesTarget1" type="number" placeholder="e.g. 2200" min="0" value="<%= member?.physique?.current_weight %>" />
             </div>
             <div class="col-md-3">
               <label class="form-label small-note">Weight Target (kg)</label>
-              <input class="form-control" id="caloriesTarget" type="number" placeholder="e.g. 2200" min="0" />
+              <input class="form-control" id="caloriesTarget" type="number" placeholder="e.g. 2200" min="0" value="<%= member?.physique?.target_weight %>" />
             </div>
 
             <div class="col-md-6">
               <label class="form-label small-note">Height (cm)</label>
-              <input class="form-control" id="height" type="number" placeholder="e.g. 170" min="0" />
+              <input class="form-control" id="height" type="number" placeholder="e.g. 170" min="0" value="<%= member?.physique?.height %>" />
             </div>
             <div class="col-md-6">
-              <label class="form-label small-note"> (cm)</label>
-              <input class="form-control" id="waist" type="number" placeholder="e.g. 70" min="0" />
+              <label class="form-label small-note">Waist (cm)</label>
+              <input class="form-control" id="waist" type="number" placeholder="e.g. 70" min="0" value="<%= member?.physique?.waist %>" />
             </div>
 
             <div class="col-md-4">
               <label class="form-label small-note">Protein (g)</label>
-              <input class="form-control" id="macroProtein" type="number" placeholder="e.g. 140" min="0" />
+              <input class="form-control" id="macroProtein" type="number" placeholder="e.g. 140" min="0" value="<%= member?.physique?.protein %>" />
             </div>
             <div class="col-md-4">
               <label class="form-label small-note">Carbs (g)</label>
-              <input class="form-control" id="macroCarbs" type="number" placeholder="e.g. 250" min="0" />
+              <input class="form-control" id="macroCarbs" type="number" placeholder="e.g. 250" min="0" value="<%= member?.physique?.carbs %>" />
             </div>
             <div class="col-md-4">
               <label class="form-label small-note">Fats (g)</label>
-              <input class="form-control" id="macroFats" type="number" placeholder="e.g. 70" min="0" />
+              <input class="form-control" id="macroFats" type="number" placeholder="e.g. 70" min="0" value="<%= member?.physique?.fats %>" />
             </div>
 
             <div class="col-12">
               <label class="form-label small-note">Notes</label>
               <textarea class="form-control" id="nutritionNotes" rows="3"
-                placeholder="e.g. Increase water intake, reduce sugar snacks, meal prep Sundays..."></textarea>
+                placeholder="e.g. Increase water intake, reduce sugar snacks, meal prep Sundays..."><%= member?.physique?.notes %></textarea>
             </div>
           </div>
         </div>
@@ -117,7 +112,7 @@
 
     <!-- <div class="col-lg-12">
       <section class="card glass-card rounded-4 shadow-sm h-100">
-        <div class="card-body p-4">
+        <div class="card-body p-3">
           <h2 class="h5 text-white mb-1">Progress Snapshot</h2>
           <div class="small-note mb-3">Quick view of your check-ins.</div>
 
@@ -147,7 +142,7 @@
 
   <!-- Fitness and Lifestyle -->
   
-      <div class="card-body p-4">
+      <div class="card-body p-3">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <div>
             <h2 class="h5 text-white mb-1">Fitness & Lifestyle</h2>
@@ -158,33 +153,38 @@
 
         <div class="row g-3">
            <!-- Occupation -->
-          <div class="col-md-6">
+          <div class="col-md-4">
             <label class="form-label small-note">Occupation</label>
             <input class="form-control" id="occupation" type="text"
-              placeholder="e.g. Office-based, student, field worker..." />
+              placeholder="e.g. Office-based, student, field worker..." value="<%= member?.physique?.occupation %>"/>
           </div>
 
           <!-- Stress Level -->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <label class="form-label small-note">Stress Level</label>
-            <select class="form-select" id="stressLevel" style="background-color:#3d5c7e73;">
-              <option value="">Select</option>
-              <option value="low">Low (generally calm)</option>
-              <option value="moderate">Moderate (manageable pressure)</option>
-              <option value="high">High (frequent stress)</option>
-              <option value="very_high">Very High (constant stress)</option>
+            <% const stressLevels = ['Select', 'Low - (generally calm)', 'Moderate (manageable pressure)', 'High (frequent stress)', 'Very High (constant stress)'] %>
+                <select class="form-select" id="stressLevel" style="background-color: #3d5c7e73;">
+                  <% stressLevels.forEach(stress => { %>
+                    <option value="<%= stress %>" 
+                      <%= member?.physique?.stress_level === stress ? "selected" : "" %>>
+                      <%= stress %>
+                    </option>
+                  <% }) %>
+                </select>
             </select>
           </div>
 
           <!-- Sleep -->
-          <div class="col-md-3">
+          <div class="col-md-4">
             <label class="form-label small-note">Average Sleep (hours/night)</label>
+            <% const sleepingHours = ['Select', 'Less than 5', '5–6', '7–8', '9+'] %>
             <select class="form-select" id="sleepHours" style="background-color:#3d5c7e73;">
-              <option value="">Select</option>
-              <option value="-5">Less than 5</option>
-              <option value="5-6">5–6</option>
-              <option value="7-8">7–8 </option>
-              <option value="9+">9+</option>
+              <% sleepingHours.forEach(sleep => { %>
+                    <option value="<%= sleep %>" 
+                      <%= member?.physique?.sleep_hours === sleep ? "selected" : "" %>>
+                      <%= sleep %>
+                    </option>
+                  <% }) %>
             </select>
           </div>
 
@@ -192,39 +192,42 @@
           <!-- Activity Level -->
           <div class="col-md-4">
             <label class="form-label small-note">Overall Activity Level</label>
+            <% const activityLevels = ['Select', 'Sedentary (desk-based, minimal movement)', 'Lightly Active (light walking)', 'Moderately Active', 'Very Active', 'Athlete / High Performance'] %>
             <select class="form-select" id="activityLevel" style="background-color:#3d5c7e73;">
-              <option value="">Select</option>
-              <option value="sedentary">Sedentary (desk-based, minimal movement)</option>
-              <option value="lightly_active">Lightly Active (light walking)</option>
-              <option value="moderately_active">Moderately Active</option>
-              <option value="very_active">Very Active</option>
-              <option value="athlete">Athlete / High Performance</option>
+              <% stressLevels.forEach(activity => { %>
+                    <option value="<%= activity %>" 
+                      <%= member?.physique?.activity_level === activity ? "selected" : "" %>>
+                      <%= activity %>
+                    </option>
+                  <% }) %>
             </select>
           </div>
 
           <!-- Training Frequency -->
           <div class="col-md-4">
             <label class="form-label small-note">Training Sessions Per Week</label>
+            <% const exerciseFrequencys = ['Select', '0', '1–2', '3–4', '5-6', '7+'] %>
             <select class="form-select" id="exerciseFrequency" style="background-color:#3d5c7e73;">
-              <option value="">Select</option>
-              <option value="0">0</option>
-              <option value="1-2">1–2</option>
-              <option value="3-4">3–4</option>
-              <option value="5-6">5–6</option>
-              <option value="7+">7+</option>
+              <% exerciseFrequencys.forEach(exercise => { %>
+                    <option value="<%= exercise %>" 
+                      <%= member?.physique?.exercise_frequency === exercise ? "selected" : "" %>>
+                      <%= exercise %>
+                    </option>
+                  <% }) %>
             </select>
           </div>
 
           <!-- Sitting Hours -->
           <div class="col-md-4">
             <label class="form-label small-note">Hours Sitting Per Day</label>
+            <% const sitHours = ['Select', '0–3', '4-6', '7-9', '10-12', '13+'] %>
             <select class="form-select" id="sittingHours" style="background-color:#3d5c7e73;">
-              <option value="">Select</option>
-              <option value="0-3">0–3</option>
-              <option value="4-6">4–6</option>
-              <option value="7-9">7–9</option>
-              <option value="10-12">10-12</option>
-              <option value="13+">13+</option>
+              <% sitHours.forEach(sitting => { %>
+                    <option value="<%= sitting %>" 
+                      <%= member?.physique?.sitting_hours === sitting ? "selected" : "" %>>
+                      <%= sitting %>
+                    </option>
+                  <% }) %>
             </select>
           </div>
 
@@ -233,64 +236,64 @@
             <label class="form-label small-note">Current Activities</label>
             <div class="d-flex flex-wrap gap-2">
 
-              <input type="checkbox" class="btn-check" id="tagGym" value="gym">
+              <input type="checkbox" class="btn-check" id="tagGym" value="Gym" <%= member?.physique?.current_activities?.includes("Gym") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagGym">Gym</label>
 
-              <input type="checkbox" class="btn-check" id="tagRun" value="running">
+              <input type="checkbox" class="btn-check" id="tagRun" value="Running" <%= member?.physique?.current_activities?.includes("Running") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagRun">Running</label>
 
-              <input type="checkbox" class="btn-check" id="tagCycle" value="cycling">
+              <input type="checkbox" class="btn-check" id="tagCycle" value="Cycling" <%= member?.physique?.current_activities?.includes("Cycling") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagCycle">Cycling</label>
 
-              <input type="checkbox" class="btn-check" id="tagFootball" value="football">
+              <input type="checkbox" class="btn-check" id="tagFootball" value="Football" <%= member?.physique?.current_activities?.includes("Football") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagFootball">Football</label>
 
-              <input type="checkbox" class="btn-check" id="tagBasketball" value="football">
+              <input type="checkbox" class="btn-check" id="tagBasketball" value="Basketball" <%= member?.physique?.current_activities?.includes("Basketball") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagBasketball">Basketball</label>
 
-              <input type="checkbox" class="btn-check" id="tagHockey" value="football">
+              <input type="checkbox" class="btn-check" id="tagHockey" value="Hockey" <%= member?.physique?.current_activities?.includes("Hockey") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagHockey">Hockey</label>
 
-              <input type="checkbox" class="btn-check" id="tagNetball" value="football">
+              <input type="checkbox" class="btn-check" id="tagNetball" value="Netball" <%= member?.physique?.current_activities?.includes("Netball") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagNetball">Netball</label>
 
-              <input type="checkbox" class="btn-check" id="tagCrossfit" value="crossfit">
+              <input type="checkbox" class="btn-check" id="tagCrossfit" value="Crossfit" <%= member?.physique?.current_activities?.includes("Crossfit") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagCrossfit">CrossFit</label>
 
-              <input type="checkbox" class="btn-check" id="tagPilates" value="pilates">
+              <input type="checkbox" class="btn-check" id="tagPilates" value="Pilates" <%= member?.physique?.current_activities?.includes("Pilates") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagPilates">Pilates</label>
 
-              <input type="checkbox" class="btn-check" id="tagYoga" value="yoga">
+              <input type="checkbox" class="btn-check" id="tagYoga" value="Yoga" <%= member?.physique?.current_activities?.includes("Yoga") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagYoga">Yoga</label>
 
-              <input type="checkbox" class="btn-check" id="tagSwim" value="swimming">
+              <input type="checkbox" class="btn-check" id="tagSwim" value="Swimming" <%= member?.physique?.current_activities?.includes("Swimming") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagSwim">Swimming</label>
 
-              <input type="checkbox" class="btn-check" id="tagBoxing" value="boxing">
+              <input type="checkbox" class="btn-check" id="tagBoxing" value="Boxing" <%= member?.physique?.current_activities?.includes("Boxing") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagBoxing">Boxing</label>
 
-              <input type="checkbox" class="btn-check" id="tagMartialArts" value="football">
+              <input type="checkbox" class="btn-check" id="tagMartialArts" value="Martial Arts" <%= member?.physique?.current_activities?.includes("Martial Arts") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagMartialArts">Martial Arts</label>
 
-              <input type="checkbox" class="btn-check" id="tagHiking" value="football">
+              <input type="checkbox" class="btn-check" id="tagHiking" value="Hiking" <%= member?.physique?.current_activities?.includes("Hiking") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagHiking">Hiking</label>
 
-              <input type="checkbox" class="btn-check" id="tagWalking" value="football">
+              <input type="checkbox" class="btn-check" id="tagWalking" value="Walking" <%= member?.physique?.current_activities?.includes("Walking") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagWalking">Walking</label>
 
-              <input type="checkbox" class="btn-check" id="tagJogging" value="football">
+              <input type="checkbox" class="btn-check" id="tagJogging" value="Jogging" <%= member?.physique?.current_activities?.includes("Jogging") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagJogging">Jogging</label>
 
-              <input type="checkbox" class="btn-check" id="tagHome-Workouts" value="football">
+              <input type="checkbox" class="btn-check" id="tagHome-Workouts" value="Home Workouts" <%= member?.physique?.current_activities?.includes("Home Workouts") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagHome-Workouts">Home Workouts</label>
 
-              <input type="checkbox" class="btn-check" id="tagDance-Fitness" value="football">
+              <input type="checkbox" class="btn-check" id="tagDance-Fitness" value="Dance-Fitness" <%= member?.physique?.current_activities?.includes("Dance-Fitness") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="tagDance-Fitness">Dance Fitness</label>
 
-              <input type="checkbox" class="btn-check" id="activity-other" value="football">
+              <input type="checkbox" class="btn-check" id="activity-other" value="Other" <%= member?.physique?.current_activities?.includes("Other") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="activity-other">Other</label>
 
-              <input type="checkbox" class="btn-check" id="activity-none" value="football">
+              <input type="checkbox" class="btn-check" id="activity-none" value="None" <%= member?.physique?.current_activities?.includes("None") ? "checked" : "" %>>
               <label class="btn btn-outline-light btn-sm rounded-pill" for="activity-none">None</label>
 
             </div>
@@ -303,55 +306,64 @@
 
             <div class="d-flex flex-wrap gap-2">
 
-              <input type="checkbox" class="btn-check" id="tagStrength" value="strength-focused">
+              <input type="checkbox" class="btn-check" id="tagStrength" value="Strength-focused" <%= member?.physique?.training_styles?.includes("Strength-focused") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagStrength">Strength-focused</label>
 
-              <input type="checkbox" class="btn-check" id="tagCardio" value="cardio-intensive">
+              <input type="checkbox" class="btn-check" id="tagCardio" value="Cardio-intensive" <%= member?.physique?.training_styles?.includes("Cardio-intensive") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagCardio">Cardio-intensive</label>
 
-              <input type="checkbox" class="btn-check" id="tagFunctional" value="functional-training">
+              <input type="checkbox" class="btn-check" id="tagFunctional" value="Functional-training" <%= member?.physique?.training_styles?.includes("Functional-training") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagFunctional">Functional training</label>
 
-              <input type="checkbox" class="btn-check" id="tagHIIT" value="high-intensity-hiit">
+              <input type="checkbox" class="btn-check" id="tagHIIT" value="High-Intensity-hiit" <%= member?.physique?.training_styles?.includes("High-Intensity-hiit") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagHIIT">High-intensity (HIIT)</label>
 
-              <input type="checkbox" class="btn-check" id="tagLowImpact" value="low-impact">
+              <input type="checkbox" class="btn-check" id="tagLowImpact" value="Low-Impact" <%= member?.physique?.training_styles?.includes("Low-Impact") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagLowImpact">Low-impact</label>
 
-              <input type="checkbox" class="btn-check" id="tagEndurance" value="endurance-based">
+              <input type="checkbox" class="btn-check" id="tagEndurance" value="endurance-based" <%= member?.physique?.training_styles?.includes("endurance-based") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagEndurance">Endurance-based</label>
 
-              <input type="checkbox" class="btn-check" id="tagMobility" value="mobility-flexibility">
+              <input type="checkbox" class="btn-check" id="tagMobility" value="mobility-flexibility" <%= member?.physique?.training_styles?.includes("mobility-flexibility") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagMobility">Mobility & flexibility</label>
 
-              <input type="checkbox" class="btn-check" id="tagBodyweight" value="bodyweight-only">
+              <input type="checkbox" class="btn-check" id="tagBodyweight" value="bodyweight-only" <%= member?.physique?.training_styles?.includes("bodyweight-only") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagBodyweight">Bodyweight-only</label>
 
-              <input type="checkbox" class="btn-check" id="tagGroup" value="group-training">
+              <input type="checkbox" class="btn-check" id="tagGroup" value="group-training" <%= member?.physique?.training_styles?.includes("group-training") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagGroup">Group training</label>
 
-              <input type="checkbox" class="btn-check" id="tagCoaching" value="personal-coaching">
+              <input type="checkbox" class="btn-check" id="tagCoaching" value="personal-coaching" <%= member?.physique?.training_styles?.includes("personal-coaching") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagCoaching">Personal coaching</label>
 
-              <input type="checkbox" class="btn-check" id="tagCompetitive" value="competitive">
+              <input type="checkbox" class="btn-check" id="tagCompetitive" value="competitive" <%= member?.physique?.training_styles?.includes("competitive") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagCompetitive">Competitive</label>
 
-              <input type="checkbox" class="btn-check" id="tagRecreational" value="recreational">
+              <input type="checkbox" class="btn-check" id="tagRecreational" value="recreational" <%= member?.physique?.training_styles?.includes("recreational") ? "checked" : "" %>>
               <label class="btn btn-outline-primary btn-sm rounded-pill" for="tagRecreational">Recreational</label>
 
             </div>
 
             <div class="small-note mt-2">Select all that apply.</div>
           </div>
-
-                  
-
-         
         </div>
+        <hr>
+
+        <div class="d-flex gap-2 flex-wrap justify-content-between pl-3">
+      <div></div>
+      <button class="btn btn-primary" type="button" id="saveNutritionBtn">
+        Save Changes
+      </button>
+    </div>
       </div>
+      
+      
+    
     </section>
+
   </div>
 </div> 
+
 
   <!-- Nutrition Profile -->
    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4 mt-5">
@@ -359,18 +371,14 @@
       <h1 class="h3 text-white mb-1">Dietary Information</h1>
       <div class="muted">keep your profile updated.</div>
       <!-- <p>Set goals, track weight, and keep your nutrition profile updated.</p> -->
+
     </div>
 
-    <div class="d-flex gap-2 flex-wrap">
-      <button class="btn btn-primary" type="button" id="saveDietBtn">
-        Save Diet
-      </button>
     </div>
-  </div>
   <div class="row g-1 glass-card rounded-4 shadow-sm">
     <div class="col-md-6"> 
       <section class="card" style="background: none; border: none;">
-        <div class="card-body p-4">
+        <div class="card-body p-3">
           <h2 class="h5 text-white mb-1">Diet Preferences</h2>
           <div class="small-note mb-3">This helps trainers (and you) keep things aligned.</div>
 
@@ -424,7 +432,7 @@
 
     <div class="col-md-6">
       <section class="card" style="background: none; border: none;">
-        <div class="card-body p-4">
+        <div class="card-body p-3">
           <h2 class="h5 text-white mb-1">Allergies & Restrictions</h2>
           <div class="small-note mb-3">Safety first. Keep this accurate.</div>
 
@@ -456,14 +464,25 @@
         </div>
       </section>
     </div>
+
+
+    <div class="mr-3">
+      <hr>
+    </div>
+    
+    <div class="mb-3 d-flex gap-2 flex-wrap justify-content-between ">
+      <div></div>
+      <button class="btn btn-primary mr-3" type="button" id="saveDietBtn">Save Diet</button>
+    </div>
+  
   </div>
 
    <!-- pop up message -->
         <div id="popup" class="popup hidden"></div>
 
  <!-- Check-ins Table -->
-   <section class="card glass-card rounded-4 shadow-sm mt-4">
-    <div class="card-body p-4">
+   <!-- <section class="card glass-card rounded-4 shadow-sm mt-4">
+    <div class="card-body p-3">
       <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
         <div>
           <h2 class="h5 text-white mb-1">Check-in History</h2>
@@ -515,7 +534,7 @@
         </table>
       </div>
     </div>
-  </section>
+  </section> -->
 
   <!-- Add Check-in Modal -->
   <div class="modal fade" id="addCheckInModal" tabindex="-1" aria-hidden="true">
