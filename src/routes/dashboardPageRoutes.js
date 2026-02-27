@@ -12,6 +12,7 @@ import { viewMemberReports } from "../controllers/member/reports.controller.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { hydrateMember } from "../middleware/hydrateMember.js";
 import { uploadProfilePic } from "../middleware/uploadProfilePic.js";
+import { getPhysiqueLifestyle, updatePhysiqueLifestyle } from "../controllers/member/physiqueLifestyleController.js";
 
 
 const router = express.Router();
@@ -32,9 +33,9 @@ router.post("/member-health-record", requireAuth, updateHealthRecord);
 
 
 // member nutritional diet and physique
-router.get("/member/nutrition", requireAuth, viewMemberNutrition);
-router.get("/member/dietary", requireAuth, getMemberDietary);
+router.get("/member/nutrition", requireAuth, viewMemberNutrition, getMemberDietary, getPhysiqueLifestyle);
 router.post("/member/dietary", requireAuth, updateMemberDietary);
+router.post("/member/physiqueLifestyle", requireAuth, updatePhysiqueLifestyle)
 
 
 // update edit profile routes
