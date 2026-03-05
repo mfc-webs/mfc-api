@@ -1,5 +1,43 @@
 import { db } from "../../config/db.js";
 
+export const viewAllMembers = async (req, res, next) => {
+   return res.render("admin/admin-dashboard.html", { 
+      activePage: "members"
+   });
+};
+
+
+export  const viewMemberDetails = async (req, res) => {
+    try {
+        const userId = req.params.id;
+
+        const { rows } = await db.query(
+          'SELECT * FROM public.users WHERE id = $1',
+          [userId]
+        );
+
+        const member = rows[0] || null;
+
+        if (!member) {
+            return res.status(404).send("Member not found");
+        }
+
+        res.render('admin/admin-member-details', { activePage: "members" , member });
+
+    } catch (error) {
+        console.error(error);
+        console.log(error.message)
+        res.status(500).send("Server error here");
+    }
+};
+
+
+
+
+
+// - - - quick member actions - - -//
+
+
 export const getMembers = async (req, res) => {
   try {
     const result = await db.query(`
@@ -16,8 +54,6 @@ export const getMembers = async (req, res) => {
 
 export const createMember = async (req, res) => {
   try {
-
-
     const { firstname, lastname, email, phone, tier, joindate } = req.body;
 
     if (!firstname || !lastname || !email || !phone) {

@@ -219,6 +219,10 @@ table {
      cursor: grab;
  }
 
+ .pad-20 {
+    padding: 20px;
+ }
+
 .popup {
 position: fixed;
 top: 8vh;

@@ -1,7 +1,6 @@
 
 import express from "express";
 
-import { viewDashboard } from "../controllers/admin/dashboardController.js";
 import { viewMemberPortal } from "../controllers/member/portal.controller.js";
 import { viewMemberActivities } from "../controllers/member/activities.controller.js";
 import { getMemberDietary, updateMemberDietary, viewMemberNutrition } from "../controllers/member/nutrition.controller.js";
@@ -10,7 +9,6 @@ import { viewEditProfile, updateMemberProfile, updatePassword } from "../control
 import { viewMemberBlling } from "../controllers/member/billing.controller.js";
 import { viewMemberReports } from "../controllers/member/reports.controller.js";
 import { requireAuth } from "../middleware/requireAuth.js";
-import { hydrateMember } from "../middleware/hydrateMember.js";
 import { uploadProfilePic } from "../middleware/uploadProfilePic.js";
 import { getPhysiqueLifestyle, updatePhysiqueLifestyle } from "../controllers/member/physiqueLifestyleController.js";
 
@@ -18,41 +16,32 @@ import { getPhysiqueLifestyle, updatePhysiqueLifestyle } from "../controllers/me
 const router = express.Router();
 
 
-
-router.use("/member", requireAuth, hydrateMember);
-
 //// - - - member dashboard update routes - - - //
 
 // update member's personal details View
-router.get("/member/personal-details", requireAuth, viewMemberPersonalDetails);
+router.get("/personal-details", requireAuth, viewMemberPersonalDetails);
 router.post("/member-personal-details-update", requireAuth, updatepersonalDetails)
 router.get("/member-emergency-contacts", requireAuth, getEmergencyContacts);
 router.post("/member-emergency-contact-update", requireAuth, updateEmsDetails)
 router.delete("/member-emergency-contact/:id", requireAuth, deleteEmergencyContact);
-router.post("/member-health-record", requireAuth, updateHealthRecord);
-
+router.post("/member-health-record", requireAuth, updateHealthRecord)
 
 // member nutritional diet and physique
-router.get("/member/nutrition", requireAuth, viewMemberNutrition, getMemberDietary, getPhysiqueLifestyle);
-router.post("/member/dietary", requireAuth, updateMemberDietary);
-router.post("/member/physiqueLifestyle", requireAuth, updatePhysiqueLifestyle)
+router.get("/nutrition", requireAuth, viewMemberNutrition, getMemberDietary, getPhysiqueLifestyle);
+router.post("/dietary", requireAuth, updateMemberDietary);
+router.post("/physiqueLifestyle", requireAuth, updatePhysiqueLifestyle)
 
 
 // update edit profile routes
 router.post("/member-profile-update", requireAuth, uploadProfilePic.single("profile_picture"), updateMemberProfile);
 router.post("/member-password-update", requireAuth, updatePassword);
 
-
-// - - - admin dashboard - - - // 
-
-router.get("/admin/dashboard", viewDashboard);
-
 // member dashboard/portals
 
-router.get("/member/portal", viewMemberPortal);
-router.get("/member/activities", requireAuth, viewMemberActivities);
-router.get("/member/edit-profile", requireAuth, viewEditProfile);
-router.get("/member/billing", requireAuth, viewMemberBlling);
-router.get("/member/reports", requireAuth, viewMemberReports);
+router.get("/portal", viewMemberPortal);
+router.get("/activities", requireAuth, viewMemberActivities);
+router.get("/edit-profile", requireAuth, viewEditProfile);
+router.get("/billing", requireAuth, viewMemberBlling);
+router.get("/reports", requireAuth, viewMemberReports);
 
 export default router;

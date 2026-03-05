@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard - Activities</title>
+    <title>Admin Dashboard -  Activities</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -18,70 +18,106 @@
 
 </head>
 <body>
+<!-- header -->
+      <%-// include("partials/header.html") %>
+<!-- header -->
+
+<!-- pop up message -->
+        <div id="popup" class="popup hidden"></div>
 
 <div class="app">
     <!-- Sidebar -->
-    <aside class="sidebar">
-        <div class="d-flex align-items-center gap-3 mb-4">
-            <div class="brand-badge">MMS</div>
-            <div>
-                <div class="text-white fw-semibold">MMS</div>
-                <div class="small-note">Admin Dashboard</div>
-            </div>
-        </div>
-    
-        <nav class="d-grid gap-2">
-            <a class="nav-pill active text-decoration-none" href="#">
-                <span><i class="fas fa-home"></i></span> <span>Overview</span>
-            </a>
-            <a class="nav-pill text-decoration-none" href="#tasks">
-                <span><i class="fa-solid fa-tasks"></i></span> <span>Activities</span>
-            </a>
-            <a class="nav-pill text-decoration-none" href="#members">
-                <span><i class="fa-solid fa-users"></i></span> <span>Members</span>
-            </a>
-            <a class="nav-pill text-decoration-none" href="#tiers">
-                <span><i class="fa-solid fa-tag"></i></span> <span>Tiers</span>
-            </a>
-            <a class="nav-pill text-decoration-none" href="#reports">
-                <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
-            </a>
-            <a class="nav-pill text-decoration-none" href="#settings">
-                <span><i class="fa-solid fa-gears"></i></span> <span>Settings</span>
-            </a>
-        </nav>
-        <button class="btn btn-outline-light d-lg-none mb-3" id="toggleSidebar">
-            <i class="fa-solid fa-bars"></i> Menu
-        </button>
-    
-    
-        <div class="mt-4 p-3 rounded-4 glass-card">
-            <div class="fw-semibold mb-1">Quick Tip</div>
-            <div class="small-note">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus molestias vel temporibus.
-            </div>
-        </div>
-    
-        <div class="mt-4 small-note">
-            Logged in as <span class="text-white">Admin</span>
-        </div>
-    </aside>
+    <%- include("partials/sidebar.html") %>
+    <!-- Sidebar -->
 
     <!-- MAIN CONTENT -->
-    <main class="content text-light">
+    <main class="content text-light p-3" style="padding: 20px;">
 
         <!-- HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2>Activities</h2>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">
-                <i class="fas fa-plus-circle"></i> Create Activity
+        <div class="d-flex justify-content-between align-items-center">
+            <h2>Current Classes</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#classesModal">
+                <i class="fas fa-plus-circle"></i> Create Class
             </button>
         </div>
+         <hr>
 
         <!-- ACTIVITY CARDS -->
         <div class="row g-4 mb-5">
+            <% if (classTypes.length > 0) { %>
+                    <% classTypes.forEach(classType => { %>
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card glass-card rounded-4 shadow-sm">
+                        <div class="card-body">
+                            <div>
+                            <div class="card glass-card rounded-4 shadow-sm">
+                                <div class="card-body">
+                                <div class="display-6 fw-semibold"><%= classType.name || '' %></div>
+                                <div class="small-note"><%= classType.description || '' %></div>
+                                <h5><%= classType.default_duration_minutes || '' %> mins</h5>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                            <button 
+                                class="btn btn-sm btn-outline-light edit-class"
+                                data-id="<%= classType.id %>"
+                                data-name="<%= classType.name %>"
+                                data-description="<%= classType.description %>"
+                                data-duration="<%= classType.default_duration_minutes %>"
+                                data-bs-toggle="modal"
+                                data-bs-target="#classesModal">
+                                <i class="fas fa-edit"></i>
+                            </button>
 
-            <div class="col-md-4">
+                            <button 
+                                class="btn btn-sm btn-outline-danger delete-class"
+                                data-id="<%= classType.id %>">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            </div>
+                        </div>
+                        </div>
+                        </div>
+                        <% }) %>
+                    <% } else { %>
+                <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card glass-card rounded-4 shadow-sm">
+                        <div class="card-body">
+                        <div class="">
+                            <div class="card glass-card rounded-4 shadow-sm">
+                            <div class="card-body">
+                                <h5>No Class</h5>
+                                <div class="small-note">Click on "+" or top right button to create a new class</div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button class="btn btn-sm btn-outline-primary"  data-bs-toggle="modal" data-bs-target="#classesModal">
+                                <i class="fas fa-plus" ></i>
+                            </button>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                    <% } %>
+                </div>
+            
+
+       
+
+         <!-- HEADER -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+            <h2>Sessions and Activities</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#activityModal">
+                <i class="fas fa-plus-circle"></i> Create Session
+            </button>
+        </div>
+        <hr>
+
+        <!-- ACTIVITY CARDS -->
+        <div class="row g-4 mb-5">
+            <div class="col-xl-3 col-lg-4 col-md-6">
                 <div class="card glass-card rounded-4 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Yoga Flow</h5>
@@ -110,41 +146,91 @@
                     </div>
                 </div>
             </div>
-
         </div>
 
+        
         <!-- DRAG & DROP TIMETABLE -->
-        <h4 class="mb-3">Weekly Timetable (Drag & Drop)</h4>
+        <h2 class="mb-4 mt-3">Weekly Timetable (Drag & Drop)</h2>
+         <hr>
+        <div class="mb-4"></div>
 
         <div class="row g-3">
-
-            <div class="col-md-3 shadow-sm">
+            <div class="col-md-2 shadow-sm">
                 <h6>Monday</h6>
                 <div class="timetable-column shadow-sm" id="monday">
-                    <div class="glass-card timetable-slot">Yoga 10:00</div>
-                    <div class="timetable-slot">HIIT 18:00</div>
+                    <div class="glass-card timetable-slot">Aerobics 17:30</div>
+                    <div class="timetable-slot">Online Workout 05:00</div>
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <h6>Tuesday</h6>
-                <div class="timetable-column" id="tuesday"></div>
-            </div>
-
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h6>Wednesday</h6>
                 <div class="timetable-column" id="wednesday"></div>
             </div>
 
-            <div class="col-md-3">
-                <h6>Thursday</h6>
-                <div class="timetable-column" id="thursday"></div>
+            <div class="col-md-2">
+                <h6>Friday</h6>
+                <div class="timetable-column" id="friday">
+                </div>
             </div>
 
+            <div class="col-md-2">
+                <h6>Saturdaday</h6>
+                <div class="timetable-column" id="saturdaday">
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <h6>Sunday</h6>
+                <div class="timetable-column" id="sunday">
+                </div>
+            </div>
         </div>
 
     </main>
 </div>
+
+<!-- CLASSES MODAL -->
+<div class="modal fade" id="classesModal" tabindex="-1">
+    <div class="modal-dialog   shadow-sm">
+        <div class="modal-content modal-lg glass-card ">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Create / Edit Classe</h5>
+                <button class="btn-close text-light" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="classForm">
+                    <input type="hidden" id="classId" name="id">
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Class Name</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Default Duration (mins)</label>
+                            <input type="number" class="form-control" id="default_duration_minutes" name="default_duration_minutes" required>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" rows="3" id="description" name="description"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button class="btn btn-primary" id="saveClassBtn">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 
 <!-- ACTIVITY MODAL -->
 <div class="modal fade" id="activityModal" tabindex="-1">
@@ -152,14 +238,12 @@
         <div class="modal-content modal-lg glass-card ">
 
             <div class="modal-header">
-                <h5 class="modal-title">Create / Edit Activity</h5>
+                <h5 class="modal-title">Create / Edit Session</h5>
                 <button class="btn-close text-light" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body">
-
                 <form>
-
                     <div class="row g-3">
 
                         <div class="col-md-6">
@@ -226,17 +310,14 @@
                                 <option value="monthly">Monthly</option>
                             </select>
                         </div>
-
                         <div class="col-md-4">
                             <label class="form-label">Repeat Until</label>
                             <input type="date" class="form-control">
                         </div>
-
                         <div class="col-md-4">
                             <label class="form-label">Max Participants</label>
                             <input type="number" class="form-control">
                         </div>
-
                         <!-- Additional Recommended Fields -->
                         <div class="col-md-6">
                             <label class="form-label">Waitlist Enabled</label>
@@ -245,18 +326,13 @@
                                 <option>No</option>
                             </select>
                         </div>
-
                         <div class="col-md-6">
                             <label class="form-label">Cancellation Deadline (hours before)</label>
                             <input type="number" class="form-control">
                         </div>
-
                     </div>
-
                 </form>
-
             </div>
-
             <div class="modal-footer">
                 <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button class="btn btn-primary">Save</button>
@@ -266,8 +342,15 @@
     </div>
 </div>
 
+
+
+
+
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../assets/dashboard/js/adminClassActivity.js" defer></script>
+
 
 <!-- Drag & Drop Initialization -->
 <script>
@@ -279,6 +362,7 @@
         });
     });
 </script>
+
 
 </body>
 </html>
