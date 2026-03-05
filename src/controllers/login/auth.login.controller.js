@@ -80,11 +80,14 @@ export const loginMember = async (req, res) => {
     });
 
     // go to the portal route (not a direct file send)
-    return res.status(200).json(({
+    return res.status(200).json({
       success: true,
-      message: "Login successful!",
-      redirect: "/member/portal"
-    }));
+      message: "Login successful. redirecting . . .",
+      redirect: user.role === "admin" 
+          ? "/admin/all-members" 
+          : "/member/portal",
+      duration: 3000
+    });
     
   } catch (err) {
     return res.status(500).json({ 

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { getSignUpForm, signUp} from "../controllers/auth.controller.js";
 import { logoutMember } from "../controllers/logout/auth.logout.controller.js";
 import { loginMember, loginForm } from "../controllers/login/auth.login.controller.js";
+import { redirectLoggedIn } from "../middleware/requireAdmin.js";
 
 
 const router = Router();
@@ -10,7 +11,7 @@ router.get("/signup", getSignUpForm);
 router.post("/signup", signUp);
 
 
-router.get("/login", loginForm);        
+router.get("/login", redirectLoggedIn, loginForm);        
 router.post("/logged-in", loginMember);
 
 router.get("/logout", logoutMember)

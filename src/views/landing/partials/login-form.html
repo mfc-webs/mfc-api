@@ -166,35 +166,6 @@
   // Run after DOM is ready (prevents nulls when scripts load early)
   document.addEventListener("DOMContentLoaded", () => {
 
-    // Bootstrap validation + optional confirm-password check
-    (() => {
-      const forms = document.querySelectorAll(".needs-validation");
-      Array.from(forms).forEach((form) => {
-        form.addEventListener("submit", (event) => {
-          const pw = document.getElementById("password");
-          const cpw = document.getElementById("confirmPassword");
-          const confirmFeedback = document.getElementById("confirmFeedback");
-
-          // Only run confirm-password logic if those fields exist (signup page)
-          if (pw && cpw && confirmFeedback) {
-            if (cpw.value !== pw.value) {
-              cpw.setCustomValidity("Passwords do not match");
-              confirmFeedback.textContent = "Passwords do not match.";
-            } else {
-              cpw.setCustomValidity("");
-              confirmFeedback.textContent = "Please confirm your password.";
-            }
-          }
-
-          if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-          }
-          form.classList.add("was-validated");
-        }, false);
-      });
-    })();
-
     // Password toggle (safe)
     function setupToggle(inputId, btnId) {
       const input = document.getElementById(inputId);
@@ -212,30 +183,6 @@
 
     setupToggle("password", "togglePw");
     setupToggle("confirmPassword", "togglePw2");
-
-    // Password strength meter (safe)
-    const pw = document.getElementById("password");
-    const bar = document.getElementById("pwBar");
-    const hint = document.getElementById("pwHint");
-
-    if (pw && bar && hint) {
-      pw.addEventListener("input", () => {
-        const v = pw.value;
-        let score = 0;
-        if (v.length >= 8) score++;
-        if (/[A-Z]/.test(v)) score++;
-        if (/[a-z]/.test(v)) score++;
-        if (/[0-9]/.test(v)) score++;
-        if (/[^A-Za-z0-9]/.test(v)) score++;
-
-        const pct = (score / 5) * 100;
-        bar.style.width = pct + "%";
-
-        if (pct < 40) hint.textContent = "Weak: add length + numbers.";
-        else if (pct < 80) hint.textContent = "Good: try adding symbols or uppercase.";
-        else hint.textContent = "Strong password.";
-      });
-    }
 
   });
 </script>
@@ -271,11 +218,7 @@
       }
 
 
- console.log(response);
-
-
-
-
+    console.log(response);
     showPopup(data.message, data.success, data.redirect) 
 
   });
@@ -292,7 +235,7 @@
       if (redirect) {
         window.location = redirect;
       }
-    }, 0);
+    }, 1500);
   }
   });
 </script>

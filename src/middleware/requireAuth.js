@@ -1,14 +1,16 @@
 import jwt from "jsonwebtoken";
 
 export const requireAuth = (req, res, next) => {
-  const token = req.cookies?.token;
-  if (!token) return res.redirect("/login");
-
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = payload; // { sub, role, email }
+    const token = req.cookies?.token; // optional chaining to be safe
+    if (!token) {
+      return res.status(401).json({ success: false, message: "No token provided" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // attach user info
     next();
-  } catch (e) {
-    return res.redirect("/login");
+  } catch (err) {
+    return res.status(401).json({ success: false, message: "Invalid token" });
   }
 };
