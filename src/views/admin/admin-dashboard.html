@@ -14,9 +14,17 @@
   </head>
 
   <body>
+
+    <!-- home header -->
+      <%-// include("partials/header.html") %>
+    <!-- header -->
+
+    <!-- pop up message -->
+        <div id="popup" class="popup hidden"></div>
+
     <div class="app">
       <!-- Sidebar -->
-      <aside class="sidebar">
+      <!-- <aside class="sidebar">
         <div class="d-flex align-items-center gap-3 mb-4">
           <div class="brand-badge">MMS</div>
           <div>
@@ -57,10 +65,14 @@
         <div class="mt-4 small-note">
           Logged in as <span class="text-white">Admin</span>
         </div>
-      </aside>
+      </aside> -->
+            <%- include("partials/sidebar.html") %>
+
+      <!-- End sidebar -->
+
 
       <!-- Main Content -->
-      <main class="content">
+      <main class="content pad-20">
         <!-- Topbar -->
         <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
           <div>
@@ -124,10 +136,10 @@
             <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
               <div>
                 <h2 class="h5 text-white mb-1">Members</h2>
-                <div class="small-note">Search, view, edit, and remove members.</div>
+                <div class="small-note">Quick search, view, edit, and remove members.</div>
               </div>
 
-              <div class="d-flex flex-column flex-md-row gap-2">
+              <div class="d-flex flex-column flex-md-row gap-2" style="display: hide;">
                 <input
                   class="form-control"
                   id="searchInput"
@@ -138,8 +150,36 @@
                   <option value="Bronze">Bronze</option>
                   <option value="Gold">Gold</option>
                   <option value="Platinum">Platinum</option>
-                </select>
+                </select> 
               </div>
+            </div>
+            <div class="mb-3">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Search by name, email or phone">
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select">
+                            <option>All Status</option>
+                            <option>Active</option>
+                            <option>Expired</option>
+                            <option>Suspended</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <select class="form-select" id="tierFilter" style="min-width: 180px; background-color: #3d4a7e79;">
+                            <option>All Membership Types</option>
+                            <option>Monthly</option>
+                            <option>Annual</option>
+                            <option>Pay-as-you-go</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-light w-100">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -159,6 +199,7 @@
                 </tbody>
               </table>
             </div>
+            
 
             <div class="small-note mt-3" id="emptyState" style="display:none;">
               No members yet. Add one using the “Add Member” button.
@@ -167,19 +208,22 @@
         </section>
 
         <footer class="small-note mt-4">
-          © <span id="year"></span> Membership management • Built by Sbu
+          © <span id="year">2026</span> Mash Fitness Club • Built with ❤ <a href="https://smconnect.co.za" target="_blank">SMCONNECT</a>
         </footer>
       </main>
     </div>
 
     <!-- Add Member Modal -->
     <div class="modal fade" id="addMemberModal" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-dialog modal-lg">
         <div class="modal-content glass-card rounded-4">
-          <div class="modal-header border-0">
-            <h5 class="modal-title text-white">Add Member</h5>
+
+
+          <div class="modal-header">
+            <h5 class="modal-title text-white">Create New Member</h5>
             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
+
           <div class="modal-body">
             <form id="addMemberForm" class="needs-validation" novalidate>
               <div class="row g-3">
@@ -194,19 +238,39 @@
                   <div class="invalid-feedback">Required.</div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-md-6">
                   <label class="form-label small-note">Email</label>
                   <input class="form-control" id="email" type="email" required />
                   <div class="invalid-feedback">Enter a valid email.</div>
                 </div>
 
-                <div class="col-12">
+                <div class="col-md-6">
                   <label class="form-label small-note">Phone</label>
                   <input class="form-control" id="phone" type="tel" required />
                   <div class="invalid-feedback">Required.</div>
                 </div>
+                <div class="col-md-4">
+                    <label class="form-label small-note">Birth Date</label>
+                    <input type="date" class="form-control">
+                </div>
 
-                <div class="col-12">
+                  <div class="col-md-4">
+                    <label class="form-label small-note">Gender</label>
+                    <select class="form-select">
+                        <option>Select</option>
+                        <option>Male</option>
+                        <option>Female</option>
+                        <option>Prefer not to say</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-4">
+                  <label class="form-label small-note">Join date</label>
+                  <input class="form-control" id="joindate" type="date" required />
+                  <div class="invalid-feedback">Required.</div>
+                </div>
+
+                <div class="col-md-12">
                   <label class="form-label small-note">Tier</label>
                   <select class="form-select" id="tier" required>
                     <option value="" selected disabled>Select tier</option>
@@ -217,18 +281,46 @@
                   <div class="invalid-feedback">Pick a tier.</div>
                 </div>
 
-                <div class="col-12">
-                  <label class="form-label small-note">Join date</label>
-                  <input class="form-control" id="joindate" type="date" required />
-                  <div class="invalid-feedback">Required.</div>
-                </div>
-              </div>
+                 <div class="col-md-6">
+                      <label class="form-label">Status</label>
+                      <select class="form-select">
+                          <option>Select</option>
+                          <option>Active</option>
+                          <option>Expired</option>
+                          <option>Suspended</option>
+                      </select>
+                  </div>
 
-              <div class="d-grid mt-4">
-                <button class="btn btn-primary btn-lg" type="submit">Save Member</button>
+                 <div class="col-md-6">
+                    <label class="form-label">Emerg. Contact Name</label>
+                    <input type="text" class="form-control">
+                </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Emerg. Contact Number</label>
+                    <input type="tel" class="form-control">
+                </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Emerg. Contact R/Ship</label>
+                    <input type="text" class="form-control">
+                </div>
+
+
+                <div class="col-12">
+                    <label class="form-label">Notes</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+
+               
               </div>
             </form>
           </div>
+
+          <div class="modal-footer">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button class="btn btn-primary" type="submit">Save</button>
+          </div>
+            
+          
         </div>
       </div>
     </div>

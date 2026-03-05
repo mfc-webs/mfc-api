@@ -8,9 +8,13 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/auth.routes.js";
 import logger from "./middleware/logger.middleware.js";
 import landingPageRoutes from "./routes/landingPageRoutes.js";
-import dashboardPageRoutes from "./routes/dashboardPageRoutes.js";
-import membersRoutes from "./routes/members.routes.js";
+import memberPageRoutes from "./routes/dashboardPageRoutes.js";
+import adminPageRoutes from "./routes/admin.routes.js";
 import dotenv from "dotenv";
+import { requireAuth } from "./middleware/requireAuth.js";
+import { requireAdmin } from "./middleware/requireAdmin.js";
+import { hydrateMember } from "./middleware/hydrateMember.js";
+import { seedAdmin } from "./utilities/seedAdmin.js";
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -21,6 +25,7 @@ const app = express();
 // database
 
 await connectDB();
+await seedAdmin();
 
 // ----- middlewares ---- //
 app.use(logger);
@@ -35,7 +40,7 @@ app.set("view engine", "html");
 app.use(cookieParser());
 
 // serve /assets
-app.use("/assets", express.static(path.join(__dirname, "views", "assets")));
+app.use("/assets", express.static(path.join(__dirname,  "views", "assets")));
 app.use(express.static(path.join(process.cwd(), "public")));
 
 
@@ -45,8 +50,8 @@ app.use(express.static(path.join(process.cwd(), "public")));
 
 app.use(authRoutes);
 app.use(landingPageRoutes);
-app.use(dashboardPageRoutes);
-app.use(membersRoutes);
+app.use("/member", requireAuth, hydrateMember, memberPageRoutes);
+app.use("/admin", requireAuth, requireAdmin, adminPageRoutes);
 
 
 
