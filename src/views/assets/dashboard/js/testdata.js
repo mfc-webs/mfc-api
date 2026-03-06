@@ -2,7 +2,12 @@ let members = [];
 
 async function loadMembers() {
   try {
-    const res = await fetch("/api/members");
+    const res = await fetch("/admin/api/members", {
+      method: "GET",
+      credentials: "include"
+    });
+
+
     if (!res.ok) throw new Error("Failed to fetch members");
 
     const dbMembers = await res.json();
@@ -109,7 +114,10 @@ window.deleteMember = async (id) => {
     const ok = confirm("Delete this member?");
     if (!ok) return;
 
-    const res = await fetch(`/api/members/${id}`, { method: "DELETE" });
+    const res = await fetch(`/admin/api/members/${id}`, { method: "DELETE",
+      credentials: "include"
+     });
+
     if (!res.ok) throw new Error("Failed to delete");
 
     // update UI
@@ -135,9 +143,10 @@ window.editMember = async (id) => {
   }
 
   try {
-    const res = await fetch(`/api/members/${id}/tier`, {
+    const res = await fetch(`/admin/api/members/${id}/tier`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify({ tier: newTier }),
     });
 
@@ -176,9 +185,10 @@ addMemberForm.addEventListener("submit", async (e) => {
     const joindate = document.getElementById("joindate").value;
    
 
-    const res = await fetch("/api/members", {
+    const res = await fetch("/admin/api/members", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(payload, joindate),
     });
 
