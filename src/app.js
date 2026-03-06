@@ -43,7 +43,11 @@ app.use(cookieParser());
 app.use("/assets", express.static(path.join(__dirname,  "views", "assets")));
 app.use(express.static(path.join(process.cwd(), "public")));
 
-
+//
+app.use((req,res,next)=>{
+  console.log("REQUEST:", req.method, req.url);
+  next();
+});
 
 // ----- routes ---- //
 

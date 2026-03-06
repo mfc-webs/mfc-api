@@ -14,15 +14,16 @@ document.getElementById("saveClassBtn").addEventListener("click", async () => {
     };
 
     const url = id 
-        ? `/api/class-types/${id}`
-        : `/api/class-types`;
+        ? `/admin/api/class-types/${id}`
+        : `/admin/api/class-types`;
 
     const method = id ? "PUT" : "POST";
 
     const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        credentials: "include"
     });
 
         const result = await response.json();
@@ -67,8 +68,9 @@ document.addEventListener("click", async function (e) {
 
     if (!confirm("Are you sure you want to delete this class?")) return;
 
-    const response = await fetch(`/api/class-types/${id}`, {
-      method: "DELETE"
+    const response = await fetch(`/admin/api/class-types/${id}`, {
+      method: "DELETE",
+      credentials: "include"
     });
 
     if (response.ok) {

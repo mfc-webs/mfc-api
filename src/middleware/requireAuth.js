@@ -7,6 +7,8 @@ export const requireAuth = (req, res, next) => {
       return res.status(401).json({ success: false, message: "No token provided" });
     }
 
+    console.log("Cookies:", req.cookies);
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded; // attach user info
     next();
