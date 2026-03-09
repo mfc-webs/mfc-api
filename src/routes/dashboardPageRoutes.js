@@ -11,11 +11,12 @@ import { viewMemberReports } from "../controllers/member/reports.controller.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { uploadProfilePic } from "../middleware/uploadProfilePic.js";
 import { getPhysiqueLifestyle, updatePhysiqueLifestyle } from "../controllers/member/physiqueLifestyleController.js";
+import { hydrateMember } from "../middleware/hydrateMember.js";
 
 
 const router = express.Router();
 
-
+router.use("/member", requireAuth, hydrateMember); 
 //// - - - member dashboard update routes - - - //
 
 // update member's personal details View

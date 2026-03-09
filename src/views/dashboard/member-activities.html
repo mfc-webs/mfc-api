@@ -72,67 +72,68 @@
         <h2 class="h5 text-white mb-1">This Month</h2>
         <div class="small-note mb-3">Quick view of your schedule.</div>
 
-        <div class="d-grid gap-2">
-          <div class="p-3 rounded-4 glass-card">
-            <div class="d-flex justify-content-between">
-              <div class="fw-semibold text-white">Week 1</div>
-              <div class="small-note"></div>
-             
-            </div> 
-            <hr>
-            <div class="fw-semibold text-white">Monday: </div>
-            <p class="small-note"> • Online Workouts - 5AM  - Online</p>
-
-            <div class="fw-semibold text-white">Wednesday: </div>
-            <p class="small-note">  • Online Workouts - 5AM  - Online </p>
-            <p class="small-note">  • In-person Workouts - 5:30PM - 6:30PM - Rabie Ridge Stadium</p>
-
-            <div class="fw-semibold text-white">Friday: </div>
-            <p class="small-note">  • In-person Workouts - 5:30PM - 6:30PM - Rabie Ridge Stadium</p>
-
-            <div class="fw-semibold text-white">Sunday: </div>
-            <p class="small-note">  • In-person Workouts - 5:30PM - 6:30PM - Rabie Ridge Stadium</p>
-
-          </div>
-
-          <!-- <div class="p-3 rounded-4 glass-card">
-            <div class="d-flex justify-content-between">
-              <div class="fw-semibold text-white">Week 2</div>
-              <div class="small-note">17:30</div>
+        <!-- DRAG & DROP TIMETABLE -->
+        <h2 class="mb-4 mt-3">Weekly Timetable Summary</h2>
+         <hr>
+        <div class="mb-4"></div>
+        <div class="row g-3 timetable-wrapper">
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Monday</h6>
+                <div class="timetable-column shadow-sm" id="Monday"></div>
             </div>
-            <div class="small-note">HIIT • Floor</div>
-          </div>
-
-          <div class="p-3 rounded-4 glass-card">
-            <div class="d-flex justify-content-between">
-              <div class="fw-semibold text-white">Week 3</div>
-              <div class="small-note">17:30</div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Tuesday</h6>
+                <div class="timetable-column shadow-sm" id="Tuesday"></div>
             </div>
-            <div class="small-note">HIIT • Floor</div>
-          </div>
-
-          <div class="p-3 rounded-4 glass-card">
-            <div class="d-flex justify-content-between">
-              <div class="fw-semibold text-white">Week 4</div>
-              <div class="small-note">17:30</div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Wednesday</h6>
+                <div class="timetable-column shadow-sm" id="Wednesday"></div>
             </div>
-            <div class="small-note">HIIT • Floor</div>
-          </div>
-
-          <div class="p-3 rounded-4 glass-card">
-            <div class="d-flex justify-content-between">
-              <div class="fw-semibold text-white">Wed</div>
-              <div class="small-note">17:30</div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Thursday</h6>
+                <div class="timetable-column shadow-sm" id="Thursday"></div>
             </div>
-            <div class="small-note">HIIT • Floor</div>
-          </div> -->
-
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Friday</h6>
+                <div class="timetable-column shadow-sm" id="Friday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Saturday</h6>
+                <div class="timetable-column shadow-sm" id="Saturday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Sunday</h6>
+                <div class="timetable-column shadow-sm" id="Sunday"></div>
+            </div>
+        
         </div>
+
+       
       </div>
     </section>
   </div>
 </div>
 </main>
 </div>    
+<script src="../assets/dashboard/js/dashboard.js"></script>
+<script src="../assets/public/timetable.js"></script>
+<script>
+  async function loadTimetable() {
+    const res = await fetch("/api/sessions");
+    const sessions = await res.json();
+    renderTimetable(sessions, "member"); // pass "member" role
+  }
+
+loadTimetable();
+</script>
+
+
 </body>
 </html>

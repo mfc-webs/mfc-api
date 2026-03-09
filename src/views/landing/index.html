@@ -364,8 +364,43 @@
             <p>Check our training timetable and commit to sessions that align with your fitness journey. Log in to join a session.</p>
           </div>
         </div>
-        <div>
-          <h2 class="h1 text-center">TIMETABLE COMMING SOON!!</h2>
+        <div class="row g-3 d-flex justify-content-center timetable-wrapper mb-5">
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Monday</h6>
+                <div class="timetable-column shadow-sm" id="Monday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Tuesday</h6>
+                <div class="timetable-column shadow-sm" id="Tuesday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Wednesday</h6>
+                <div class="timetable-column shadow-sm" id="Wednesday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Thursday</h6>
+                <div class="timetable-column shadow-sm" id="Thursday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Friday</h6>
+                <div class="timetable-column shadow-sm" id="Friday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Saturday</h6>
+                <div class="timetable-column shadow-sm" id="Saturday"></div>
+            </div>
+        
+            <div class="col-md-3">
+                <h6 class="text-center">Sunday</h6>
+                <div class="timetable-column shadow-sm" id="Sunday"></div>
+            </div>
+        
         </div>
         <div class="about-button why d-flex justify-content-center"> 
                 <a href="/login" class="page-btn">JOIN SESSION</a>
@@ -913,6 +948,17 @@
   <script src="./assets/landing/js/jquery.smartmenus.js"></script>
   <script src="./assets/landing/js/owl.carousel.js"></script>
   <script src="./assets/landing/js/custom.js"></script>
+    <script src="../assets/public/timetable.js"></script>
+
+  <script>
+  async function loadTimetable() {
+    const res = await fetch("/api/sessions");
+    const sessions = await res.json();
+    renderTimetable(sessions); // pass "member" role
+  }
+
+loadTimetable();
+</script>
 </body>
 
 </html>

@@ -3219,3 +3219,37 @@ i.fa.fa-clock-o {
  .small-note {
    color: rgba(255, 255, 255, .60);
  } 
+
+ /* - - - sessions  timetable - - - */
+
+.timetable-column{
+    min-height: 250px;
+    padding:10px;
+    border-radius:10px;
+    background: none;
+}
+
+.timetable-slot{
+          background: rgba(71, 0, 133, 0.2);
+
+    border-radius:8px;
+    padding:8px 10px;
+    margin-bottom:8px;
+    font-size:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.slot-time{
+    font-weight:600;
+}
+
+.slot-class{
+    font-weight:500;
+}
+
+.enroll-btn{
+    font-size:12px;
+    padding:3px 8px;
+}
