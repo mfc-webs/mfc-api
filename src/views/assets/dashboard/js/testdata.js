@@ -231,7 +231,7 @@ addMemberForm.addEventListener("submit", async (e) => {
   // close modal
   const modalEl = document.getElementById("addMemberModal");
   const modal = bootstrap.Modal.getInstance(modalEl);
-  modal.hide();
+  // modal.hide();
 
   renderTable();
 

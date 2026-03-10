@@ -119,5 +119,5 @@ function showPopup(message, type = "success", duration = 4000) {
   // Hide after duration
   setTimeout(() => {
     popup.classList.add("hidden");
-  }, 3000);
+  }, duration);
 }

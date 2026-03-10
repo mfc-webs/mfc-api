@@ -49,3 +49,38 @@
             Logged in as <span class="text-white">Admin</span>
         </div>
     </aside>
+
+    <!-- <div id="authOverlay" class="auth-overlay hidden">
+  <div class="auth-glass">
+    
+    <div class="auth-icon">🔒</div>
+
+    <h2>Access Restricted</h2>
+
+    <p id="authMessage">
+      Your session expired or you don't have permission.
+    </p>
+
+    <div class="auth-actions">
+      <button onclick="redirectLogin()">Login</button>
+      <button onclick="closeAuthOverlay()">Close</button>
+    </div>
+
+  </div>
+</div> -->
+
+ <!-- pop up message -->
+        <div id="popup" class="popup hidden"></div>
+
+          <!-- Auth pop up -->
+   <div id="authOverlay" class="auth-overlay hidden-out">
+  <div class="auth-modal glass-card">
+    <h3>⚠ Access Restricted</h3>
+    <p id="authMessage">You don't have permission to perform this action.</p>
+
+    <div class="auth-actions">
+      <button onclick="closeAuthOverlay()">Close</button>
+      <a href="/login" class="btn-primary">Login</a>
+    </div>
+  </div>
+</div>

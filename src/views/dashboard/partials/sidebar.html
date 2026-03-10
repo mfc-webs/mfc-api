@@ -55,3 +55,19 @@
       Logged in as <span class="text-white" id="memberName"><%= member.role %></span>
     </div>
   </aside>
+
+    <!-- pop up message -->
+        <div id="popup" class="popup hidden"></div>
+
+  <!-- Auth pop up -->
+   <div id="authOverlay" class="auth-overlay hidden-out">
+  <div class="auth-modal glass-card">
+    <h3>⚠ Access Restricted</h3>
+    <p id="authMessage">You don't have permission to perform this action.</p>
+
+    <div class="auth-actions">
+      <button onclick="closeAuthOverlay()">Close</button>
+      <a href="/login" class="btn-primary">Login</a>
+    </div>
+  </div>
+</div>

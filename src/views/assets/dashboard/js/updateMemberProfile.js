@@ -32,8 +32,9 @@
     const fileInput = document.getElementById("profileImage");
     if (fileInput?.files?.[0]) fd.append("profile_picture", fileInput.files[0]); // IMPORTANT name
 
-    const res = await fetch("/member-profile-update", {
+    const res = await fetch("/member/member-profile-update", {
       method: "POST",
+      credentials: "include",
       body: fd,
     });
 
@@ -42,14 +43,14 @@
     console.log("SAVE PROFILE:", res.status, res.statusText, res.url, text);
 
     if (!res.ok) {
-      alert(`Could not save profile ❌ (status ${res.status})`);
+      showPopup(`Could not save profile status ${res.status})`, "info");
       return;
     }
 
-    alert("Profile saved ✅");
+    showPopup("Profile saved successfully", "success")
   } catch (err) {
     console.error(err);
-    alert("Could not save profile ❌ (network/js error)");
+    showPopup("Could not save profile. Server error","error");
   }
 });
 
@@ -97,27 +98,28 @@
     }
 
     try {
-      const res = await fetch("/member-password-update", {
+      const res = await fetch("/member/member-password-update", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({ currentPassword, newPassword, confirmPassword }),
       });
 
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok || !data.ok) {
-        alert(data.message || `Could not update password ❌ (status ${res.status})`);
+        showPopup(data.message || `Could not update password ❌ status ${res.status}`, "info");
         return;
       }
 
       clearPasswords();
-      alert("Password updated ✅");
+      showPopup("Password updated successfully","success");
     } catch (err) {
       console.error(err);
-      alert("Could not update password ❌");
+      showPopup("Server error. Could not update password", "error");
     }
   });
 });
@@ -126,3 +128,34 @@
   document.getElementById("logoutAllBtn")?.addEventListener("click", () => {
     alert("All devices logged out (hook API next).");
   });
+
+  function showPopup(message, type = "success", duration = 4000) {
+  const popup = document.getElementById("popup");
+  if (!popup) return;
+
+  // Set message
+  popup.textContent = message;
+
+  // Style based on type
+  switch (type) {
+    case "success":
+      popup.style.background = "#28a746bf"; // green
+      break;
+    case "error":
+      popup.style.background = "#dc3545bf"; // red
+      break;
+    case "info":
+      popup.style.background = "#007bffbf"; // blue
+      break;
+    default:
+      popup.style.background = "#77837abf";
+  }
+
+  // Show popup
+  popup.classList.remove("hidden");
+
+  // Hide after duration
+  setTimeout(() => {
+    popup.classList.add("hidden");
+  }, duration);
+}

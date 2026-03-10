@@ -1,15 +1,18 @@
 import * as classTypesService from "../../services/classTypes.service.js";
+import * as sessionsService from "../../services/classSessions.service.js";
 
 
 // - - actual page - - //
 
 export const getClassActivities = async (req, res, next) =>  { 
 
-   const classTypes = await classTypesService.getAll();
+    const classTypes = await classTypesService.getAll();
+    const sessions = await sessionsService.getAllSessions();
 
     return res.render("admin/admin-class-activities" , { 
       activePage: "classes",
-      classTypes
+      classTypes,
+      sessions
    });
 };
 

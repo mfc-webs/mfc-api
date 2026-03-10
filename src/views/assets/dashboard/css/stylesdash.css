@@ -240,3 +240,104 @@ display: none;
 .mr-3 {
     margin-right: 14px;
 }
+
+
+/* Auth styles */
+
+.auth-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.55);
+  backdrop-filter:blur(6px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.hidden-out{
+  display:none;
+}
+
+.auth-glass{
+  width:420px;
+  padding:40px;
+  border-radius:16px;
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,0.2);
+  box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  text-align:center;
+  color:white;
+}
+
+.auth-icon{
+  font-size:42px;
+  margin-bottom:15px;
+}
+
+.auth-glass h2{
+  margin-bottom:10px;
+}
+
+.auth-glass p{
+  opacity:.8;
+  margin-bottom:25px;
+}
+
+.auth-actions{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+}
+
+.auth-actions button{
+  padding:10px 20px;
+  border-radius:8px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+}
+
+.auth-actions button:first-child{
+  background:#2563eb;
+  color:white;
+}
+
+.auth-actions button:last-child{
+  background:#334155;
+  color:white;
+}
+
+/* - - - sessions  timetable - - - */
+
+.timetable-column{
+    min-height: 250px;
+    padding:10px;
+    border-radius:10px;
+    background: none;
+}
+
+.timetable-slot{
+     background: rgba(255, 255, 255, 0.2);
+    border-radius:8px;
+    padding:8px 10px;
+    margin-bottom:8px;
+    font-size:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.slot-time{
+    font-weight:600;
+}
+
+.slot-class{
+    font-weight:500;
+}
+
+.enroll-btn{
+    font-size:12px;
+    padding:3px 8px;
+}

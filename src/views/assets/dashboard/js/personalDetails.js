@@ -58,11 +58,12 @@ document.getElementById("savePersonalBtn")?.addEventListener("click", async () =
    
 
 
-        const res = await fetch("/member-personal-details-update", {
+        const res = await fetch("/member/member-personal-details-update", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
+          credentials: "include",
           body: JSON.stringify(data),
           });
 
@@ -107,8 +108,9 @@ document.getElementById("saveEmergencyBtn")?.addEventListener("click", async () 
       return;
     }
 
-    const res = await fetch("/member-emergency-contact-update", {
+    const res = await fetch("/member/member-emergency-contact-update", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     });
@@ -175,7 +177,9 @@ document.addEventListener("DOMContentLoaded", loadEmergencyContacts);
 
 async function loadEmergencyContacts() {
   try {
-    const res = await fetch("/member-emergency-contacts");
+    const res = await fetch("/member/member-emergency-contacts", {
+      credentials: "include",
+    });
 
     if (!res.ok) return;
 
@@ -204,8 +208,9 @@ document.addEventListener("click", async function (e) {
 
     if (!confirm("Delete this contact?")) return;
 
-    const res = await fetch(`/member-emergency-contact/${id}`, {
-      method: "DELETE"
+    const res = await fetch(`/member/member-emergency-contact/${id}`, {
+      method: "DELETE",
+      credentials: "include",
     });
 
     if (res.ok) {
@@ -291,11 +296,12 @@ document.addEventListener("DOMContentLoaded", () => {
       };
 
       try {
-        const res = await fetch("/member-health-record", {
+        const res = await fetch("/member/member-health-record", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
+          credentials: "include",
           body: JSON.stringify(data)
         });
 
@@ -314,3 +320,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+
+function showPopup(message, type = "success", duration = 4000) {
+  const popup = document.getElementById("popup");
+  if (!popup) return;
+
+  // Set message
+  popup.textContent = message;
+
+  // Style based on type
+  switch (type) {
+    case "success":
+      popup.style.background = "#28a746bf"; // green
+      break;
+    case "error":
+      popup.style.background = "#dc3545bf"; // red
+      break;
+    case "info":
+      popup.style.background = "#007bffbf"; // blue
+      break;
+    default:
+      popup.style.background = "#77837abf";
+  }
+
+  // Show popup
+  popup.classList.remove("hidden");
+
+  // Hide after duration
+  setTimeout(() => {
+    popup.classList.add("hidden");
+  }, duration);
+}

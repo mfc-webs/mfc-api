@@ -15,6 +15,7 @@ import { requireAuth } from "./middleware/requireAuth.js";
 import { requireAdmin } from "./middleware/requireAdmin.js";
 import { hydrateMember } from "./middleware/hydrateMember.js";
 import { seedAdmin } from "./utilities/seedAdmin.js";
+import sessionsRoutes from './routes/sessions.router.js';
 
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -54,8 +55,10 @@ app.use((req,res,next)=>{
 
 app.use(authRoutes);
 app.use(landingPageRoutes);
+app.use("/api/sessions", sessionsRoutes);
 app.use("/member", requireAuth, hydrateMember, memberPageRoutes);
 app.use("/admin", requireAuth, requireAdmin, adminPageRoutes);
+
 
 
 
