@@ -88,23 +88,3 @@ export const editSession = async (req, res) => {
   }
 
 };
-
-// controllers/sessionsController.js
-
-export const getSessions = async (req, res) => {
-
-  const result = await db.query(`
-    SELECT 
-    s.id,
-    TO_CHAR(s.starts_at, 'HH24:MI') AS time,
-    TO_CHAR(s.starts_at, 'Day') AS day,
-    s.capacity,
-    s.location,
-    c.name AS class_name
-    FROM class_sessions s
-    JOIN class_types c ON s.class_type_id = c.id
-    ORDER BY  s.starts_at
-  `);
-
-  res.json(result.rows);
-};

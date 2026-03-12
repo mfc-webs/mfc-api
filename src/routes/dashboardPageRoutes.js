@@ -13,7 +13,6 @@ import { uploadProfilePic } from "../middleware/uploadProfilePic.js";
 import { getPhysiqueLifestyle, updatePhysiqueLifestyle } from "../controllers/member/physiqueLifestyleController.js";
 import { hydrateMember } from "../middleware/hydrateMember.js";
 
-
 const router = express.Router();
 
 router.use("/member", requireAuth, hydrateMember); 
@@ -44,5 +43,7 @@ router.get("/activities", requireAuth, viewMemberActivities);
 router.get("/edit-profile", requireAuth, viewEditProfile);
 router.get("/billing", requireAuth, viewMemberBlling);
 router.get("/reports", requireAuth, viewMemberReports);
+
+
 
 export default router;
