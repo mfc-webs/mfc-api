@@ -3222,11 +3222,34 @@ i.fa.fa-clock-o {
 
  /* - - - sessions  timetable - - - */
 
+ .timetable-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+	scroll-snap-type: x mandatory;
+}
+
+.timetable-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.timetable-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+.timetable-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 .timetable-column{
     min-height: 250px;
     padding:10px;
     border-radius:10px;
     background: none;
+	min-width: 180px;
+	scroll-snap-align: start;
+
 }
 
 .timetable-slot{
@@ -3252,4 +3275,9 @@ i.fa.fa-clock-o {
 .enroll-btn{
     font-size:12px;
     padding:3px 8px;
+}
+
+.timetable-styler {
+    flex-wrap: wrap;
+	justify-content: center;
 }

@@ -202,22 +202,7 @@ table {
      transform: translateY(-3px);
  }
 
- .timetable-column {
-     min-height: 250px;
-     /* background: #ffffff; */
-     border: 1px solid #dee2e6;
-     padding: 15px;
-     border-radius: 8px;
- }
 
- .timetable-slot {
-     background: #7272727e;
-     color: white;
-     padding: 8px;
-     border-radius: 6px;
-     margin-bottom: 8px;
-     cursor: grab;
- }
 
  .pad-20 {
     padding: 20px;
@@ -309,17 +294,44 @@ display: none;
   color:white;
 }
 
+
+
 /* - - - sessions  timetable - - - */
+.timetable-scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+
+}
+
+.timetable-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.timetable-scroll::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+}
+
+.timetable-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+
 
 .timetable-column{
     min-height: 250px;
     padding:10px;
+    border: 1px solid #dee2e6;
     border-radius:10px;
     background: none;
+    min-width: 180px;
+    scroll-snap-align: start;
+
 }
 
 .timetable-slot{
-     background: rgba(255, 255, 255, 0.2);
+    background: #ffffff33;
     border-radius:8px;
     padding:8px 10px;
     margin-bottom:8px;
@@ -327,6 +339,8 @@ display: none;
     display:flex;
     justify-content:space-between;
     align-items:center;
+    cursor: grab;
+
 }
 
 .slot-time{
@@ -340,4 +354,18 @@ display: none;
 .enroll-btn{
     font-size:12px;
     padding:3px 8px;
+}
+
+/* - - - - time table style - - - - */
+
+.timetable-styler {
+    flex-wrap: wrap;
+	justify-content: center;
+}
+
+@media screen and (max-width:767px) {
+	.timetable-styler {
+		flex-wrap: nowrap;
+		justify-content: start;
+  }
 }

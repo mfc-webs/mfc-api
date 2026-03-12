@@ -114,7 +114,7 @@
         <hr>
 
         <!-- ACTIVITY CARDS -->
-        <div class="row g-4 mb-5">
+        <div class="row g-4 mb-5 flex-nowrap overflow-auto">
             <% if (sessions.length > 0) { %>
             <% sessions.forEach(session=> { %>
                 <div class="col-xl-3 col-lg-4 col-md-6">
@@ -227,44 +227,61 @@
         <h2 class="mb-4 mt-3">Weekly Timetable Summary</h2>
          <hr>
         <div class="mb-4"></div>
-        <div class="row d-flex g-3 timetable-wrapper">
+        <div class="timetable-scroll">
+        <div class="row d-flex g-3  timetable-styler timetable-wrapper">
         
             <div class="col-md-3">
                 <h6 class="text-center">Monday</h6>
-                <div class="timetable-column shadow-sm" id="Monday"></div>
+                <div class="timetable-column shadow-sm " id="Monday">
+                    <div class="timetable-slot"></div>
+                </div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Tuesday</h6>
-                <div class="timetable-column shadow-sm" id="Tuesday"></div>
+                <div class="timetable-column shadow-sm " id="Tuesday">
+                    <div class="timetable-slot"></div>
+                </div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Wednesday</h6>
-                <div class="timetable-column shadow-sm text-white" id="Wednesday"></div>
+                <div class="timetable-column shadow-sm " id="Wednesday">
+                    <div class="timetable-slot"></div>
+                </div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Thursday</h6>
-                <div class="timetable-column shadow-sm" id="Thursday"></div>
+                <div class="timetable-column shadow-sm " id="Thursday">
+                    <div class="timetable-slot"></div>
+                </div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Friday</h6>
-                <div class="timetable-column shadow-sm" id="Friday"></div>
+                <div class="timetable-column shadow-sm " id="Friday">
+                    <div class="timetable-slot"></div>
+                </div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Saturday</h6>
-                <div class="timetable-column shadow-sm" id="Saturday"></div>
+                <div class="timetable-column shadow-sm " id="Saturday">
+                <div class="timetable-slot"></div>
+            </div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Sunday</h6>
-                <div class="timetable-column shadow-sm" id="Sunday"></div>
+                <div class="timetable-column shadow-sm " id="Sunday">
+                    <div class="timetable-slot"></div>
+                </div>
             </div>
         
         </div>
+        </div>
+    </div>
     </main>
 </div>
 
