@@ -118,9 +118,9 @@
 
             <div class="col-md-3">
               <label class="form-label small-note">Gender</label>
-              <% const gender = ['Select', 'Male', 'Female', 'Other' ] %>
+              <% const genders = ['Select', 'Male', 'Female', 'Other' ] %>
               <select class="form-select" id="gender" style=" background-color: #3d5c7e73;">
-                <% gender.forEach(function(gender) { %>
+                <% genders.forEach(function(gender) { %>
                  <option value="<%= gender %>" <%= member.gender === gender ? "selected" : "Select" %> >
                     <%= gender %>
                   </option>

@@ -54,11 +54,13 @@ export const updateClassType = async (req, res) => {
             req.params.id,
             req.body
         );
-        res.status(200).json(updated, {
-         message: "Class updated successfully."
+        res.status(200).json({
+            success: true,
+            message: "Class updated successfully.",
+            data: updated
         });
     } catch (error) {
-      // console.error("CREATE CLASS ERROR:", error);
+      console.error("CREATE CLASS ERROR:", error);
         res.status(500).json({ message: "Failed to update class type" });
     }
 };

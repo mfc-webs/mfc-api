@@ -52,9 +52,13 @@
 
      <div class="d-flex gap-2 flex-wrap">
         <!--  <a class="btn btn-outline-light" href="/member/reports">Export</a>-->
-        <a class="btn btn-primary" href="/member/activities">View Activities <i class='fas fa-external-link-alt'></i></a>
+        <a class="btn btn-primary" href="/member/activities#you-timetable">View Activities <i class='fas fa-external-link-alt'></i></a>
       </div> 
     </div>
+
+    
+ 
+
 
     <!-- Profile completion banner (non-blocking) -->
     <section class="card glass-card rounded-4 shadow-sm mb-4">
@@ -84,6 +88,31 @@
         </div>
       </div>
     </section>
+
+       <!-- Attendance tracking -->
+    <div class="row text-center mb-4">
+    
+      <div class="col-md-4">
+        <div class="card glass-card p-3 rounded-4">
+          <h5>Total Visits</h5>
+          <h2 id="total-visits">0</h2>
+        </div>
+      </div>
+    
+      <div class="col-md-4">
+        <div class="card glass-card p-3 rounded-4">
+          <h5>This Month</h5>
+          <h2 id="visits-month">0</h2>
+        </div>
+      </div>
+    
+      <div class="col-md-4">
+        <div class="card glass-card p-3 rounded-4">
+          <h5>Last Visit</h5>
+          <h2 id="last-visit">--</h2>
+        </div>
+      </div>
+    </div>
 
     <!-- Stat cards -->
     <div class="row g-3 mb-4">
@@ -121,61 +150,16 @@
         <div class="card glass-card rounded-4 shadow-sm">
           <div class="card-body">
             <div class="small-note">Nutrition Goal</div>
-            <div class="h4 fw-semibold text-white mb-0" id="statGoal">Maintain</div>
+            <div class="h4 fw-semibold text-white mb-0" id="statGoal"><%= member?.physique?.primary_goal || '' %></div>
             <div class="small-note">Current focus</div>
           </div>
         </div>
       </div>
     </div>
 
+
     <!-- Panels -->
     <div class="row g-3">
-      <div class="col-lg-6">
-        <section class="card glass-card rounded-4 shadow-sm h-100">
-          <div class="card-body p-4">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-              <div>
-                <h2 class="h5 text-white mb-1">Upcoming Activities</h2>
-                <div class="small-note">Your next sessions and schedule.</div>
-              </div>
-              <!-- <a class="btn btn-outline-light btn-sm" href="/member/activities">View all</a> -->
-            </div>
-
-            <div class="list-group list-group-flush">
-              <div class="list-group-item bg-transparent text-white border-secondary">
-                <div class="d-flex justify-content-between">
-                  <div class="fw-semibold">In-person Aerobics</div>
-                  <div class="small-note">18 Feb • 17:30</div>
-                </div>
-                <!-- <div class="small-note">Coach: Neo • Studio A</div> -->
-              </div>
-
-              <div class="list-group-item bg-transparent text-white border-secondary">
-                <div class="d-flex justify-content-between">
-                  <div class="fw-semibold">In-person Aerobics</div>
-                  <div class="small-note">20 Feb • 17:30</div>
-                </div>
-                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
-              </div>
-              <div class="list-group-item bg-transparent text-white border-secondary">
-                <div class="d-flex justify-content-between">
-                  <div class="fw-semibold">In-person Aerobics</div>
-                  <div class="small-note">22 Feb • 06:00</div>
-                </div>
-                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
-              </div>
-              <div class="list-group-item bg-transparent text-white border-secondary">
-                <div class="d-flex justify-content-between">
-                  <div class="fw-semibold">2nd Annual hike</div>
-                  <div class="small-note">29 Mar • 06:00</div>
-                </div>
-                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
       <div class="col-lg-6">
         <section class="card glass-card rounded-4 shadow-sm h-100">
           <div class="card-body p-4">
@@ -230,6 +214,51 @@
           </div>
         </section>
       </div>
+      <div class="col-lg-6">
+        <section class="card glass-card rounded-4 shadow-sm h-100">
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <div>
+                <h2 class="h5 text-white mb-1">Upcoming Activities</h2>
+                <div class="small-note">Your next sessions and schedule.</div>
+              </div>
+              <a class="btn btn-outline-light btn-sm" href="/member/activities">View all</a>
+            </div>
+
+            <div class="list-group list-group-flush">
+              <div class="list-group-item bg-transparent text-white border-secondary">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-semibold">Aerobics | In-person </div>
+                  <div class="small-note">18 Feb • 17:30</div>
+                </div>
+                <!-- <div class="small-note">Coach: Neo • Studio A</div> -->
+              </div>
+
+              <div class="list-group-item bg-transparent text-white border-secondary">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-semibold">In-person Aerobics</div>
+                  <div class="small-note">20 Feb • 17:30</div>
+                </div>
+                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
+              </div>
+              <div class="list-group-item bg-transparent text-white border-secondary">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-semibold">In-person Aerobics</div>
+                  <div class="small-note">22 Feb • 06:00</div>
+                </div>
+                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
+              </div>
+              <div class="list-group-item bg-transparent text-white border-secondary">
+                <div class="d-flex justify-content-between">
+                  <div class="fw-semibold">2nd Annual hike</div>
+                  <div class="small-note">29 Mar • 06:00</div>
+                </div>
+                <!-- <div class="small-note">Coach: Sam • Floor</div> -->
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </div>
   </main>
 </div>
@@ -259,6 +288,9 @@
       });
 </script>
 <script src="../assets/dashboard/js/dashboard.js"></script>
+<script src="../assets/public/attendace.js"></script>
+<script>loadMemberStats();
+</script>
 
 </body>
 </html>

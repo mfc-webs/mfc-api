@@ -39,7 +39,7 @@ document.getElementById("saveClassBtn").addEventListener("click", async () => {
             
     }  catch (err) {
     console.error("Profile update error", err);    // full error
-     //console.error("CODE:", err.code, "MSG:", err.message); pg errors have code/message
+     console.error("CODE:", err.code, "MSG:", err.message); //pg errors have code/message
     showPopup("Server error saving class", "error", 3000);
     }
 });
