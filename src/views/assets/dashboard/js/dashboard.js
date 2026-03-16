@@ -1,40 +1,4 @@
-// Overlay JS Logic
 
-// function showAuthOverlay(message) {
-//   const overlay = document.getElementById("authOverlay");
-//   const msg = document.getElementById("authMessage");
-
-//   msg.textContent = message || "You are not authorized.";
-//   overlay.classList.remove("hidden-out");
-// }
-
-// function closeAuthOverlay() {
-//   document.getElementById("authOverlay").classList.add("hidden-out");
-// }
-
-// global JS interceptor
-
-// const originalFetch = window.fetch;
-
-// window.fetch = async (...args) => {
-
-//   const response = await originalFetch(...args);
-
-//   if(response.status === 401 || response.status === 403){
-
-//     try{
-//       const data = await response.clone().json();
-
-//       showAuthOverlay(data.message || "Authorization error");
-
-//     }catch{
-//       showAuthOverlay("Session expired.");
-//     }
-
-//   }
-
-//   return response;
-// };
 
     // ===== Popup Utility =====
 function showPopup(message, type = "success", duration = 4000) {

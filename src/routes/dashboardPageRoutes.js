@@ -12,6 +12,7 @@ import { requireAuth } from "../middleware/requireAuth.js";
 import { uploadProfilePic } from "../middleware/uploadProfilePic.js";
 import { getPhysiqueLifestyle, updatePhysiqueLifestyle } from "../controllers/member/physiqueLifestyleController.js";
 import { hydrateMember } from "../middleware/hydrateMember.js";
+import { getMyStats } from "../controllers/member/attendance.controller.js";
 
 const router = express.Router();
 
@@ -44,6 +45,8 @@ router.get("/edit-profile", requireAuth, viewEditProfile);
 router.get("/billing", requireAuth, viewMemberBlling);
 router.get("/reports", requireAuth, viewMemberReports);
 
+// get attendace stats
+router.get("/stats", requireAuth, getMyStats);
 
 
 export default router;

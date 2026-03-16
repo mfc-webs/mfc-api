@@ -17,15 +17,35 @@ export const requireAuth = (req, res, next) => {
 };
 
 
-function handleAuthError(req, res, message) {
-  if (req.originalUrl.startsWith("/api")) {
-    return res.status(401).json({
-      success: false,
-      message
-    });
+export const attachUser = (req, res, next) => {
+
+  const token = req.cookies.token;
+
+  if (!token) {
+    req.user = null;
+    return next();
   }
 
-  return res.status(401).render("errors/auth-error.html", {
-    message
-  });
-}
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+  } catch {
+    req.user = null;
+  }
+
+  next();
+};
+
+
+// function handleAuthError(req, res, message) {
+//   if (req.originalUrl.startsWith("/api")) {
+//     return res.status(401).json({
+//       success: false,
+//       message
+//     });
+//   }
+
+//   return res.status(401).render("errors/auth-error.html", {
+//     message
+//   });
+// }
