@@ -120,9 +120,13 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="card glass-card rounded-4 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <%= session.class_name %>
-                            </h5>
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title">
+                                    <%= session.class_name %>
+                                </h5>
+                                <div class="small-note glass-card border-2 p-1 btn btn-outline-light"> #<%= session.id %>
+                                </div>
+                            </div>
                             <p class="card-text">
                                 <%= session.description || "No description available." %>
                             </p>
@@ -224,7 +228,7 @@
 
         
         <!-- DRAG & DROP TIMETABLE -->
-        <h2 class="mb-4 mt-3">Weekly Timetable Summary</h2>
+        <h2 class="mb-4 mt-3">Timetable Preview</h2>
          <hr>
         <div class="mb-4"></div>
         <div class="timetable-scroll">

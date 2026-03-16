@@ -3259,9 +3259,9 @@ i.fa.fa-clock-o {
     padding:8px 10px;
     margin-bottom:8px;
     font-size:14px;
-    display:flex;
+    /* display:flex;
     justify-content:space-between;
-    align-items:center;
+    align-items:center; */
 }
 
 .slot-time{
@@ -3280,4 +3280,28 @@ i.fa.fa-clock-o {
 .timetable-styler {
     flex-wrap: wrap;
 	justify-content: center;
+}
+
+
+/* HTML: <div class="loader"></div> */
+
+
+.dumbbell {
+  width: 80px;
+  aspect-ratio: 4/3;
+  background: linear-gradient(   #e8799b, #e767aa, #dc58c0, #9258f9,#5e02ff) bottom/100% 0% no-repeat #000000;
+   -webkit-mask:
+    linear-gradient(#000 0 0) 50% 50% / 80% 25% no-repeat, /* handle */
+
+	linear-gradient(#000 0 0) 10% 50% / 28% 40% no-repeat,  /* left cap */
+    linear-gradient(#000 0 0) 18% 50% / 20% 60% no-repeat,  /* left inner */
+    linear-gradient(#000 0 0) 26% 50% / 12% 80% no-repeat,  /* left big */
+  
+    linear-gradient(#000 0 0) 79% 55% / 12% 80% no-repeat,  /* right big */
+	linear-gradient(#000 0 0) 87% 55% / 20% 60% no-repeat,  /* right inner */
+    linear-gradient(#000 0 0) 95% 55% / 28% 40% no-repeat;  /* right cap */
+  animation: l19 2s infinite linear;
+}
+@keyframes l19 {
+    90%,100% {background-size:100% 100%}
 }

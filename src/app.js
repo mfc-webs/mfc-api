@@ -11,12 +11,14 @@ import landingPageRoutes from "./routes/landingPageRoutes.js";
 import memberPageRoutes from "./routes/dashboardPageRoutes.js";
 import adminPageRoutes from "./routes/admin.routes.js";
 import dotenv from "dotenv";
-import { requireAuth } from "./middleware/requireAuth.js";
-import { requireAdmin } from "./middleware/requireAdmin.js";
+import { attachUser, requireAuth } from "./middleware/requireAuth.js";
 import { hydrateMember } from "./middleware/hydrateMember.js";
 import { seedAdmin } from "./utilities/seedAdmin.js";
 import sessionsRoutes from './routes/sessions.router.js';
 import classBookingRoutes from "./routes/classBooking.routes.js";
+import { requireAdmin } from "./middleware/requireAdmin.js";
+import attendanceRoutes from "./routes/attendance.router.js"
+
 
 
 
@@ -54,13 +56,15 @@ app.use((req,res,next)=>{
 
 // ----- routes ---- //
 
-
+app.use(attachUser); 
 app.use(authRoutes);
 app.use(landingPageRoutes);
 app.use("/api/sessions", sessionsRoutes);
 app.use("/api/class-bookings", classBookingRoutes);
 app.use("/member", requireAuth, hydrateMember, memberPageRoutes);
 app.use("/admin", requireAuth, requireAdmin, adminPageRoutes);
+app.use("/api/attendance", attendanceRoutes);
+app.use("/api/member/attendance", memberPageRoutes);
 
 
 

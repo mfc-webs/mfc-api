@@ -98,6 +98,7 @@ function renderTable() {
             </td>
             <td>${escapeHtml(m.joindate)}</td>
             <td class="text-end">
+              <button class="btn btn-sm btn-outline-success checkin-btn" data-user="${m.id}"><i class="fas fa-check"></i></button>
               <button class="btn btn-sm btn-outline-dark" onclick="window.location='/admin/member-details/${m.id}'"><i class="fas fa-eye"></i></button>
               <button class="btn btn-sm btn-outline-secondary" onclick="editMember('${m.id}')"><i class="fas fa-edit"></i></button>
               <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteMember('${m.id}')"><i class="fas fa-trash"></i></button>
@@ -123,9 +124,10 @@ window.deleteMember = async (id) => {
     // update UI
     members = members.filter(m => m.id !== id);
     renderTable();
+    showPopup("Member deleted successfully","success");
   } catch (err) {
     console.error(err);
-    alert("Could not delete member.");
+    showPopup("Could not delete member.","error");
   }
 };
 
@@ -138,7 +140,7 @@ window.editMember = async (id) => {
 
   const allowed = ["Bronze", "Gold", "Platinum"];
   if (!allowed.includes(newTier)) {
-    alert("Invalid tier.");
+    showPopup("Invalid tier.","error");
     return;
   }
 
@@ -155,9 +157,10 @@ window.editMember = async (id) => {
     // update UI locally
     m.tier = newTier;
     renderTable();
+    showPopup("Member updated!","success");
   } catch (err) {
     console.error(err);
-    alert("Could not update tier.");
+    showPopup("Could not update tier.","error");
   }
 };
 
@@ -178,25 +181,29 @@ addMemberForm.addEventListener("submit", async (e) => {
       lastname: document.getElementById("lastName").value.trim(),
       email: document.getElementById("email").value.trim(),
       phone: document.getElementById("phone").value.trim(),
-      tier: document.getElementById("tier").value,
-    
+      tier: document.getElementById("tier").value.trim() || 'Bronze',
+      gender: document.getElementById("gender").value.trim(),
+      birthdate: document.getElementById("birthDate").value.trim(),
+      joindate: document.getElementById("joindate").value,
+      ecname : document.getElementById("eName").value.trim(),
+      ephone : document.getElementById("eNumber").value.trim(),
+      relationship : document.getElementById("eRship").value.trim(),
+      notes: document.getElementById("notes").value.trim(),
     };
-
-    const joindate = document.getElementById("joindate").value;
    
 
     const res = await fetch("/admin/api/members", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify(payload, joindate),
+      body: JSON.stringify(payload),
     });
 
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
       console.error("ADD MEMBER failed:", res.status, data);
-  alert(data.message || `Could not add member (HTTP ${res.status})`);
+      alert(data.message || `Could not add member (HTTP ${res.status})`);
       return;
     }
 
@@ -208,7 +215,7 @@ addMemberForm.addEventListener("submit", async (e) => {
       email: data.email,
       phone: data.phone,
       tier: data.tier || "Bronze",
-      joindate: data.joindate
+      joindate: data.joindate,
     };
 
     members.unshift(newMember);
@@ -221,19 +228,14 @@ addMemberForm.addEventListener("submit", async (e) => {
     modal.hide();
 
     renderTable();
+    showPopup("Member added successfully!","success");
   } catch (err) {
     console.error(err);
-    alert("Could not add member.");
+    showPopup("Could not add member.", "error");
   }
 });
 
-
-  // close modal
-  const modalEl = document.getElementById("addMemberModal");
-  const modal = bootstrap.Modal.getInstance(modalEl);
-  // modal.hide();
-
-  renderTable();
+renderTable();
 
 
 // filters
@@ -242,3 +244,112 @@ tierFilter.addEventListener("change", renderTable);
 
 document.getElementById("year").textContent = new Date().getFullYear();
 renderTable();
+
+// check-in member //
+
+document.addEventListener("click", async (e)=>{
+
+  if(!e.target.closest(".checkin-btn")) return;
+
+  const btn = e.target.closest(".checkin-btn");
+
+  const user_id = btn.dataset.user;
+
+  const res = await fetch("/api/attendance/checkin",{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      user_id
+    })
+  });
+
+  const data = await res.json();
+
+ if(data.ok){
+
+  showPopup("Member checked in","success");
+
+  btn.disabled = true;
+  btn.classList.remove("btn-outline-success");
+  btn.classList.add("btn-success");
+
+} else {
+
+  showPopup(data.message || "Already checked in today","warning");
+
+  btn.disabled = true;
+  btn.classList.remove("btn-outline-success");
+  btn.classList.add("btn-success");
+}
+
+});
+
+
+// check checked-in status
+async function loadCheckinStatus(){
+
+  const buttons = document.querySelectorAll(".checkin-btn");
+
+  for(const btn of buttons){
+
+    const user_id = btn.dataset.user;
+
+    console.log(user_id);
+
+    const res = await fetch(`/api/attendance/status/${user_id}`,{
+      credentials:"include"
+    });
+
+    const data = await res.json();
+
+    if(data.checked_in_today){
+
+      btn.disabled = true;
+
+      btn.classList.remove("btn-outline-success");
+      btn.classList.add("btn-success");
+
+    }
+
+  }
+
+}
+
+
+
+
+// ===== Popup Utility ===== //
+
+function showPopup(message, type = "success", duration = 4000) {
+  const popup = document.getElementById("popup");
+  if (!popup) return;
+
+  // Set message
+  popup.textContent = message;
+
+  // Style based on type
+  switch (type) {
+    case "success":
+      popup.style.background = "#28a746bf"; // green
+      break;
+    case "error":
+      popup.style.background = "#dc3545bf"; // red
+      break;
+    case "info":
+      popup.style.background = "#007bffbf"; // blue
+      break;
+    default:
+      popup.style.background = "#77837abf";
+  }
+
+  // Show popup
+  popup.classList.remove("hidden");
+
+  // Hide after duration
+  setTimeout(() => {
+    popup.classList.add("hidden");
+  }, duration);
+}

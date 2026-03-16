@@ -31,19 +31,22 @@ export const createClassType = async (data) => {
 export const updateClassType = async (id, data) => {
     const query = `
         UPDATE class_types
-        SET name = $1, description = $2, default_duration_minutes = $3
+        SET name = $1, description = $2, 
+        default_duration_minutes = $3
         WHERE id = $4
         RETURNING *
     `;
 
-    await db.query(query, [
-        data.name,
-        data.description,
-        data.default_duration_minutes,
-        id
-    ]);
+    const values = [
+    data.name,
+    data.description,
+    data.default_duration_minutes,
+    id
+  ];
 
-    return rows[0];
+  const result = await db.query(query, values);
+
+  return result.rows[0]; 
 };
 
 export const deleteClassType = async (id) => {

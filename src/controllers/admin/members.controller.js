@@ -1,4 +1,6 @@
 import { db } from "../../config/db.js";
+import bcrypt from "bcrypt";
+
 
 export const viewAllMembers = async (req, res, next) => {
    return res.render("admin/admin-dashboard.html", { 
@@ -54,7 +56,11 @@ export const getMembers = async (req, res) => {
 
 export const createMember = async (req, res) => {
   try {
-    const { firstname, lastname, email, phone, tier, joindate } = req.body;
+    const { firstname, lastname, email, phone, tier, joindate,
+            gender, birthdate, notes,
+            ecname, relationship, ephone
+
+     } = req.body;
 
     if (!firstname || !lastname || !email || !phone) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -62,16 +68,50 @@ export const createMember = async (req, res) => {
 
     const allowed = ["Bronze", "Gold", "Platinum"];
     const safeTier = allowed.includes(tier) ? tier : "Bronze";
+    const password = 'Password123';
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+
+     await db.query("BEGIN");
 
     const result = await db.query(
-      `INSERT INTO public.users (firstname, lastname, email, phone, tier, joindate)
-       VALUES ($1, $2, $3, $4, $5 ,COALESCE($6::date, CURRENT_DATE))
-       RETURNING id, firstname, lastname, email, phone, tier, 
-        to_char(joindate, 'YYYY-MM-DD') AS joindate`,
-      [firstname, lastname, email, phone, safeTier, joindate]
-    );
+      `INSERT INTO public.users 
+      (firstname, lastname, email, phone, password, tier, joindate)
+       VALUES 
+       ($1, $2, $3, $4, $5, $6, COALESCE($7::date, CURRENT_DATE))
+       RETURNING id, firstname, lastname, email, phone, password, tier, 
+        to_char(joindate, 'YYYY-MM-DD') AS joindate
+        `,
+      [firstname, lastname, email.trim().toLowerCase(), phone, hashedPassword, safeTier, joindate]
+      );
 
-    return res.status(201).json(result.rows[0]);
+      const userId = result.rows[0].id;
+
+       // Insert contact details
+        await db.query(
+          `INSERT INTO public.member_contact_details
+          (user_id, gender, birthdate, notes)
+          VALUES ($1,$2,$3,$4)`,
+          [userId, gender, birthdate, notes]
+        );
+
+        // Insert emergency contact
+        await db.query(
+          `INSERT INTO public.member_emergency_contacts
+          (user_id, ecname, relationship, phone)
+          VALUES ($1,$2,$3,$4)`,
+          [userId, ecname, relationship, ephone]
+        );
+
+         await db.query("COMMIT");
+
+        return res.status(201).json({
+          ok: true,
+          message: "New member created successfully",
+          data: result.rows[0]
+        });
+    
   }catch (err) {
   console.error("CREATE MEMBER ERROR:", err.code, err.message);
   return res.status(500).json({ message: err.message });

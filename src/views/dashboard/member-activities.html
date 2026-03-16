@@ -15,6 +15,9 @@
     <!-- Sidebar -->
      <%- include("partials/sidebar.html") %>
 
+   <!-- Backdrop for mobile -->
+  <div class="backdrop" id="backdrop"></div>
+
 
     <!-- /member/activities -->
 
@@ -25,10 +28,10 @@
     <div class="muted">Your classes, schedule, and attendance.</div>
   </div>
 
-  <div class="d-flex gap-2 flex-wrap">
+  <!-- <div class="d-flex gap-2 flex-wrap">
     <button class="btn btn-outline-light">Attendance</button>
     <button class="btn btn-primary">View Timetable</button>
-  </div>
+  </div> -->
 </div>
 <div class="row g-3">
   <!-- <div class="col-lg-7">
@@ -67,7 +70,7 @@
   </div> -->
 
   <div class="col-lg-12">
-    <section class="card glass-card rounded-4 shadow-sm">
+    <section class="card glass-card rounded-4 shadow-sm" id="you-timetable">
       <div class="card-body p-4">
         <h2 class="h5 text-white mb-1">This Month</h2>
         <div class="small-note mb-3">Quick view of your schedule.</div>
@@ -124,6 +127,33 @@
 </div>
 </main>
 </div>    
+ <script>
+
+  const sidebar = document.querySelector(".sidebar");
+  const toggle = document.getElementById("toggleSidebar");
+  const backdrop = document.getElementById("backdrop");
+
+  function openSidebar() {
+    sidebar.classList.add("open");
+    backdrop.classList.add("show");
+  }
+
+  function closeSidebar() {
+    sidebar.classList.remove("open");
+    backdrop.classList.remove("show");
+  }
+
+  toggle?.addEventListener("click", openSidebar);
+  backdrop?.addEventListener("click", closeSidebar);
+
+       // Close sidebar when a link is clicked (mobile)
+      document.querySelectorAll(".sidebar a").forEach(a => {
+        a.addEventListener("click", () => {
+          if (window.innerWidth < 992) closeSidebar();
+        });
+      });
+  
+</script>
 <script src="../assets/dashboard/js/dashboard.js"></script>
 <script src="../assets/public/timetable.js"></script>
 <script>
@@ -134,6 +164,7 @@
   }
 
 loadTimetable();
+loadMemberStats();
 </script>
 
 

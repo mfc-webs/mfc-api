@@ -11,36 +11,77 @@ function renderTimetable(data, role="member") {
 
     column.innerHTML = "";
 
-    const sessions = data.filter(s => s.day === day);
+    const sessions = data
+    .filter(s => s.day === day)
+    .sort((a,b) => a.time.localeCompare(b.time));
+
+    
 
     sessions.forEach(session => {
 
       const slot = document.createElement("div");
       slot.className = "timetable-slot";
 
-      if(role === "admin"){
+      const d = new Date(session.starts_at);
 
-        slot.innerHTML = `
-          <span>${session.class_name}</span>
-          <span>${session.time}</span>
-          <span>${session.location}</span>
-        `;
+      const date = `${d.getDate()}/${d.getMonth()+1}`;
+      const button = `
+              <button 
+                class="btn btn-sm ${session.enrolled ? 'btn-success' : 'btn-outline-light'} enroll-btn"
+                data-id="${session.id}"
+                ${session.enrolled ? 'disabled' : ''}
+              >
+                ${session.enrolled ? 'Enrolled' : 'Join'}
+              </button>
+            `;
+      
+        switch (role) {
 
-      } else {
+          case "admin":
+            slot.innerHTML = `
+              <div class="d-flex justify-content-between border-bottom-1">
+                  <span class="glass-card border-2 p-1 rounded-1 btn-outline-light">#${session.id}</span>
+                  <span> ${session.class_name}</span>
+                  <span>${session.time}</span>
+                  <span>${date}</span>
+              </div>
+              <div class=" mt-1 mb-1"></div>
+              <span class="mt-2">${session.location}</span>
+            `;
+          break;
 
-        slot.innerHTML = `
-          <span>${session.class_name} ${session.time}</span>
-          <button 
-            class="btn btn-sm ${session.enrolled ? 'btn-success' : 'btn-outline-light'} enroll-btn"
-            data-id="${session.id}"
-            ${session.enrolled ? 'disabled' : ''}
-          >
-            ${session.enrolled ? 'Enrolled' : 'Join Class'}
-          </button>
-        `;
+          case "member":
+            slot.innerHTML = `
+              <div class="d-flex justify-content-between">
+                  <div class="d-flex flex-wrap width-100 justify-content-between gap-2" style="width: 80%; padding-right: 10px">
+                    <div>${session.class_name}</div> 
+                    <div>${session.time} ${date}</div>
+                  </div> 
+                  <span>
+                    ${button}
+                  </span>
+              </div>
+              <div class="${session.location == null ? 'd-none' : ''}">
+                <div class="border-bottom mb-1 mt-2"></div>
+                <span class="mt-2">${session.location}</span>
+              </div>
+            `;
+          break;
 
-      }
-
+          default:
+            slot.innerHTML = `
+            <div class="d-flex justify-content-between">
+                  <div class="d-flex flex-wrap width-100 justify-content-between gap-2" style="width: 80%; padding-right: 10px">
+                    <div>${session.class_name}</div> 
+                    <div>${session.time} ${date}</div>
+                  </div> 
+                  <span>
+                    ${button}
+                  </span>
+              </div>
+          `;
+        }
+      
       column.appendChild(slot);
 
     });
@@ -64,16 +105,16 @@ document.addEventListener("click", async (e) => {
 
     if(res.status === 401){
       // user not logged in → redirect
-      window.location.href = "/signup";
+      window.location.href = "/login";
       return;
     }
 
     const data = await res.json();
 
     if(data.success){
-      button.classList.emove("btn-outline-secondary");
+      button.classList.remove("btn-outline-light");
       button.classList.add("btn-success");
-      button.innerText = "Enrolling...";
+      button.innerText = "Enrolled";
       button.disabled = true;
     } else {
       alert(data.message || "Booking failed");

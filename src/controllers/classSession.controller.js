@@ -7,6 +7,7 @@ export const getSessions = async (req, res) => {
   const result = await db.query(`
     SELECT 
       s.id,
+      s.starts_at,
       TO_CHAR(s.starts_at,'HH24:MI') AS time,
       TRIM(TO_CHAR(s.starts_at,'Day')) AS day,
       s.capacity,
@@ -17,9 +18,13 @@ export const getSessions = async (req, res) => {
     JOIN class_types c ON s.class_type_id = c.id
     LEFT JOIN class_bookings b 
       ON b.session_id = s.id
-      AND b.user_id = $1
+      AND b.user_id = $1::int
     ORDER BY s.starts_at
   `,[user_id]);
+
+  if (!user_id) {
+  result.rows.forEach(s => s.location = null);
+  }
 
   res.json(result.rows);
 
