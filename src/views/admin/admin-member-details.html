@@ -29,7 +29,7 @@
           <!-- Header -->
           <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
             <div>
-              <h1 class="h3 text-white mb-1">Member Details</h1>
+              <h1 class="h3 text-white mb-1"><%= member.firstname || 'Member' %> Details</h1>
               <div class="muted">Manage member profile, membership, and engagement.</div>
             </div>
 
@@ -54,36 +54,32 @@
                   <div class="row g-3">
                     <div class="col-md-6">
                       <label class="form-label small-note">First Name</label>
-                      <input type="text" class="form-control" value="<%= member.firstname || '' %>">
+                      <input class="form-control" value="<%= member.firstname || 'N/A' %>">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label small-note">Last Name</label>
-                      <input type="text" class="form-control" value="<%= member.firstname || '' %>">
+                      <input class="form-control" value="<%= member.lastname || 'N/A' %>">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label small-note">Email</label>
-                      <input type="email" class="form-control" value="john@email.com">
+                      <input class="form-control" value="<%= member.email || 'N/A' %>">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label small-note">Phone</label>
-                      <input type="text" class="form-control" value="+123456789">
+                      <input  class="form-control" value="<%= member.user_phone || 'N/A' %>">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label small-note">Date of Birth</label>
-                      <input type="date" class="form-control">
+                      <input  class="form-control" value="<%= member.birthdate || 'N/A' %>">
                     </div>
 
                     <div class="col-md-6">
                       <label class="form-label small-note">Gender</label>
-                      <select class="form-select">
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
-                      </select>
+                      <input  class="form-control" value="<%= member.gender || 'N/A' %>">
                     </div>
                   </div>
                 </div>
@@ -96,16 +92,20 @@
 
                   <div class="row g-3">
                     <div class="col-12">
-                      <input class="form-control" placeholder="Street Address">
+                      <label class="form-label small-note">Street Adress</label>
+                      <input class="form-control" placeholder="Street Address" value="<%= member.street_address || "N/A" %>">
                     </div>
                     <div class="col-md-6">
-                      <input class="form-control" placeholder="City">
+                      <label class="form-label small-note">City</label>
+                      <input class="form-control" placeholder="City" value="<%= member.city || "N/A" %>">
                     </div>
                     <div class="col-md-3">
-                      <input class="form-control" placeholder="Province/State">
+                      <label class="form-label small-note">Province</label>
+                      <input class="form-control" placeholder="Province/State" value="<%= member.province || "N/A" %>">
                     </div>
                     <div class="col-md-3">
-                      <input class="form-control" placeholder="Postal Code">
+                      <label class="form-label small-note">Postal Code</label>
+                      <input class="form-control" placeholder="Postal Code" value="<%= member.postal_code || "N/A" %>">
                     </div>
                   </div>
                 </div>
@@ -117,14 +117,21 @@
                   <h5 class="text-white mb-3">Emergency Contact</h5>
 
                   <div class="row g-3">
-                    <div class="col-md-6">
-                      <input class="form-control" placeholder="Contact Name">
+                    <div class="col-md-3">
+                      <label class="form-label small-note">Name</label>
+                      <input class="form-control" placeholder="Contact Name" value="<%= member.ecname || "N/A" %>">
                     </div>
                     <div class="col-md-3">
-                      <input class="form-control" placeholder="Relationship">
+                      <label class="form-label small-note">Relationship</label>
+                      <input class="form-control" placeholder="Relationship" value="<%= member.relationship || "N/A" %>">
                     </div>
                     <div class="col-md-3">
-                      <input class="form-control" placeholder="Phone">
+                      <label class="form-label small-note">Phone</label>
+                      <input class="form-control" placeholder="Phone" value="<%= member.emergency_phone || "N/A" %>">
+                    </div>
+                    <div class="col-md-3">
+                      <label class="form-label small-note">Notes</label>
+                      <input class="form-control" placeholder="Notes" value="<%= member.ems_notes || "N/A" %>">
                     </div>
                   </div>
                 </div>
@@ -134,9 +141,27 @@
               <div class="card glass-card rounded-4 shadow-sm mb-4">
                 <div class="card-body">
                   <h5 class="text-white mb-3">Health Notes</h5>
-
-                  <textarea class="form-control mb-3" rows="3" placeholder="Medical conditions..."></textarea>
-                  <textarea class="form-control" rows="3" placeholder="Injuries or limitations..."></textarea>
+                  <div class="row g-3">
+                    <div class="col-md-4">
+                      <label class="form-label small-note">Share info with trainer</label>
+                      <input class="form-control" placeholder="Contact Name" value="<%= member.share_content_trainer || "N/A" %>">
+                    </div>
+                    <div class="col-md-8">
+                      <label class="form-label small-note">Medical Conditions</label>
+                      <input class="form-control" placeholder="Contact Name" value="<%= member.medical_conditions || "N/A" %>">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label small-note">Surgeries, Injuries or Limitations</label>
+                      <input class="form-control" placeholder="Contact Name" value="<%= member.injuries || "N/A" %>">
+                    </div>
+                    <div class="col-md-6">
+                      <label class="form-label small-note">Medication</label>
+                      <input class="form-control" placeholder="Contact Name" value="<%= member.medication || "N/A" %>">
+                    </div>
+                  </div>
+                  
+                  <label class="form-label small-note">Notes</label>
+                  <textarea class="form-control" rows="2" placeholder="Injuries or limitations..."><%= member.health_notes || "N/A" %></textarea>
                 </div>
               </div>
 
@@ -150,8 +175,9 @@
                 <div class="card-body">
                   <h5 class="text-white mb-3">Membership</h5>
 
-                  <label class="form-label small-note">Tier</label>
+                  <label class="form-label small-note">Plan</label>
                   <select class="form-select mb-3">
+                    <option><%= member.tier %></option>
                     <option>Bronze</option>
                     <option>Silver</option>
                     <option>Gold</option>
@@ -164,11 +190,11 @@
                     <option>Expired</option>
                   </select>
 
-                  <label class="form-label small-note">Start Date</label>
-                  <input type="date" class="form-control mb-3">
+                  <label class="form-label small-note">Join Date</label>
+                  <input class="form-control mb-3" value="<%= member.joindate || '' %>">
 
-                  <label class="form-label small-note">Renewal Date</label>
-                  <input type="date" class="form-control">
+                  <!-- <label class="form-label small-note">Renewal Date</label>
+                  <input  class="form-control" value="N/A"> -->
                 </div>
               </div>
 
@@ -177,13 +203,13 @@
                 <div class="card-body">
                   <h5 class="text-white mb-3">Engagement</h5>
                   <div class="small-note">Total Check-ins</div>
-                  <div class="h4 text-white">32</div>
+                  <div class="h4 text-white"><%= member.total_visits || '0' %></div>
 
-                  <div class="small-note mt-3">Classes Enrolled</div>
-                  <div class="h4 text-white">5</div>
+                  <div class="small-note mt-3">Visits This Month</div>
+                  <div class="h4 text-white"><%= member.visits_this_month || '0' %></div>
 
                   <div class="small-note mt-3">Last Attendance</div>
-                  <div class="text-white">12 Feb 2026</div>
+                  <div class="text-white"><%= member.last_visit || 'Never' %></div>
                 </div>
               </div>
 

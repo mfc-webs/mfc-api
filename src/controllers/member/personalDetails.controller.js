@@ -72,6 +72,8 @@ export const updateEmsDetails = async (req, res) => {
     const priority = req.body?.priority || "primary";
     const ems_notes = req.body?.ems_notes || null;
 
+    
+
     await client.query("BEGIN");
 
     // 1. Remove existing contact of same priority
@@ -104,6 +106,7 @@ export const updateEmsDetails = async (req, res) => {
     );
 
     await client.query("COMMIT");
+
 
     return res.status(200).json({
       ok: true,
@@ -197,46 +200,28 @@ export const updateHealthRecord = async (req, res) => {
       [userId]
     );
 
-    if (rows.length > 0) {
-      // Update existing
-      await client.query(
-        `
-        UPDATE member_health_records
-        SET medical_conditions = $1,
-            injuries = $2,
-            health_notes = $3,
-            consent_share_trainer = $4,
-            medication = $5,
-            updated_at = NOW()
-        WHERE user_id = $6
-        `,
-        [medical_conditions, injuries, health_notes, consent_share_trainer, medication, userId]
-      );
-    } else {
-      // Insert new
-      await client.query(
-        `
-        INSERT INTO member_health_records
-        (user_id, medical_conditions, injuries, health_notes, consent_share_trainer, medication,)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        ON CONFLICT (user_id)
-        DO UPDATE SET
-          medical_conditions = EXCLUDED.medical_conditions,
-          injuries = EXCLUDED.injuries,
-          health_notes = EXCLUDED.health_notes,
-          consent_share_trainer = EXCLUDED.consent_share_trainer,
-          medication = EXCLUDED.medication,
-          updated_at = CURRENT_TIMESTAMP
-        `,
-        [userId, medical_conditions, injuries, health_notes, consent_share_trainer, medication,]
-      );
-    }
+        await client.query(
+      `
+      INSERT INTO member_health_records
+      (user_id, medical_conditions, injuries, health_notes, consent_share_trainer, medication, updated_at)
+      VALUES ($1, $2, $3, $4, $5, $6, NOW())
+      ON CONFLICT (user_id)
+      DO UPDATE SET
+        medical_conditions = EXCLUDED.medical_conditions,
+        injuries = EXCLUDED.injuries,
+        health_notes = EXCLUDED.health_notes,
+        consent_share_trainer = EXCLUDED.consent_share_trainer,
+        medication = EXCLUDED.medication,
+        updated_at = NOW()
+      `,
+      [userId, medical_conditions, injuries, health_notes, consent_share_trainer, medication]
+    );
 
     await client.query("COMMIT");
 
     return res.status(200).json({
       ok: true,
-      message: "Medical condition saved successfully!"
+      message: "Medical info saved successfully!"
     });
 
   } catch (err) {

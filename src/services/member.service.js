@@ -4,7 +4,7 @@ export async function getMemberWithProfile(userId) {
   const { rows } = await db.query(
      `
     SELECT
-      u.id, u.firstname, u.lastname, u.email, u.phone, u.tier, u.joindate, u.role,
+      u.id, u.firstname, u.lastname, u.email, u.phone, u.tier, u.joindate, u.role, u.status,
 
       -- member edit profile columns
 
