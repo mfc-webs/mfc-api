@@ -85,3 +85,34 @@ export const getAllSessions = async () => {
 
   return result.rows;
 };
+
+export const getUpcomingSessions = async () => {
+  const query = `
+    SELECT
+      s.id,
+      s.starts_at,
+      s.ends_at,
+      s.capacity,
+      s.location,
+      s.status,
+      s.trainer_id,
+
+      c.name AS class_name,
+      c.description,
+
+      to_char(s.starts_at, 'DD Mon') AS class_date,
+      to_char(s.starts_at, 'HH24:MI') AS class_time
+
+    FROM class_sessions s
+    JOIN class_types c ON c.id = s.class_type_id
+
+    WHERE s.starts_at >= NOW()
+    AND s.status = 'scheduled'
+
+    ORDER BY s.starts_at ASC
+    LIMIT 5
+  `;
+
+  const { rows } = await db.query(query);
+  return rows;
+};

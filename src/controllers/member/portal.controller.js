@@ -1,13 +1,20 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import path from "path";
+import { getUpcomingSessions } from '../../services/classSessions.service.js';
 
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const viewMemberPortal = async (req, res, next) =>  { 
-    return res.render("dashboard/member-portal" , { 
-      activePage: "portal"
-   });
+   try {
+    const sessions = await getUpcomingSessions();
+
+    res.render("dashboard/member-portal", {
+      activePage: "portal",
+      sessions
+    });
+
+console.log("SESSIONS:",sessions);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Server error");
+  }
 };
 

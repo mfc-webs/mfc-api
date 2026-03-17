@@ -9,28 +9,81 @@ export const viewAllMembers = async (req, res, next) => {
 };
 
 
-export  const viewMemberDetails = async (req, res) => {
-    try {
-        const userId = req.params.id;
+export const viewMemberDetails = async (req, res) => {
+  try {
+    const userId = req.params.id;
 
-        const { rows } = await db.query(
-          'SELECT * FROM public.users WHERE id = $1',
-          [userId]
-        );
+    const { rows } = await db.query(`
+      SELECT 
+        u.id,
+        u.firstname,
+        u.lastname,
+        u.email,
+        u.phone AS user_phone,
+        u.tier,
+        to_char(u.joindate, 'DD/MM/YYYY') AS joindate,
+        u.status,
 
-        const member = rows[0] || null;
+        cd.gender,
+        to_char(cd.birthdate, 'DD/MM/YYYY') AS birthdate,
+        cd.street_address,
+        cd.notes,
+        cd.city,
+        cd.province,
+        cd.postal_code,
 
-        if (!member) {
-            return res.status(404).send("Member not found");
-        }
+        ec.ecname,
+        ec.relationship,
+        ec.phone AS emergency_phone,
+        ec.ems_notes,
+        
+        hr.medical_conditions,
+        hr.injuries,
+        hr.medication,
+        hr.health_notes,
+        
+        a.total_visits,
+        a.visits_this_month,
+        COALESCE(TO_CHAR(a.last_visit, 'DD Mon YYYY, HH24:MI'), 'Never') AS last_visit
 
-        res.render('admin/admin-member-details', { activePage: "members" , member });
+      FROM public.users u
+      LEFT JOIN public.member_contact_details cd 
+        ON cd.user_id = u.id
+      LEFT JOIN public.member_emergency_contacts ec 
+        ON ec.user_id = u.id
+      LEFT JOIN public.member_health_records hr
+        ON hr.user_id = u.id
+      LEFT JOIN LATERAL (
+          SELECT 
+            COUNT(*) AS total_visits,
+            COUNT(*) FILTER (
+              WHERE date_trunc('month', check_in_time) = date_trunc('month', NOW())
+            ) AS visits_this_month,
+            MAX(check_in_time) AS last_visit
+          FROM public.attendance
+          WHERE user_id = u.id
+        ) a ON true
 
-    } catch (error) {
-        console.error(error);
-        console.log(error.message)
-        res.status(500).send("Server error here");
+      WHERE u.id = $1
+      LIMIT 1
+    `, [userId]);
+
+
+    const member = rows[0];
+
+    if (!member) {
+      return res.status(404).send("Member not found");
     }
+
+    res.render("admin/admin-member-details", {
+      activePage: "members",
+      member
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
 };
 
 
