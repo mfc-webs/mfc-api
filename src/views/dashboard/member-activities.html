@@ -9,14 +9,19 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/dashboard/css/stylesdash.css" />
     <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
+        <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
 </head>
-<body>
+<body class="bg-body-bg">
+
+     <!-- header -->
+      <%- include("partials/header.html") %>
+    <!-- header -->
 <div class="app-shell">
     <!-- Sidebar -->
      <%- include("partials/sidebar.html") %>
-
-   <!-- Backdrop for mobile -->
-  <div class="backdrop" id="backdrop"></div>
+   <!-- sidebar -->
 
 
     <!-- /member/activities -->
@@ -24,8 +29,8 @@
   <main class="content">
 <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
   <div>
-    <h1 class="h3 text-white mb-1">Activities</h1>
-    <div class="muted">Your classes, schedule, and attendance.</div>
+    <h1 class="h3  mb-1">Activities</h1>
+    <div>Your classes, schedule, and attendance.</div>
   </div>
 
   <!-- <div class="d-flex gap-2 flex-wrap">
@@ -37,11 +42,11 @@
   <!-- <div class="col-lg-7">
     <section class="card glass-card rounded-4 shadow-sm">
       <div class="card-body p-4">
-        <h2 class="h5 text-white mb-1">My Classes</h2>
+        <h2 class="h5  mb-1">My Classes</h2>
         <div class="small-note mb-3">Classes included in your tier.</div>
 
         <div class="list-group list-group-flush">
-          <div class="list-group-item bg-transparent text-white border-secondary">
+          <div class="list-group-item bg-transparent  border-secondary">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <div class="fw-semibold">Boxing</div>
@@ -51,7 +56,7 @@
             </div>
           </div>
 
-          <div class="list-group-item bg-transparent text-white border-secondary">
+          <div class="list-group-item bg-transparent  border-secondary">
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <div class="fw-semibold">HIIT</div>
@@ -61,7 +66,7 @@
             </div>
           </div>
 
-          <div class="list-group-item bg-transparent text-white border-secondary">
+          <div class="list-group-item bg-transparent  border-secondary">
             <div class="small-note">No classes yet — choose a program to start.</div>
           </div>
         </div>
@@ -72,7 +77,7 @@
   <div class="col-lg-12">
     <section class="card glass-card rounded-4 shadow-sm" id="you-timetable">
       <div class="card-body p-4">
-        <h2 class="h5 text-white mb-1">This Month</h2>
+        <h2 class="h5  mb-1">This Month</h2>
         <div class="small-note mb-3">Quick view of your schedule.</div>
 
         <!-- DRAG & DROP TIMETABLE -->
@@ -84,37 +89,37 @@
         
             <div class="col-md-3">
                 <h6 class="text-center">Monday</h6>
-                <div class="timetable-column shadow-sm" id="Monday"></div>
+                <div class="timetable-column shadow-sm glass-card" id="Monday"></div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Tuesday</h6>
-                <div class="timetable-column shadow-sm" id="Tuesday"></div>
+                <div class="timetable-column shadow-sm glass-card" id="Tuesday"></div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Wednesday</h6>
-                <div class="timetable-column shadow-sm" id="Wednesday"></div>
+                <div class="timetable-column shadow-sm glass-card" id="Wednesday"></div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Thursday</h6>
-                <div class="timetable-column shadow-sm" id="Thursday"></div>
+                <div class="timetable-column shadow-sm glass-card" id="Thursday"></div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Friday</h6>
-                <div class="timetable-column shadow-sm" id="Friday"></div>
+                <div class="timetable-column shadow-sm glass-card" id="Friday"></div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Saturday</h6>
-                <div class="timetable-column shadow-sm" id="Saturday"></div>
+                <div class="timetable-column shadow-sm glass-card" id="Saturday"></div>
             </div>
         
             <div class="col-md-3">
                 <h6 class="text-center">Sunday</h6>
-                <div class="timetable-column shadow-sm" id="Sunday"></div>
+                <div class="timetable-column shadow-sm glass-card" id="Sunday"></div>
             </div>
         
         </div>
@@ -127,33 +132,54 @@
 </div>
 </main>
 </div>    
- <script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+   
+  <script>
+        // Close sidebar when a link is clicked (mobile)
+      const btn = document.getElementById("toggleSidebar");
+      const sidebar = document.querySelector(".sidebar");
 
-  const sidebar = document.querySelector(".sidebar");
-  const toggle = document.getElementById("toggleSidebar");
-  const backdrop = document.getElementById("backdrop");
-
-  function openSidebar() {
-    sidebar.classList.add("open");
-    backdrop.classList.add("show");
-  }
-
-  function closeSidebar() {
-    sidebar.classList.remove("open");
-    backdrop.classList.remove("show");
-  }
-
-  toggle?.addEventListener("click", openSidebar);
-  backdrop?.addEventListener("click", closeSidebar);
-
-       // Close sidebar when a link is clicked (mobile)
-      document.querySelectorAll(".sidebar a").forEach(a => {
-        a.addEventListener("click", () => {
-          if (window.innerWidth < 992) closeSidebar();
-        });
+      btn?.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
       });
-  
 </script>
+<script>
+      // Tooltips
+      document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        .forEach(el => new bootstrap.Tooltip(el));
+
+      // =========================
+      // Smooth Theme Toggle
+      // =========================
+      const html = document.documentElement;
+      const toggleBtn = document.getElementById('themeToggle');
+      const icon = document.getElementById('themeIcon');
+
+      function setTheme(theme) {
+        html.setAttribute('data-bs-theme', theme);
+        localStorage.setItem('theme', theme);
+        icon.className = theme === 'dark' ? 'bi bi-sun' : 'bi bi-moon';
+      }
+
+      // Load theme
+      setTheme(localStorage.getItem('theme') || 'light');
+
+      toggleBtn.addEventListener('click', () => {
+        const current = html.getAttribute('data-bs-theme');
+        setTheme(current === 'light' ? 'dark' : 'light');
+      });
+
+      // =========================
+      // Bell Animation
+      // =========================
+      const bellIcon = document.getElementById('bellIcon');
+
+      document.getElementById('bellBtn').addEventListener('click', () => {
+        bellIcon.classList.remove('bell-animate');
+        void bellIcon.offsetWidth;
+        bellIcon.classList.add('bell-animate');
+      });
+    </script>
 <script src="../assets/dashboard/js/dashboard.js"></script>
 <script src="../assets/public/timetable.js"></script>
 <script>
