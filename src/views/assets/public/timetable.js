@@ -39,19 +39,22 @@ function renderTimetable(data, role="member") {
 
           case "admin":
             slot.innerHTML = `
+            <div class="border p-1 rounded-3">
               <div class="d-flex justify-content-between border-bottom-1">
-                  <span class="glass-card border-2 p-1 rounded-1 btn-outline-light">#${session.id}</span>
+                  <span class="glass-card border-2 rounded-1 btn-outline-light p-10">#${session.id}</span>
                   <span> ${session.class_name}</span>
                   <span>${session.time}</span>
                   <span>${date}</span>
               </div>
               <div class=" mt-1 mb-1"></div>
               <span class="mt-2">${session.location}</span>
+            </div>
             `;
           break;
 
           case "member":
             slot.innerHTML = `
+            <div class=" p-1 rounded-3">
               <div class="d-flex justify-content-between">
                   <div class="d-flex flex-wrap width-100 justify-content-between gap-2" style="width: 80%; padding-right: 10px">
                     <div>${session.class_name}</div> 
@@ -62,15 +65,16 @@ function renderTimetable(data, role="member") {
                   </span>
               </div>
               <div class="${session.location == null ? 'd-none' : ''}">
-                <div class="border-bottom mb-1 mt-2"></div>
+                <div class="border-bottom small-note mb-1 mt-2"></div>
                 <span class="mt-2">${session.location}</span>
               </div>
+            </div
             `;
           break;
 
           default:
             slot.innerHTML = `
-            <div class="d-flex justify-content-between">
+            <div class="d-flex justify-content-between ">
                   <div class="d-flex flex-wrap width-100 justify-content-between gap-2" style="width: 80%; padding-right: 10px">
                     <div>${session.class_name}</div> 
                     <div>${session.time} ${date}</div>

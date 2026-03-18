@@ -1,0 +1,92 @@
+
+
+<!-- Header -->
+<div class="d-flex justify-content-between align-items-center px-3 glass-card rounded-bottom-4 header mb-4">
+
+  <!-- Logo -->
+  <button class="btn fw-bold fs-4 border-0">
+    Mash Fitness
+  </button>
+  <!-- <h2 class="nav-brand"><a href="/"><img src="../assets/landing/images/icon/mfc-2.png" alt="Mash Fitness" style="height: 35px;"
+                  class="img-fluid"></a></h2> -->
+
+  <!-- Right -->
+  <div class="d-flex align-items-center gap-2">
+
+    <!-- Dark Mode -->
+    <button id="themeToggle" class="btn icon-btn border" data-bs-toggle="tooltip">
+      <i id="themeIcon" class="bi bi-moon"></i>
+    </button>
+
+    <!-- Notifications -->
+    <div class="dropdown">
+      <!--<button id="bellBtn" class="btn icon-btn position-relative border" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+        <i id="bellIcon" class="bi bi-bell"></i>
+         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          3
+        </span> 
+      </button>-->
+
+      <!-- Notification Panel -->
+      <div class="dropdown-menu dropdown-menu-end p-0 shadow" style="width: 300px; z-index: 999; transform: translate3d(40px, 62px, 0px);">
+
+        <div class="p-3 border-bottom fw-semibold">
+          Notifications
+        </div>
+
+        <div class="list-group list-group-flush">
+
+          <div class="list-group-item notification-item">
+            <small class="text-muted">2 min ago</small><br>
+            New user registered
+          </div>
+
+          <div class="list-group-item notification-item">
+            <small class="text-muted">10 min ago</small><br>
+            Server backup completed
+          </div>
+
+          <div class="list-group-item notification-item">
+            <small class="text-muted">1 hour ago</small><br>
+            New message received
+          </div>
+
+        </div>
+
+        <div class="p-2 text-center border-top">
+          <a href="#" class="small text-decoration-none">View all</a>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Profile -->
+    <div class="dropdown">
+      <button class="btn p-0 border-0" data-bs-toggle="dropdown">
+         <div class="logo-circle">
+        <img
+              src="<%= member.profile_picture %>"
+              alt="Profile"
+              class="rounded-circle border"
+              style="width: 40px; height: 40px; object-fit: cover; border-color: rgba(255,255,255,.18) !important;"
+              id="profilePreview"
+            />
+      </div>
+      
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="/member/edit-profile"><span><i class="fa-solid fa-user"></i></span> <span>Profile</span></a></li>
+        <!-- <li><a class="dropdown-item" href="#">Settings</a></li> -->
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item text-danger" href="/logout"><span><i class="fa-solid fa-arrow-right-from-bracket"></i></span> <span>Logout</span></a></li>
+      </ul>
+    </div>
+
+    <!-- Menu -->
+    <button class="btn icon-btn d-lg-none" data-bs-toggle="tooltip" id="toggleSidebar">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+  </div>
+</div>
+
