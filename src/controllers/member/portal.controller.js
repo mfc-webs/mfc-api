@@ -10,7 +10,6 @@ export const viewMemberPortal = async (req, res, next) =>  {
       sessions
     });
 
-console.log("SESSIONS:",sessions);
 
   } catch (err) {
     console.error(err);
