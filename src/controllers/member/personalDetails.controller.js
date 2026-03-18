@@ -105,8 +105,11 @@ export const updateEmsDetails = async (req, res) => {
       [userId, ecname, relationship, phone, priority, ems_notes]
     );
 
+    
+
     await client.query("COMMIT");
 
+    console.log("emergency:", req.body);
 
     return res.status(200).json({
       ok: true,

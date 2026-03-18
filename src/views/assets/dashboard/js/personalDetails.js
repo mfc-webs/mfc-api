@@ -1,32 +1,3 @@
-//////// menu sidebar controls
-const sidebar = document.querySelector(".sidebar");
-const toggle = document.getElementById("toggleSidebar");
-const backdrop = document.getElementById("backdrop");
-
-function openSidebar() {
-    sidebar.classList.add("open");
-    backdrop.classList.add("show");
-}
-
-function closeSidebar() {
-    sidebar.classList.remove("open");
-    backdrop.classList.remove("show");
-}
-
-toggle?.addEventListener("click", openSidebar);
-backdrop?.addEventListener("click", closeSidebar);
-
-// Close sidebar when a link is clicked (mobile)
-document.querySelectorAll(".sidebar a").forEach(a => {
-    a.addEventListener("click", () => {
-        if (window.innerWidth < 992) closeSidebar();
-    });
-});
-
-
-// Minimal UI wiring (hook API later)
-
-
 // Preview profile image
   document.getElementById("profileImage")?.addEventListener("change", (e) => {
     const file = e.target.files?.[0];
