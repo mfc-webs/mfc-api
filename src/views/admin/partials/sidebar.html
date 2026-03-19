@@ -12,8 +12,11 @@
       <!-- <a class="nav-pill text-decoration-none <%= activePage === 'admin' ? 'active' : '' %>" href="/admin/dashboard">
         <span><i class="fas fa-home"></i></span> <span>Overview</span>
       </a> -->
+      <a class="small-note nav-pill text-decoration-none <%= activePage === 'insights' ? 'active' : '' %>" href="/admin/insights">
+        <span><i class="fa-solid fa-chart-area"></i></span> <span>Insights</span>
+      </a>
       <a class="small-note nav-pill text-decoration-none <%= activePage === 'classes' ? 'active' : '' %>" href="/admin/class-activities">
-        <span><i class="fa-solid fa-tasks"></i></span> <span>Classes & Sessions</span>
+        <span><i class="fa-regular fa-calendar"></i></span> <span>Schedule</span>
       </a>
       <a class="small-note nav-pill text-decoration-none <%= activePage === 'members' ? 'active' : '' %>" href="/admin/all-members">
         <span><i class="fa-solid fa-users"></i></span> <span>Members</span>
@@ -30,7 +33,7 @@
       <!-- <a class="nav-pill text-decoration-none <%= activePage === 'reports' ? 'active' : '' %>" href="/admin/reports">
         <span><i class="fa-solid fa-chart-area"></i></span> <span>Reports</span>
       </a> -->
-      <a class="small-note nav-pill text-decoration-none" href="/logout">
+      <a class="small-note nav-pill text-decoration-none text-danger" href="/logout">
         <span><i class="fa-solid fa-arrow-right-from-bracket"></i></span> <span>Logout</span>
       </a>
     </nav>

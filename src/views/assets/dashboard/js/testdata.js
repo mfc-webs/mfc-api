@@ -99,7 +99,7 @@ function renderTable() {
             <td>${escapeHtml(m.joindate)}</td>
             <td class="text-end">
               <button class="btn btn-sm btn-outline-success checkin-btn" data-user="${m.id}"><i class="fas fa-check"></i></button>
-              <button class="btn btn-sm btn-outline-light" onclick="window.location='/admin/member-details/${m.id}'"><i class="fas fa-eye"></i></button>
+              <button class="btn btn-sm btn-outline-info" onclick="window.location='/admin/member-details/${m.id}'"><i class="fas fa-eye"></i></button>
               <button class="btn btn-sm btn-outline-secondary" onclick="editMember('${m.id}')"><i class="fas fa-edit"></i></button>
               <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteMember('${m.id}')"><i class="fas fa-trash"></i></button>
             </td>

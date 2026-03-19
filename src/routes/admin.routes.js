@@ -5,6 +5,7 @@ import { getAllClassTypes, createClassType, updateClassType, deleteClassType } f
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireAdmin } from "../middleware/requireAdmin.js";
 import { createClassSession, deleteSession, editSession } from "../controllers/admin/classSession.controller.js";
+import { viewAdminInsights } from "../controllers/admin/insights.controller.js";
 
 
 
@@ -37,5 +38,9 @@ router.get("/api/members", getMembers);
 router.post("/api/members", createMember);
 router.delete("/api/members/:id", deleteMember);
 router.patch("/api/members/:id/tier", updateMemberTier);
+
+// Member insights
+router.get("/insights", viewAdminInsights);
+
 
 export default router;
