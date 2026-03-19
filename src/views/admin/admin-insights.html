@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard</title>
+
+    <!-- Links -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/dashboard/css/stylesdash.css" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
+
+    
+  </head>
+
+  <body class="bg-body-bg">
+
+    <!-- header -->
+      <%- include("partials/header.html") %>
+    <!-- header -->
+     
+    <div class="app">
+      <!-- Sidebar -->
+            <%- include("partials/sidebar.html") %>
+      <!-- End sidebar -->
+       <!-- Main Content -->
+<main class="content pad-20">
+
+     <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
+          <div>
+            <h1 class="h3 small-note mb-2">Performance Analitics</h1>
+            <div class="small-note">Track member activity, engagement, and growth at a glance.</div>
+          </div>
+
+          <div>
+          </div>
+        </div>
+
+    <!-- top stats -->
+        <div class="row g-4 mb-4">
+  <!-- Attendance Line -->
+        <div class="col-md-6 col-xl-4">
+            <div class="card glass-card rounded-4 shadow-sm">
+              <div class="card-body">
+                <h3 class="small-note">Total Members</h3>
+                <div class="display-6 fw-semibold"><h3><%= summary.total_members %></h3></div>
+                <div class="small-note">All-time</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-xl-4">
+            <div class="card glass-card rounded-4 shadow-sm">
+              <div class="card-body">
+                <h3 class="small-note">Check-ins Today</h3>
+                <div class="display-6 fw-semibold"><h3><%= summary.checkins_today %></h3></div>
+                <div class="small-note">All-time</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-xl-4">
+            <div class="card glass-card rounded-4 shadow-sm">
+              <div class="card-body">
+                <h3 class="small-note">This Week</h3>
+                <div class="display-6 fw-semibold"><h3><%= summary.checkins_week %></h3></div>
+                <div class="small-note">All-time</div>
+              </div>
+            </div>
+          </div>
+          
+    <!-- End top stats -->
+
+    <!-- goals and attendance stats-->
+     <div class="row g-4 mb-4 d-flex justify-content-center">
+
+            <!-- Goals Donut -->
+            <div class="col-md-6 col-sm-12">
+                <div class=" card glass-card p-3 rounded-4 shadow-sm">
+                <h2 class="mb-3">Member Goals</h2>
+                <canvas id="goalsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Attendance Line -->
+            <div class="col-md-6 col-sm-12">
+               
+                <div class="d-flex row mb-4 g-4">
+                   
+                   <div class="col-md-6">
+                    <div class="card glass-card rounded-4 shadow-sm">
+                      <div class="card-body text-center">
+                        <h4 class="small-note">Active Members</h4>
+                        <div class="display-6 fw-semibold"><h3><%= activeMembers %></h3></div>
+                        <div class="small-note shadow-sm"></div>
+                      </div>
+                    </div>
+                  </div>
+                   <div class="col-md-6">
+                    <div class="card glass-card rounded-4 shadow-smr">
+                      <div class="card-body text-center">
+                        <h4 class="small-note">Engagement Rate</h4>
+                        <div class="display-6 fw-semibold"><h3><%= engagementRate %>%</h3></div>
+                        <div class="small-note shadow-sm"></div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="col-md-6">
+                    <div class="card glass-card rounded-4 shadow-smr">
+                      <div class="card-body text-center">
+                        <h4 class="small-note">At-Risk Members</h4>
+                        <div class="display-6 fw-semibold"><h3 class="text-warning"><span><%= atRiskMembers %></span></h3></div>
+                        <div class="small-note shadow-sm"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="card glass-card rounded-4 shadow-smr">
+                      <div class="card-body text-center">
+                        <h4 class="small-note">Avg Visits/Member</h4>
+                        <div class="display-6 fw-semibold"><h3><span><%= avgVisits %></span></h3></div>
+                        <div class="small-note shadow-sm"></div>
+                      </div>
+                    </div>
+                  </div>
+              <div class="col-12">
+                <div class="card glass-card p-3 rounded-4 shadow-sm">
+                <h2 class="mb-3">Attendance Trend</h2>
+                <canvas id="attendanceChart"></canvas>
+                </div>
+                </div>
+            </div>
+
+      </div>
+    <!-- End goals and attendance stats -->
+
+    <!-- inactive members -->
+    <div class="glass-card p-3 rounded-4">
+        <h2>Inactive Users (7+ days)</h2>
+    
+        <% if (inactiveUsers.length===0) { %>
+            <p class="text-success">All members are active ✅</p>
+            <% } else { %>
+    
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th class="text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    
+                        <% inactiveUsers.forEach(user => { %>
+                            <tr>
+                                <td>
+                                    <%= user.firstname %>
+                                        <%= user.lastname %>
+                                </td>
+                                <td class="text-end">
+                                    <a href="https://wa.me/<%= user.phone %>" target="_blank"
+                                        class="btn btn-success btn-sm">
+                                        WhatsApp
+                                    </a>
+                                </td>
+                            </tr>
+                            <% }) %>
+    
+                    </tbody>
+                </table>
+    
+                <% } %>
+    </div>
+    <!-- End inactive members -->
+</main>
+<input class="hidden" id="allGoals" value="<%= JSON.stringify(goals) %>">
+<input class="hidden" id="allTrends" value="<%= JSON.stringify(trend) %>">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/dashboard/js/memberInsights.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      loadCheckinStatus();
+    </script>
+  </body>
+</html>

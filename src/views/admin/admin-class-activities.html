@@ -446,9 +446,14 @@
     void bellIcon.offsetWidth;
     bellIcon.classList.add('bell-animate');
   });
+
+  // =========================
+  // Hamburger
+  // =========================
+
+     
 </script>
 <script src="../assets/dashboard/js/adminClassActivity.js" defer></script>
-<!-- <script src="../assets/dashboard/js/dashboard.js"></script> -->
 <script src="../assets/dashboard/js/classSessionHandler.js"></script>
 <script src="../assets/public/timetable.js"></script>
 <script>
@@ -458,6 +463,32 @@
     renderTimetable(sessions, "admin"); // pass "admin" role
     }
     loadTimetable();
+</script>
+<script>
+
+    const sidebar = document.querySelector(".sidebar");
+      const toggle = document.getElementById("toggleSidebar");
+      const backdrop = document.getElementById("backdrop");
+
+      function openSidebar() {
+        sidebar.classList.add("open");
+        backdrop.classList.add("show");
+      }
+
+      function closeSidebar() {
+        sidebar.classList.remove("open");
+        backdrop.classList.remove("show");
+      }
+
+      toggle?.addEventListener("click", openSidebar);
+      backdrop?.addEventListener("click", closeSidebar);
+
+      // Close sidebar when a link is clicked (mobile)
+      document.querySelectorAll(".sidebar a").forEach(a => {
+        a.addEventListener("click", () => {
+          if (window.innerWidth < 1024) closeSidebar();
+        });
+      });
 </script>
 
 </body>
