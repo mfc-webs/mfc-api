@@ -45,9 +45,9 @@
         <div class="col-md-6 col-xl-4">
             <div class="card glass-card rounded-4 shadow-sm">
               <div class="card-body">
-                <h3 class="small-note">Total Members</h3>
+                <h3 class="small-note">All Members</h3>
                 <div class="display-6 fw-semibold"><h3><%= summary.total_members %></h3></div>
-                <div class="small-note">All-time</div>
+                <div class="small-note">Total</div>
               </div>
             </div>
           </div>
@@ -57,7 +57,7 @@
               <div class="card-body">
                 <h3 class="small-note">Check-ins Today</h3>
                 <div class="display-6 fw-semibold"><h3><%= summary.checkins_today %></h3></div>
-                <div class="small-note">All-time</div>
+                <div class="small-note">Daily</div>
               </div>
             </div>
           </div>
@@ -66,7 +66,7 @@
               <div class="card-body">
                 <h3 class="small-note">This Week</h3>
                 <div class="display-6 fw-semibold"><h3><%= summary.checkins_week %></h3></div>
-                <div class="small-note">All-time</div>
+                <div class="small-note">Weekly</div>
               </div>
             </div>
           </div>
@@ -141,7 +141,7 @@
         <h2>Inactive Users (7+ days)</h2>
     
         <% if (inactiveUsers.length===0) { %>
-            <p class="text-success">All members are active ✅</p>
+            <p class="text-success">All members are active</p>
             <% } else { %>
     
                 <table class="table align-middle">
