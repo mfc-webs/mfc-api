@@ -6,6 +6,8 @@ import { requireAuth } from "../middleware/requireAuth.js";
 import { requireAdmin } from "../middleware/requireAdmin.js";
 import { createClassSession, deleteSession, editSession } from "../controllers/admin/classSession.controller.js";
 import { viewAdminInsights } from "../controllers/admin/insights.controller.js";
+import { searchMembersController, viewKiosk } from "../controllers/admin/searchMember.controller.js";
+import { createCheckin } from "../controllers/admin/attendance.controller.js";
 
 
 
@@ -41,6 +43,15 @@ router.patch("/api/members/:id/tier", updateMemberTier);
 
 // Member insights
 router.get("/insights", viewAdminInsights);
+
+// 🔍 Search members (kiosk)
+router.get("/search-members", searchMembersController);
+
+// ✅ Check-in (reuse existing controller)
+router.post("/checkin", createCheckin);
+
+// 🖥️ Kiosk page
+router.get("/admin-kiosk", viewKiosk);
 
 
 export default router;

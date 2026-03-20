@@ -495,4 +495,18 @@ display: none;
       background-color: rgba(0,0,0,0.05);
       cursor: pointer;
     }
+
+
+
+  .search-bar {
+    bottom: 0;
+    padding: 12px;
+    position: fixed;
+  }
+
   
+    @media screen and (min-width:767px) {
+  .search-bar {
+            bottom: 20%;
+        }
+      }
