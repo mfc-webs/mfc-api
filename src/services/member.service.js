@@ -68,3 +68,32 @@ export async function getMemberWithProfile(userId) {
 
   return rows[0];
 }
+
+
+// search member for kiosk check-in service
+
+export const searchMembers = async (query) => {
+  const result = await db.query(
+    `
+    SELECT 
+      u.id,
+      u.firstname,
+      u.lastname,
+      mp.display_name,
+      mp.profile_picture
+    FROM users u
+    LEFT JOIN member_profile mp 
+      ON mp.user_id = u.id
+    WHERE 
+      u.firstname ILIKE $1
+      OR u.lastname ILIKE $1
+      OR (u.firstname || ' ' || u.lastname) ILIKE $1
+      OR mp.display_name ILIKE $1
+    ORDER BY u.firstname ASC
+    LIMIT 6
+    `,
+    [`%${query}%`]
+  );
+
+  return result.rows;
+};

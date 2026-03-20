@@ -1,0 +1,25 @@
+// controllers/admin/searchMembers.js
+import { searchMembers } from "../../services/member.service.js";
+
+export const viewKiosk = async (req, res) => {
+    res.render("admin/admin-kiosk", {
+        activePage: 'kiosk'
+        });
+}
+
+export const searchMembersController = async (req, res) => {
+  try {
+    const { q } = req.query;
+
+    if (!q) return res.json([]);
+
+    const results = await searchMembers(q);
+
+    res.json(results);
+
+    
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Search failed" });
+  }
+};

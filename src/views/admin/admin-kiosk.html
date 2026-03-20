@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- SortableJS (Drag & Drop) -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+
+    <link rel="stylesheet" href="../assets/dashboard/css/stylesdash.css" />
+    <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
+    
+    <style>
+        /* .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #111;
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: 0.3s;
+            }
+
+        .toast.show {
+            opacity: 1;
+            } */
+
+        .kiosk-container {
+            height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .results {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        
+
+        .search-bar input {
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+        }
+
+    </style>
+</head>
+
+
+<body class="bg-body-bg" style="height: 100%; overflow: hidden;">
+   
+            <div class="card glass-card">
+                <!-- views/admin/checkin-kiosk.ejs -->
+                <div class="kiosk-container">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center px-3 glass-card rounded-bottom-4 shadow-sm header mb-4">
+            
+                        <!-- Exit -->
+                        <button class="exit-btn btn fw-bold fs-4 border rounded-circle gl" onclick="exitKiosk()">✕</button>
+            
+                        <!-- Logo -->
+                        <button class="btn fw-bold fs-4 border-0 gl">
+                                    MFC
+                                </button>
+                        <!-- <h2 class="nav-brand"><a href="/"><img src="../assets/landing/images/icon/mfc-2.png" alt="Mash Fitness" style="height: 35px;"
+                                        class="img-fluid"></a></h2> -->
+            
+                        <!-- Right -->
+                        <div class="">
+            
+                            <!-- Dark Mode -->
+                            <button id="themeToggle" class="btn icon-btn border" data-bs-toggle="tooltip">
+                                <i id="themeIcon" class="bi bi-moon"></i>
+                            </button>
+            
+                            <!-- Notifications -->
+                            <!-- <div class="dropdown"> -->
+                                <!--<button id="bellBtn" class="btn icon-btn position-relative border" data-bs-toggle="dropdown" data-bs-auto-close="outside">
+                                <i id="bellIcon" class="bi bi-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                3
+                                </span> 
+                            </button>-->
+            
+                                <!-- Notification Panel -->
+                                <!-- <div class="dropdown-menu dropdown-menu-end p-0 shadow"
+                                    style="width: 300px; z-index: 999; transform: translate3d(40px, 62px, 0px);">
+            
+                                    <div class="p-3 border-bottom fw-semibold">
+                                        Notifications
+                                    </div>
+            
+                                    <div class="list-group list-group-flush">
+            
+                                        <div class="list-group-item notification-item">
+                                            <small class="text-muted">2 min ago</small><br>
+                                            New user registered
+                                        </div>
+            
+                                        <div class="list-group-item notification-item">
+                                            <small class="text-muted">10 min ago</small><br>
+                                            Server backup completed
+                                        </div>
+            
+                                        <div class="list-group-item notification-item">
+                                            <small class="text-muted">1 hour ago</small><br>
+                                            New message received
+                                        </div>
+            
+                                    </div>
+            
+                                    <div class="p-2 text-center border-top">
+                                        <a href="#" class="small text-decoration-none">View all</a>
+                                    </div>
+            
+                                </div> -->
+                            <!-- </div> -->
+            
+                            <!-- Profile -->
+                            <!-- <div class="dropdown"> -->
+                                <!-- <button class="btn p-0 border-0" data-bs-toggle="dropdown">
+                                <img src="../../../../public/images/profile-pic.jpg" class="rounded-circle" width="40" height="40">
+                            </button> -->
+                               <!-- <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" href="/member/edit-profile"><span><i
+                                                    class="fa-solid fa-user"></i></span> <span>Profile</span></a></li>
+                                     <li><a class="dropdown-item" href="#">Settings</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item text-danger" href="/logout"><span><i
+                                                    class="fa-solid fa-arrow-right-from-bracket"></i></span> <span>Logout</span></a>
+                                    </li>
+                                </ul>
+                            </div> -->
+            
+                            <!-- Menu -->
+                            <!-- <button class="btn icon-btn d-lg-none" data-bs-toggle="tooltip" id="toggleSidebar">
+                                    <i class="fa-solid fa-bars"></i>
+                                </button> -->
+            
+                        </div>
+                    </div>
+                    <!-- End Header -->
+            
+            
+                    <!-- Results -->
+                    <div class="results d-flex justify-content-center align-items-start">
+                        <div class="col-sm-12 col-md-6 col-xl-4">
+                            <div class="glass-card rounded-4 shadow-sm">
+                                <div class="card-body">
+                                    <div id="results" class="">No Search Results</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Search -->
+                     <div class="d-flex justify-content-center">
+                    <div class="search-bar col-xs-12 col-md-8 col-xl-4 bg-md-sedondary">
+                        <input type="text" class="rounded-5 border shadow-sm" id="searchInput" placeholder="Search member..." autofocus />
+                    </div>
+                    </div>
+                </div>
+            </div>
+<!-- Alerts for checkins -->
+ <div id="toast" class="toast"></div>
+<audio id="successSound" src="/sounds/success.mp3" preload="auto"></audio>
+<audio id="errorSound" src="/sounds/error.mp3" preload="auto"></audio>
+<!-- enf of alert for check-ins -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        const html = document.documentElement;
+const toggleBtn = document.getElementById('themeToggle');
+const icon = document.getElementById('themeIcon');
+
+   function setTheme(theme) {
+  html.setAttribute('data-bs-theme', theme);
+  localStorage.setItem('theme', theme);
+  icon.className = theme === 'dark' ? 'bi bi-sun' : 'bi bi-moon';
+}
+
+// Load theme
+setTheme(localStorage.getItem('theme') || 'light');
+
+toggleBtn.addEventListener('click', () => {
+  const current = html.getAttribute('data-bs-theme');
+  setTheme(current === 'light' ? 'dark' : 'light');
+});
+    </script>
+
+    <script>
+        const input = document.getElementById("searchInput");
+        const resultsDiv = document.getElementById("results");
+
+        let debounceTimer;
+
+        input.addEventListener("input", () => {
+            clearTimeout(debounceTimer);
+
+            debounceTimer = setTimeout(async () => {
+                const query = input.value;
+
+                if (!query) {
+                    resultsDiv.innerHTML = "No Search Results";
+                    return;
+                }
+
+                const res = await fetch(`/admin/search-members?q=${query}`);
+                const members = await res.json();
+
+                renderResults(members);
+            }, 500);
+        });
+
+        function renderResults(members) {
+            resultsDiv.innerHTML = members.map(m => `
+                <div class=" d-flex justify-content-between mb-3">
+                <div>
+                    <img src="${m.profile_image || '/images/profile-pic.jpg'}" class="rounded-circle" width="40" height="40"/>
+                    <span>${m.firstname} ${m.lastname}</span>
+                </div>
+                <button onclick="checkIn(${m.id})" class="btn rounded-pill btn-success">Check In</button>
+                </div>
+            `).join("");
+        }
+
+const successSound = document.getElementById("successSound");
+const errorSound = document.getElementById("errorSound");
+
+async function checkIn(userId) {
+  try {
+    const res = await fetch("/admin/checkin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ user_id: userId })
+    });
+
+    const data = await res.json();
+
+    if (data.ok) {
+      successSound.currentTime = 0;
+      successSound.play();
+
+      showToast("✅ Checked in");
+
+      // reset
+      input.value = "";
+      resultsDiv.innerHTML = "";
+      input.focus();
+
+    } else {
+      errorSound.currentTime = 0;
+      errorSound.play();
+
+      showToast("⚠️ " + data.message);
+    }
+
+  } catch (err) {
+    console.error(err);
+
+    errorSound.currentTime = 0;
+    errorSound.play();
+
+    showToast("❌ Check-in failed");
+  }
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.innerText = message;
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1500);
+}
+
+function exitKiosk() {
+    window.location.href = "/admin/insights";
+}
+</script>
+</body>
+
+</html>
