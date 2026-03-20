@@ -21,14 +21,14 @@
     <script src="https://kit.fontawesome.com/e6d1f98a15.js" crossorigin="anonymous"></script>
     
     <style>
-        /* .toast {
+        .toast {
             position: fixed;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: #111;
+            background: #67656588;
             color: #fff;
-            padding: 12px 18px;
+            padding: 12px 22px;
             border-radius: 8px;
             opacity: 0;
             transition: 0.3s;
@@ -36,7 +36,7 @@
 
         .toast.show {
             opacity: 1;
-            } */
+            }
 
         .kiosk-container {
             height: 100dvh;
@@ -164,7 +164,7 @@
                         <div class="col-sm-12 col-md-6 col-xl-4">
                             <div class="glass-card rounded-4 shadow-sm">
                                 <div class="card-body">
-                                    <div id="results" class="">No Search Results</div>
+                                    <div id="results" class="">Search results will Appear here</div>
                                 </div>
                             </div>
                         </div>
@@ -176,7 +176,7 @@
                         <input type="text" class="rounded-5 border shadow-sm" id="searchInput" placeholder="Search member..." autofocus />
                     </div>
                     </div>
-                </div>
+                </div> 
             </div>
 <!-- Alerts for checkins -->
  <div id="toast" class="toast"></div>
@@ -220,7 +220,7 @@ toggleBtn.addEventListener('click', () => {
                 const query = input.value;
 
                 if (!query) {
-                    resultsDiv.innerHTML = "No Search Results";
+                    resultsDiv.innerHTML = "";
                     return;
                 }
 
@@ -231,13 +231,14 @@ toggleBtn.addEventListener('click', () => {
             }, 500);
         });
 
+        
         function renderResults(members) {
             resultsDiv.innerHTML = members.map(m => `
-                <div class=" d-flex justify-content-between mb-3">
+                <div class=" d-flex justify-content-between mb-3 width-100">
                 <div>
                     <img src="${m.profile_image || '/images/profile-pic.jpg'}" class="rounded-circle" width="40" height="40"/>
                     <span>${m.firstname} ${m.lastname}</span>
-                </div>
+                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button onclick="checkIn(${m.id})" class="btn rounded-pill btn-success">Check In</button>
                 </div>
             `).join("");
