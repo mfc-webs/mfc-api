@@ -123,9 +123,11 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="card glass-card rounded-4 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <%= session.class_name %>
-                            </h5>
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title"><%= session.class_name %></h5>
+                                <span class="glass-card border-1 rounded-1 btn-outline-light p-10 btn-sm">#<%= session.id %></span>
+                            </div>
+                            
                             <p class="card-text">
                                 <%= session.description || "No description available." %>
                             </p>

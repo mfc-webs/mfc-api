@@ -1,48 +1,108 @@
+let currentPage = 1;
+const limit = 10;
+let stats = {};
 let members = [];
 
-async function loadMembers() {
-  try {
-    const res = await fetch("/admin/api/members", {
-      method: "GET",
-      credentials: "include"
-    });
 
+async function fetchMembers(page = 1) {
+  const search = searchInput.value || "";
+  const tier = tierFilter.value || "";
 
-    if (!res.ok) throw new Error("Failed to fetch members");
+  const res = await fetch(
+    `/admin/api/members?page=${page}&limit=${limit}&search=${search}&tier=${tier}`
+  );
 
-    const dbMembers = await res.json();
-
-    // Transform DB shape -> UI shape
-    members = dbMembers.map(u => ({
-      id: String(u.id),                
-      firstName: u.firstname,
-      lastName: u.lastname,
-      email: u.email,
-      phone: u.phone,
-      tier: u.tier || "Bronze",           
-      joindate: u.joindate,
-    }));
-
-    renderTable(); // <-- this is your real render function
-  } catch (err) {
-    console.error(err);
-  }
+  if (!res.ok) {
+  console.error("API failed:", res.status);
+  return;
 }
 
-document.addEventListener("DOMContentLoaded", loadMembers);
+  const data = await res.json();
 
+  members = members = Array.isArray(data.members) ? data.members : [];
+  stats = data.stats;
 
+  currentPage = data.page;
+  totalPages = data.totalPages;
+
+  renderTable();
+  renderPagination();
+  renderStats(stats);   
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadMembers();
+  fetchMembers(1);
 });
+
+function renderTable() {
+  tbody.innerHTML = members.map(m => `
+    <tr>
+      <td>
+        <div class="fw-semibold">
+          ${escapeHtml(m.firstname)} ${escapeHtml(m.lastname)}
+        </div>
+      </td>
+      <td>${escapeHtml(m.email)}</td>
+      <td>${escapeHtml(m.phone)}</td>
+      <td>
+        <span class="badge rounded-pill bg-${
+          m.tier === "Gold" ? "warning" :
+          m.tier === "Platinum" ? "info" : "secondary"
+        } text-dark">
+          ${escapeHtml(m.tier)}
+        </span>
+      </td>
+      <td>${escapeHtml(m.joindate)}</td>
+      <td class="text-end">
+        <button class="btn btn-sm btn-outline-success checkin-btn" data-user="${m.id}">
+          <i class="fas fa-check"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-info"
+          onclick="window.location='/admin/member-details/${m.id}'">
+          <i class="fas fa-eye"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-secondary"
+          onclick="editMember('${m.id}')">
+          <i class="fas fa-edit"></i>
+        </button>
+        <button class="btn btn-sm btn-outline-danger ms-1"
+          onclick="deleteMember('${m.id}')">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  `).join("");
+
+  emptyState.style.display = members.length === 0 ? "block" : "none";
+}
+
 
 
 // --- Helpers ---
 const tbody = document.getElementById("membersTbody");
 const emptyState = document.getElementById("emptyState");
-const searchInput = document.getElementById("searchInput");
-const tierFilter = document.getElementById("tierFilter");
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (searchInput) searchInput.addEventListener("input", () => fetchMembers(1));
+  if (tierFilter) tierFilter.addEventListener("change", () => fetchMembers(1));
+
+  fetchMembers(1); // initial load
+});
+
+searchInput.addEventListener("input", () => {
+  fetchMembers(1); // reset to page 1
+});
+
+tierFilter.addEventListener("change", () => {
+  fetchMembers(1);
+});
+
+function renderStats(stats) {
+  document.getElementById("statTotal").textContent = Number(stats.total);
+  document.getElementById("statGold").textContent = Number(stats.gold);
+  document.getElementById("statPlatinum").textContent = Number(stats.platinum);
+  document.getElementById("statBronze").textContent = Number(stats.bronze);
+}
 
 function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, (m) => ({
@@ -54,59 +114,16 @@ function escapeHtml(str) {
   }[m]));
 }
 
-function renderStats(list) {
-  const total = list.length;
-  const gold = list.filter(m => m.tier === "Gold").length;
-  const platinum = list.filter(m => m.tier === "Platinum").length;
-  const bronze = list.filter(m => m.tier === "Bronze").length;
 
-  document.getElementById("statTotal").textContent = total;
-  document.getElementById("statGold").textContent = gold;
-  document.getElementById("statPlatinum").textContent = platinum;
-  document.getElementById("statBronze").textContent = bronze;
-}
+function renderPagination() {
+  const pagination = document.getElementById("pagination");
+  if (!pagination) return;
 
-function getFilteredMembers() {
-  const q = searchInput.value.trim().toLowerCase();
-  const tier = tierFilter.value;
-
-  return members.filter(m => {
-    const haystack = `${m.firstName} ${m.lastName} ${m.email} ${m.phone} ${m.tier}`.toLowerCase();
-    const matchSearch = q === "" ? true : haystack.includes(q);
-    const matchTier = tier === "" ? true : m.tier === tier;
-    return matchSearch && matchTier;
-  });
-}
-
-function renderTable() {
-  const list = getFilteredMembers();
-  renderStats(members);
-
-  tbody.innerHTML = list.map(m => `
-          <tr>
-            <td>
-              <div class="fw-semibold">
-              ${escapeHtml(m.firstName)} ${escapeHtml(m.lastName)}
-              </div>
-            </td>
-            <td>${escapeHtml(m.email)}</td>
-            <td>${escapeHtml(m.phone)}</td>
-            <td>
-              <span class="badge rounded-pill bg-${m.tier === "Gold" ? "warning" : m.tier === "Platinum" ? "info" : "secondary"} text-dark">
-                ${escapeHtml(m.tier)}
-              </span>
-            </td>
-            <td>${escapeHtml(m.joindate)}</td>
-            <td class="text-end">
-              <button class="btn btn-sm btn-outline-success checkin-btn" data-user="${m.id}"><i class="fas fa-check"></i></button>
-              <button class="btn btn-sm btn-outline-info" onclick="window.location='/admin/member-details/${m.id}'"><i class="fas fa-eye"></i></button>
-              <button class="btn btn-sm btn-outline-secondary" onclick="editMember('${m.id}')"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-sm btn-outline-danger ms-1" onclick="deleteMember('${m.id}')"><i class="fas fa-trash"></i></button>
-            </td>
-          </tr>
-        `).join("");
-
-  emptyState.style.display = members.length === 0 ? "block" : "none";
+  pagination.innerHTML = `
+    <button ${currentPage <= 1 ? "disabled" : ""} onclick="fetchMembers(${currentPage-1})" class="btn btn-sm"><i class="fa fa-chevron-left"></i></button>
+    <span>Page ${currentPage} of ${totalPages}</span>
+    <button ${currentPage >= totalPages ? "disabled" : ""} onclick="fetchMembers(${currentPage+1})" class="btn btn-sm"><i class="fa fa-chevron-right"></i></button>
+  `;
 }
 
 // --- Actions ---

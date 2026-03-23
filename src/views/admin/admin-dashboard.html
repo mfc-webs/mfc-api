@@ -151,11 +151,14 @@
                 </tbody>
               </table>
             </div>
-            
-
             <div class="small-note mt-3" id="emptyState" style="display:none;">
               No members yet. Add one using the “Add Member” button.
             </div>
+            <div class="mb-2"></div>
+            <div class="p-2 d-flex justify-content-center">
+              <div id="pagination"></div>
+            </div>
+            
           </div>
         </section>
 
@@ -312,11 +315,15 @@
       // =========================
       const bellIcon = document.getElementById('bellIcon');
 
+      document.addEventListener("DOMContentLoaded", () => {
+
       document.getElementById('bellBtn').addEventListener('click', () => {
         bellIcon.classList.remove('bell-animate');
         void bellIcon.offsetWidth;
         bellIcon.classList.add('bell-animate');
       });
+
+    });
     </script>
     <script>
       loadCheckinStatus();

@@ -174,8 +174,8 @@
         
             <% if (checkinsPage> 1) { %>
               <li class="page-item">
-                <a class="page-link" href="?checkinsPage=<%= checkinsPage - 1 %>&inactivePage=<%= inactivePage %>">
-                  Prev
+                <a class="page-link btn-sm" href="?checkinsPage=<%= checkinsPage - 1 %>&inactivePage=<%= inactivePage %>">
+                  <i class="fa fa-chevron-left"></i>
                 </a>
               </li>
               <% } %>
@@ -188,8 +188,8 @@
         
                 <% if (checkinsPage < totalCheckinPages) { %>
                   <li class="page-item">
-                    <a class="page-link" href="?checkinsPage=<%= checkinsPage + 1 %>&inactivePage=<%= inactivePage %>">
-                      Next
+                    <a class="page-link btn-sm" href="?checkinsPage=<%= checkinsPage + 1 %>&inactivePage=<%= inactivePage %>">
+                      <i class="fa fa-chevron-right" aria-hidden="true"></i>
                     </a>
                   </li>
                   <% } %>
@@ -241,8 +241,8 @@
         
             <% if (inactivePage> 1) { %>
               <li class="page-item">
-                <a class="page-link" href="?inactivePage=<%= inactivePage - 1 %>&checkinsPage=<%= checkinsPage %>">
-                  Prev
+                <a class="page-link btn-sm" href="?inactivePage=<%= inactivePage - 1 %>&checkinsPage=<%= checkinsPage %>">
+                  <i class="fa fa-chevron-left"></i>
                 </a>
               </li>
               <% } %>
@@ -255,8 +255,8 @@
         
                 <% if (inactivePage < totalInactivePages) { %>
                   <li class="page-item">
-                    <a class="page-link" href="?inactivePage=<%= inactivePage + 1 %>&checkinsPage=<%= checkinsPage %>">
-                      Next
+                    <a class="page-link btn-sm href="?inactivePage=<%= inactivePage + 1 %>&checkinsPage=<%= checkinsPage %>">
+                      <i class="fa fa-chevron-right"></i>
                     </a>
                   </li>
                   <% } %>
