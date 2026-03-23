@@ -66,7 +66,7 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between mt-3">
-                                        <button class="btn btn-sm btn-outline-light edit-class" data-id="<%= classType.id %>"
+                                        <button class="btn btn-sm btn-outline-secondary edit-class" data-id="<%= classType.id %>"
                                             data-name="<%= classType.name %>" data-description="<%= classType.description %>"
                                             data-duration="<%= classType.default_duration_minutes %>" data-bs-toggle="modal"
                                             data-bs-target="#classesModal">
@@ -123,9 +123,11 @@
                 <div class="col-xl-3 col-lg-4 col-md-6">
                     <div class="card glass-card rounded-4 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">
-                                <%= session.class_name %>
-                            </h5>
+                            <div class="d-flex justify-content-between">
+                                <h5 class="card-title"><%= session.class_name %></h5>
+                                <span class="glass-card border-1 rounded-1 btn-outline-secondary p-10 btn-sm">#<%= session.id %></span>
+                            </div>
+                            
                             <p class="card-text">
                                 <%= session.description || "No description available." %>
                             </p>
@@ -179,8 +181,8 @@
                             </ul>
                             <div class="d-flex justify-content-between mt-3">
                                 <button 
-                                    class="btn btn-sm btn-outline-light edit-session"
-                                      class="btn btn-sm btn-outline-light edit-session"
+                                    class="btn btn-sm btn-outline-secondary edit-session"
+                                      class="btn btn-sm btn-outline-secondary edit-session"
                                         data-id="<%= session.id %>"
                                         data-class="<%= session.class_type_id %>"
                                         data-date="<%= session.starts_at %>"

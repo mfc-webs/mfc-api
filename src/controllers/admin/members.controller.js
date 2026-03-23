@@ -95,17 +95,78 @@ export const viewMemberDetails = async (req, res) => {
 
 export const getMembers = async (req, res) => {
   try {
-    const result = await db.query(`
-      SELECT id, firstname, lastname, email, phone, tier, to_char(joindate, 'YYYY-MM-DD') AS joindate
-      FROM public.users
-      ORDER BY id ASC
-    `);
-    return res.json(result.rows);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
+    const tier = req.query.tier || "";
+
+    const offset = (page - 1) * limit;
+
+
+    const [dataResult, countResult, statsResult] = await Promise.all([
+  db.query(`
+    SELECT id, firstname, lastname, email, phone, tier,
+    to_char(joindate, 'YYYY-MM-DD') AS joindate
+    FROM users
+    WHERE 
+      ($1 = '' OR 
+        LOWER(firstname || ' ' || lastname || ' ' || email || ' ' || phone)
+        LIKE LOWER('%' || $1 || '%'))
+      AND
+      ($2 = '' OR tier = $2)
+    ORDER BY id ASC
+    LIMIT $3 OFFSET $4
+  `, [search, tier, limit, offset]),
+
+  db.query(`
+    SELECT COUNT(*) 
+    FROM users
+    WHERE 
+      ($1 = '' OR 
+        LOWER(firstname || ' ' || lastname || ' ' || email || ' ' || phone)
+        LIKE LOWER('%' || $1 || '%'))
+      AND
+      ($2 = '' OR tier = $2)
+  `, [search, tier]),
+
+  db.query(`
+    SELECT 
+      COUNT(*) AS total,
+      COUNT(*) FILTER (WHERE tier = 'Gold') AS gold,
+      COUNT(*) FILTER (WHERE tier = 'Platinum') AS platinum,
+      COUNT(*) FILTER (WHERE tier = 'Bronze') AS bronze
+    FROM users
+    WHERE 
+      ($1 = '' OR 
+        LOWER(firstname || ' ' || lastname || ' ' || email || ' ' || phone)
+        LIKE LOWER('%' || $1 || '%'))
+      AND
+      ($2 = '' OR tier = $2)
+  `, [search, tier])
+]);
+
+    const total = parseInt(countResult.rows[0].count);
+    const stats = statsResult.rows[0];
+
+    return res.json({
+      members: dataResult.rows,
+      total,
+      page,
+      totalPages: Math.ceil(total / limit),
+      stats: {
+        total: parseInt(stats.total),
+        gold: parseInt(stats.gold),
+        platinum: parseInt(stats.platinum),
+        bronze: parseInt(stats.bronze)
+      }
+    });
+
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Failed to load members" });
   }
 };
+
 
 export const createMember = async (req, res) => {
   try {

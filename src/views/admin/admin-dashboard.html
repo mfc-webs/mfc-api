@@ -60,27 +60,27 @@
           <div class="col-md-6 col-xl-3">
             <div class="card glass-card rounded-4 shadow-sm">
               <div class="card-body">
-                <div class="small-note">Pay-As-You-Go</div>
+                <div class="small-note">Bronze</div>
                 <div class="display-6 fw-semibold" id="statGold">0</div>
-                <div class="small-note">Membership</div>
+                <div class="small-note">Pay-As-You-Go</div>
               </div>
             </div>
           </div>
           <div class="col-md-6 col-xl-3">
             <div class="card glass-card rounded-4 shadow-sm">
               <div class="card-body">
-                <div class="small-note">Bi-Weekly</div>
+                <div class="small-note">Gold</div>
                 <div class="display-6 fw-semibold" id="statPlatinum">0</div>
-                <div class="small-note">Membership</div>
+                <div class="small-note">Bi-Weekly</div>
               </div>
             </div>
           </div>
           <div class="col-md-6 col-xl-3">
             <div class="card glass-card rounded-4 shadow-sm">
               <div class="card-body">
-                <div class="small-note">Monthly</div>
+                <div class="small-note">Platinum</div>
                 <div class="display-6 fw-semibold" id="statBronze">0</div>
-                <div class="small-note">Membership</div>
+                <div class="small-note">Monthly</div>
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@
           <div class="card-body">
             <div class="d-flex flex-column flex-lg-row gap-3 align-items-lg-center justify-content-between mb-3">
               <div>
-                <h2 class="h5 mb-1">Members</h2>
+                <h1 class="h3 small-note mb-2">Members</h1>
                 <div class="small-note">Quick search, view, edit, and remove members.</div>
               </div>
               <div class="d-flex gap-2">
@@ -151,11 +151,14 @@
                 </tbody>
               </table>
             </div>
-            
-
             <div class="small-note mt-3" id="emptyState" style="display:none;">
               No members yet. Add one using the “Add Member” button.
             </div>
+            <div class="mb-2"></div>
+            <div class="p-2 d-flex justify-content-center">
+              <div id="pagination"></div>
+            </div>
+            
           </div>
         </section>
 
@@ -312,11 +315,15 @@
       // =========================
       const bellIcon = document.getElementById('bellIcon');
 
+      document.addEventListener("DOMContentLoaded", () => {
+
       document.getElementById('bellBtn').addEventListener('click', () => {
         bellIcon.classList.remove('bell-animate');
         void bellIcon.offsetWidth;
         bellIcon.classList.add('bell-animate');
       });
+
+    });
     </script>
     <script>
       loadCheckinStatus();

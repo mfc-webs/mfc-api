@@ -41,7 +41,7 @@ function renderTimetable(data, role="member") {
             slot.innerHTML = `
             <div class="border p-1 rounded-3">
               <div class="d-flex justify-content-between border-bottom-1">
-                  <span class="glass-card border-2 rounded-1 btn-outline-light p-10">#${session.id}</span>
+                  <span class="glass-card border-1 rounded-1 btn-outline-light p-10">#${session.id}</span>
                   <span> ${session.class_name}</span>
                   <span>${session.time}</span>
                   <span>${date}</span>

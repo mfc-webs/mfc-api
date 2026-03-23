@@ -48,7 +48,7 @@ export const getAttendanceTrend = async () => {
 };
 
 // 4. Inactive Users (7+ days)
-export const getInactiveUsers = async () => {
+export const getInactiveUsers = async (limit = 5, offset = 0) => {
   const result = await db.query(`
     SELECT 
       m.id,
@@ -67,7 +67,8 @@ export const getInactiveUsers = async () => {
       OR MAX(a.check_in_time) < NOW() - INTERVAL '7 days'
 
     ORDER BY last_checkin ASC
-  `);
+    LIMIT $1 OFFSET $2
+  `, [limit, offset]);
 
   return result.rows;
 };
@@ -107,4 +108,41 @@ export const getAvgVisits = async () => {
   `);
 
   return Number(result.rows[0].avg_visits).toFixed(1);
+};
+
+//just checked-in today
+export const getTodayCheckIns = async (limit = 5, offset = 0) => {
+  const result = await db.query(`
+    SELECT 
+      u.firstname,
+      u.lastname,
+      a.check_in_time
+    FROM attendance a
+    JOIN Users u ON u.id = a.user_id
+    WHERE DATE(a.check_in_time) = CURRENT_DATE
+    ORDER BY a.check_in_time DESC
+    LIMIT $1 OFFSET $2
+  `, [limit, offset]);
+
+  return result.rows;
+};
+
+export const getTodayCheckInsCount = async () => {
+  const result = await db.query(`
+    SELECT COUNT(*) 
+    FROM attendance
+    WHERE DATE(check_in_time) = CURRENT_DATE
+  `);
+
+  return parseInt(result.rows[0].count);
+};
+
+export const getInactiveUsersCount = async () => {
+  const result = await db.query(`
+    SELECT COUNT(*)
+    FROM attendance
+    WHERE DATE(check_in_time) < NOW() - INTERVAL '7 days'
+  `);
+
+  return parseInt(result.rows[0].count);
 };
