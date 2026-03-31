@@ -9,10 +9,19 @@ export const requireAuth = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
+    
     req.user = decoded;
+    req.gymId = decoded.gymId; // ✅ inject here
+
+
+
+    if (!req.gymId) {
+      return res.status(403).json({ error: "No gym context" });
+    }
+
     next();
   } catch (err) {
+     return res.status(401).json({ error: "Invalid token" });
   }
 };
 

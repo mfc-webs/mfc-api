@@ -15,7 +15,8 @@ const signToken = (user) =>
     { 
       sub: user.id, 
       role: user.role, 
-      email: user.email
+      email: user.email,
+      gymId: user.gym_id
     },
     process.env.JWT_SECRET,
     { 
