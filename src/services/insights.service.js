@@ -113,7 +113,10 @@ export const getAtRiskUsers = async (gymId) => {
 export const getAvgVisits = async (gymId) => {
   const result = await db.query(`
     SELECT 
-      COUNT(*)::float / COUNT(DISTINCT user_id) AS avg_visits
+      COALESCE(
+        COUNT(*)::float / NULLIF(COUNT(DISTINCT user_id), 0),
+        0
+      ) AS avg_visits
     FROM attendance
     WHERE check_in_time >= NOW() - INTERVAL '30 days'
       AND gym_id = $1
