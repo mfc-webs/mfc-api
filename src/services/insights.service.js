@@ -127,8 +127,6 @@ export const getAvgVisits = async (gymId) => {
 
 // 8. Today check-ins
 export const getTodayCheckIns = async (gymId, limit = 5, offset = 0) => {
-  console.log("GYM ID TYPE:", typeof gymId, gymId);
-  console.log("GYM ID SENT TO DB:", gymId);
   const result = await db.query(`
     SELECT 
       u.firstname,

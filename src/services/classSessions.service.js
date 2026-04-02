@@ -9,7 +9,7 @@ export const createClassSession = async (data, gymId) => {
   try {
     // get class_type info
     const classType = await db.query(
-      `SELECT id, default_duration_minutes, description 
+      `SELECT id, default_duration_minutes, description, gym_id 
       FROM class_types 
       WHERE id = $1 
       AND gym_id = $2
@@ -67,7 +67,7 @@ export const createClassSession = async (data, gymId) => {
   }
 };
 
-export const getAllSessions = async () => {
+export const getAllSessions = async (gymId) => {
   const query = `
     SELECT
       s.id,

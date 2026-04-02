@@ -42,9 +42,9 @@ export const viewAdminInsights = async (req, res, next) => {
   getActiveUsers(gymId),                
   getAtRiskUsers(gymId),
   getAvgVisits(gymId),
-   getTodayCheckIns(limit, checkinsOffset, gymId),
+   getTodayCheckIns(gymId, limit, checkinsOffset),
   getTodayCheckInsCount(gymId),
-  getInactiveUsers(limit, inactiveOffset, gymId),
+  getInactiveUsers(gymId, limit, inactiveOffset),
   getInactiveUsersCount(gymId)
 ]);
 

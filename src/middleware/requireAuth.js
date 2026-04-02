@@ -9,10 +9,11 @@ export const requireAuth = (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    console.log("REQ.USER:", req.user);
+console.log("REQ.GYMID:", req.gymId, typeof req.gymId);
     
     req.user = decoded;
-    req.gymId = decoded.gymId; // ✅ inject here
-
 
 
     // if (!req.gymId) {

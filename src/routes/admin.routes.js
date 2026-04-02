@@ -21,7 +21,7 @@ router.use("/admin", requireAuth, requireGym, requireAdmin);
 
 //// ADMIN PAGES
 router.get("/class-activities", getClassActivities);
-router.get("/all-members", viewAllMembers);
+router.get("/all-members", requireGym, viewAllMembers);
 router.get("/member-details/:id", viewMemberDetails);
 
 //// class types APIs

@@ -113,7 +113,7 @@ export const getMembers = async (req, res) => {
     const [dataResult, countResult, statsResult] = await Promise.all([
   db.query(`
     SELECT id, firstname, lastname, email, phone, tier,
-    to_char(joindate, 'YYYY-MM-DD') AS joindate
+    to_char(joindate, 'YYYY-MM-DD') AS joindate, gym_id
     FROM users
     WHERE 
       ($1 = '' OR 
@@ -145,8 +145,6 @@ export const getMembers = async (req, res) => {
       COUNT(*) FILTER (WHERE tier = 'Gold') AS gold,
       COUNT(*) FILTER (WHERE tier = 'Platinum') AS platinum,
       COUNT(*) FILTER (WHERE tier = 'Bronze') AS bronze,
-      gym_id
-
     FROM users
     WHERE 
       ($1 = '' OR 

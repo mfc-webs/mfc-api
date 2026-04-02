@@ -17,7 +17,6 @@ const signToken = (user) =>
       email: user.email,
       gymId: user.gym_id 
     },
-    
     process.env.JWT_SECRET,
     { 
       expiresIn: process.env.JWT_EXPIRES_IN || "2h" 
@@ -28,7 +27,6 @@ const signToken = (user) =>
     // working
 export const loginForm = (req, res) => {
 
-  
   return res.status(200).sendFile(
     path.join(req.app.get("views"), "landing", "partials", "login-form.html")
   );
@@ -38,8 +36,7 @@ export const loginForm = (req, res) => {
 // working
 export const loginMember = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const gymId = req.gymId;
+    const { email, password, gymId } = req.body;
 
     if (!email || !password) return res.status(400).json({ message: "Email and password required" });
 
@@ -47,10 +44,12 @@ export const loginMember = async (req, res) => {
       `SELECT id, firstname, lastname, email, role, password, gym_id
        FROM public.users
        WHERE email = $1
-       AND gym_id = $2
        LIMIT 1`,
-      [email.toLowerCase(), gymId]
+      [email.toLowerCase()]
     );
+
+    console.log("REQ.GYMID SOURCE:", req.user?.gym_id);
+console.log("DB RESULT:", result.rows);
 
     // ✅ Check if user exists
     const user = result.rows[0];
@@ -85,6 +84,8 @@ export const loginMember = async (req, res) => {
       path: "/",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
+    
 
     // go to the portal route (not a direct file send)
     return res.status(200).json({
