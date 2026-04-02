@@ -10,13 +10,16 @@ export const viewMemberBlling = async (req, res, next) => {
 
 try {
     const userId = req.user.sub; // because I used { sub: user.id } in JWT
+    const gymId = req.gymId;
 
     const { rows } = await db.query(
-      `SELECT id, firstname, lastname, email, phone, tier, joindate, role
+      `SELECT id, firstname, lastname, email, phone, tier, joindate, role, gym_id
        FROM public.users
        WHERE id = $1
+       AND gym_id = $2
+
        LIMIT 1`,
-      [userId]
+      [userId, gymId]
     );
 
     const member = rows[0];

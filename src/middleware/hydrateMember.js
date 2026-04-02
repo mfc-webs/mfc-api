@@ -5,6 +5,8 @@ import * as physiqueService  from '../services/physiqueLifestyleService.js';
 export const hydrateMember = async (req, res, next) => {
   try {
     const userId = req.user?.sub;
+    const gymId = req.gymId;
+
     if (!userId) return res.redirect("/login");
 
     const member = await getMemberWithProfile(userId);

@@ -3,7 +3,8 @@ import { db } from "../../config/db.js";
 
 export const createClassSession = async (req, res) => {
   try {
-    const session = await classSessionsService.createClassSession(req.body);
+    const gymId = req.gymId;
+    const session = await classSessionsService.createClassSession(req.body, gymId);
     res.status(201).json({ success: true, message: "Session created", session });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
@@ -11,80 +12,61 @@ export const createClassSession = async (req, res) => {
 };
 
 export const deleteSession = async (req, res) => {
-
   try {
-
     const { id } = req.params;
+    const gymId = req.gymId;
 
-    await db.query(
-      `DELETE FROM class_sessions WHERE id = $1`,
-      [id]
-    );
+    const deleted = await classSessionsService.deleteSession(id, gymId);
+
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Session not found"
+      });
+    }
 
     res.json({ success: true });
 
   } catch (err) {
-
     console.error(err);
-
     res.status(500).json({
       success: false,
       message: "Failed to delete session"
     });
-
   }
-
 };
 
 // - - edit session - - //
 
 export const editSession = async (req, res) => {
-
   try {
-
     const { id } = req.params;
-    const data = req.body;
+    const gymId = req.gymId;
 
-    const query = `
-      UPDATE class_sessions
-      SET
-        class_type_id = $1,
-        starts_at = $2,
-        start_time = $3,
-        capacity = $4,
-        location = $5,
-        status = $6,
-        updated_at = NOW()
-      WHERE id = $7
-      RETURNING *
-    `;
+    const session = await classSessionsService.updateSession(
+      id,
+      req.body,
+      gymId
+    );
 
-    const values = [
-      data.class_type_id,
-      new Date(`${data.date} ${data.time}`),
-      data.time,
-      data.capacity,
-      data.location,
-      data.status,
-      id
-    ];
-
-    const result = await db.query(query, values);
+    if (!session) {
+      return res.status(404).json({
+        success: false,
+        message: "Session not found"
+      });
+    }
 
     res.json({
       success: true,
-      session: result.rows[0]
+      session
     });
 
   } catch (err) {
+    console.error("UPDATE SESSION ERROR:", err);
 
-    console.error(err);
-        console.error("UPDATE SESSION ERROR:", err);
     res.status(500).json({
       success: false,
       message: "Failed to update session"
     });
-
   }
-
 };

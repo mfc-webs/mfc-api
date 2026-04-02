@@ -11,7 +11,12 @@ export const viewAllMembers = async (req, res, next) => {
 
 export const viewMemberDetails = async (req, res) => {
   try {
-    const userId = req.params.id;
+    const userId = Number(req.params.id);
+
+    if (Number.isNaN(userId)) {
+        return res.status(400).send("Invalid member id");
+      }
+    const gymId = req.gymId;
 
     const { rows } = await db.query(`
       SELECT 
@@ -49,10 +54,13 @@ export const viewMemberDetails = async (req, res) => {
       FROM public.users u
       LEFT JOIN public.member_contact_details cd 
         ON cd.user_id = u.id
+        AND cd.gym_id = u.gym_id
       LEFT JOIN public.member_emergency_contacts ec 
         ON ec.user_id = u.id
+        AND ec.gym_id = u.gym_id
       LEFT JOIN public.member_health_records hr
         ON hr.user_id = u.id
+        AND hr.gym_id = u.gym_id
       LEFT JOIN LATERAL (
           SELECT 
             COUNT(*) AS total_visits,
@@ -62,11 +70,13 @@ export const viewMemberDetails = async (req, res) => {
             MAX(check_in_time) AS last_visit
           FROM public.attendance
           WHERE user_id = u.id
+          AND gym_id = u.gym_id
         ) a ON true
 
       WHERE u.id = $1
+      AND u.gym_id = $2
       LIMIT 1
-    `, [userId]);
+    `, [userId, gymId]);
 
 
     const member = rows[0];
@@ -86,15 +96,12 @@ export const viewMemberDetails = async (req, res) => {
   }
 };
 
-
-
-
-
 // - - - quick member actions - - -//
 
 
 export const getMembers = async (req, res) => {
   try {
+    const gymId = req.gymId;
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const search = req.query.search || "";
@@ -114,9 +121,11 @@ export const getMembers = async (req, res) => {
         LIKE LOWER('%' || $1 || '%'))
       AND
       ($2 = '' OR tier = $2)
+    AND gym_id = $5
     ORDER BY id ASC
-    LIMIT $3 OFFSET $4
-  `, [search, tier, limit, offset]),
+    LIMIT $3 
+    OFFSET $4
+  `, [search, tier, limit, offset, gymId]),
 
   db.query(`
     SELECT COUNT(*) 
@@ -127,14 +136,17 @@ export const getMembers = async (req, res) => {
         LIKE LOWER('%' || $1 || '%'))
       AND
       ($2 = '' OR tier = $2)
-  `, [search, tier]),
+      AND gym_id = $3
+  `, [search, tier, gymId]),
 
   db.query(`
     SELECT 
       COUNT(*) AS total,
       COUNT(*) FILTER (WHERE tier = 'Gold') AS gold,
       COUNT(*) FILTER (WHERE tier = 'Platinum') AS platinum,
-      COUNT(*) FILTER (WHERE tier = 'Bronze') AS bronze
+      COUNT(*) FILTER (WHERE tier = 'Bronze') AS bronze,
+      gym_id
+
     FROM users
     WHERE 
       ($1 = '' OR 
@@ -142,7 +154,8 @@ export const getMembers = async (req, res) => {
         LIKE LOWER('%' || $1 || '%'))
       AND
       ($2 = '' OR tier = $2)
-  `, [search, tier])
+      AND gym_id = $3
+  `, [search, tier, gymId])
 ]);
 
     const total = parseInt(countResult.rows[0].count);
@@ -175,6 +188,7 @@ export const createMember = async (req, res) => {
             ecname, relationship, ephone
 
      } = req.body;
+     const gymId = req.gymId;
 
     if (!firstname || !lastname || !email || !phone) {
       return res.status(400).json({ message: "Missing required fields" });
@@ -191,13 +205,13 @@ export const createMember = async (req, res) => {
 
     const result = await db.query(
       `INSERT INTO public.users 
-      (firstname, lastname, email, phone, password, tier, joindate)
+      (firstname, lastname, email, phone, password, tier, joindate, gym_id)
        VALUES 
-       ($1, $2, $3, $4, $5, $6, COALESCE($7::date, CURRENT_DATE))
+       ($1, $2, $3, $4, $5, $6, COALESCE($7::date, CURRENT_DATE),$8)
        RETURNING id, firstname, lastname, email, phone, password, tier, 
         to_char(joindate, 'YYYY-MM-DD') AS joindate
         `,
-      [firstname, lastname, email.trim().toLowerCase(), phone, hashedPassword, safeTier, joindate]
+      [firstname, lastname, email.trim().toLowerCase(), phone, hashedPassword, safeTier, joindate, gymId]
       );
 
       const userId = result.rows[0].id;
@@ -205,17 +219,17 @@ export const createMember = async (req, res) => {
        // Insert contact details
         await db.query(
           `INSERT INTO public.member_contact_details
-          (user_id, gender, birthdate, notes)
-          VALUES ($1,$2,$3,$4)`,
-          [userId, gender, birthdate, notes]
+          (user_id, gender, birthdate, notes, gym_id)
+          VALUES ($1,$2,$3,$4,$5)`,
+          [userId, gender, birthdate, notes, gymId]
         );
 
         // Insert emergency contact
         await db.query(
           `INSERT INTO public.member_emergency_contacts
-          (user_id, ecname, relationship, phone)
-          VALUES ($1,$2,$3,$4)`,
-          [userId, ecname, relationship, ephone]
+          (user_id, ecname, relationship, phone, gym_id)
+          VALUES ($1,$2,$3,$4,$5)`,
+          [userId, ecname, relationship, ephone, gymId]
         );
 
          await db.query("COMMIT");
@@ -227,6 +241,7 @@ export const createMember = async (req, res) => {
         });
     
   }catch (err) {
+    await db.query("ROLLBACK"); // 🔥 REQUIRED
   console.error("CREATE MEMBER ERROR:", err.code, err.message);
   return res.status(500).json({ message: err.message });
 }
@@ -238,14 +253,16 @@ export const deleteMember = async (req, res) => {
   try {
 
     const id = Number(req.params.id);
+    const gymId = req.gymId;
+
     if (Number.isNaN(id)) {
       console.log("BAD ID (not a number):", req.params.id);
       return res.status(400).json({ message: "Invalid member id" });
     }
 
     const result = await db.query(
-      "DELETE FROM public.users WHERE id = $1 RETURNING id",
-      [id]
+      "DELETE FROM public.users WHERE id = $1 AND gym_id = $2 RETURNING id",
+      [id, gymId]
     );
 
     console.log("DELETE rowCount:", result.rowCount);
@@ -266,6 +283,7 @@ export const updateMemberTier = async (req, res) => {
   try {
     const { id } = req.params;
     const { tier } = req.body;
+    const gymId = req.gymId;
 
     const allowed = ["Bronze", "Gold", "Platinum"];
     if (!allowed.includes(tier)) {
@@ -273,8 +291,12 @@ export const updateMemberTier = async (req, res) => {
     }
 
     const result = await db.query(
-      `UPDATE public.users SET tier = $1 WHERE id = $2 RETURNING id, tier`,
-      [tier, id]
+      `UPDATE public.users 
+      SET tier = $1 
+      WHERE id = $2 
+      AND gym_id = $3 
+      RETURNING id, tier`,
+      [tier, id, gymId]
     );
 
     if (result.rowCount === 0) {

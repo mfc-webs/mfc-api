@@ -126,3 +126,45 @@ export const getUpcomingSessions = async (gymId) => {
   const { rows } = await db.query(query, [gymId]);
   return rows;
 };
+
+export const deleteSession = async (id, gymId) => {
+  const result = await db.query(
+    `DELETE FROM class_sessions 
+     WHERE id = $1 AND gym_id = $2`,
+    [id, gymId]
+  );
+
+  return result.rowCount; // 👈 important
+};
+
+export const updateSession = async (id, data, gymId) => {
+  const query = `
+    UPDATE class_sessions
+    SET
+      class_type_id = $1,
+      starts_at = $2,
+      start_time = $3,
+      capacity = $4,
+      location = $5,
+      status = $6,
+      updated_at = NOW()
+    WHERE id = $7
+      AND gym_id = $8
+    RETURNING *
+  `;
+
+  const values = [
+    data.class_type_id,
+    new Date(`${data.date} ${data.time}`),
+    data.time,
+    data.capacity,
+    data.location,
+    data.status,
+    id,
+    gymId
+  ];
+
+  const { rows } = await db.query(query, values);
+
+  return rows[0]; // undefined if not found
+};

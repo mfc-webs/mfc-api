@@ -6,6 +6,7 @@ export const seedAdmin = async () => {
 
     const email = process.env.ADMIN_EMAIL;
     const password = process.env.ADMIN_PASSWORD;
+    const gymId = process.env.ADMIN_GYM_ID;
 
     // 🚨 If env values are removed, skip seeding
     if (!email || !password) {
@@ -13,7 +14,8 @@ export const seedAdmin = async () => {
       return;
     }
 
-    const existingAdmin = await User.findOne(email);
+
+    const existingAdmin = await User.findOne(email, gymId);
 
     if (existingAdmin) {
       console.log("Admin already exists.");
@@ -25,13 +27,16 @@ export const seedAdmin = async () => {
       10
     );
 
+
     await User.create({
-      firstname: "Admin1",
-      lastname: "User1",
+      firstname: "Sir",
+      lastname: "Mango",
       phone: "0672845741",
       email: process.env.ADMIN_EMAIL,
       password: hashedPassword,
       role: "admin",
+      gymId
+
     });
 
     console.log("Admin created successfully.");

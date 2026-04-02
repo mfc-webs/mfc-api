@@ -8,8 +8,9 @@ export const getMyStats = async (req,res)=>{
   try{
 
     const user_id = req.user?.sub;
+    const gymId = req.gymId;
 
-    const stats = await getMemberStats(user_id);
+    const stats = await getMemberStats(user_id, gymId);
 
     res.json(stats);
 

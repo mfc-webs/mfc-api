@@ -17,6 +17,7 @@ export const viewEditProfile = async (req, res, next) =>  {
 export const updateMemberProfile = async (req, res) => {
   try {
     const userId = req.user.sub;
+    const gymId = req.gymId;
 
     const display_name = req.body.display_name || null;
     const bio = req.body.bio || null;
@@ -33,9 +34,9 @@ export const updateMemberProfile = async (req, res) => {
 
     await db.query(
       `
-      INSERT INTO public.member_profile (user_id, profile_picture, display_name, bio, mail_note, sms_note, wa_note)
-      VALUES ($1, COALESCE($2, '/images/profile-pic.jpg'), $3, $4, $5, $6, $7)
-      ON CONFLICT (user_id)
+      INSERT INTO public.member_profile (user_id, profile_picture, display_name, bio, mail_note, sms_note, wa_note, gym_id)
+      VALUES ($1, COALESCE($2, '/images/profile-pic.jpg'), $3, $4, $5, $6, $7,$8)
+      ON CONFLICT (user_id, gym_id)
       DO UPDATE SET
         profile_picture = COALESCE($2, public.member_profile.profile_picture),
         display_name = EXCLUDED.display_name,
@@ -45,7 +46,7 @@ export const updateMemberProfile = async (req, res) => {
         wa_note   = EXCLUDED.wa_note,
         updated_at = NOW()
       `,
-      [userId, profile_picture, display_name, bio, mail_note, sms_note, wa_note]
+      [userId, profile_picture, display_name, bio, mail_note, sms_note, wa_note, gymId]
     );
 
     return res.status(200).json({ ok: true, message: "Profile updated" });
@@ -62,6 +63,8 @@ export const updateMemberProfile = async (req, res) => {
 export const updatePassword = async (req, res) => {
   try {
     const userId = req.user.sub;
+    const gymId = req.gymId;
+
     if (!userId) return res.status(401).json({ ok: false, message: "Unauthorized" });
 
     const { currentPassword, newPassword, confirmPassword } = req.body;
@@ -80,10 +83,22 @@ export const updatePassword = async (req, res) => {
 
     // Get current hash
     const { rows } = await db.query(
-      `SELECT password FROM public.users WHERE id = $1 LIMIT 1`,
-      [userId]
+      `SELECT password FROM public.users 
+      WHERE id = $1 
+      AND gym_id = $2
+      LIMIT 1`,
+      [userId, gymId]
     );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        ok: false,
+        message: "User not found",
+      });
+    }
+
     const user = rows[0];
+
     if (!user?.password) {
       return res.status(400).json({ ok: false, message: "Account has no password set yet" });
     }
@@ -98,8 +113,8 @@ export const updatePassword = async (req, res) => {
     const hash = await bcrypt.hash(newPassword, 10);
 
     await db.query(
-      `UPDATE public.users SET password = $1 WHERE id = $2`,
-      [hash, userId]
+      `UPDATE public.users SET password = $1 WHERE id = $2 AND gym_id = $3`,
+      [hash, userId, gymId]
     );
 
     return res.status(200).json({ ok: true, message: "Password updated" });

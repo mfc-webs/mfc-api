@@ -15,9 +15,9 @@ export const requireAuth = (req, res, next) => {
 
 
 
-    if (!req.gymId) {
-      return res.status(403).json({ error: "No gym context" });
-    }
+    // if (!req.gymId) {
+    //   return res.status(403).json({ error: "No gym context" });
+    // }
 
     next();
   } catch (err) {
