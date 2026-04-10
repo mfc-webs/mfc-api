@@ -19,6 +19,7 @@ export const getSummaryStats = async (gymId) => {
       ON m.id = a.user_id
      AND a.gym_id = $1
     WHERE m.gym_id = $1
+    AND role = 'member'
   `, [gymId]);
 
   return result.rows[0];

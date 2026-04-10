@@ -106,13 +106,12 @@ export const getMembers = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const search = req.query.search || "";
     const tier = req.query.tier || "";
-
     const offset = (page - 1) * limit;
 
 
     const [dataResult, countResult, statsResult] = await Promise.all([
   db.query(`
-    SELECT id, firstname, lastname, email, phone, tier,
+    SELECT id, firstname, lastname, email, phone, tier, role,
     to_char(joindate, 'YYYY-MM-DD') AS joindate, gym_id
     FROM users
     WHERE 
@@ -122,6 +121,7 @@ export const getMembers = async (req, res) => {
       AND
       ($2 = '' OR tier = $2)
     AND gym_id = $5
+    AND role = 'member'
     ORDER BY id ASC
     LIMIT $3 
     OFFSET $4
@@ -137,6 +137,7 @@ export const getMembers = async (req, res) => {
       AND
       ($2 = '' OR tier = $2)
       AND gym_id = $3
+      AND role = 'member'
   `, [search, tier, gymId]),
 
   db.query(`
@@ -144,7 +145,7 @@ export const getMembers = async (req, res) => {
       COUNT(*) AS total,
       COUNT(*) FILTER (WHERE tier = 'Gold') AS gold,
       COUNT(*) FILTER (WHERE tier = 'Platinum') AS platinum,
-      COUNT(*) FILTER (WHERE tier = 'Bronze') AS bronze,
+      COUNT(*) FILTER (WHERE tier = 'Bronze') AS bronze
     FROM users
     WHERE 
       ($1 = '' OR 
@@ -153,6 +154,7 @@ export const getMembers = async (req, res) => {
       AND
       ($2 = '' OR tier = $2)
       AND gym_id = $3
+      AND role = 'member'
   `, [search, tier, gymId])
 ]);
 

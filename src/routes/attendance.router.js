@@ -6,9 +6,9 @@ import { requireGym } from "../middleware/gym.middleware.js";
 
 const router = express.Router();
 
-router.post("/checkin", requireAuth, requireGym, createCheckin);
-router.get("/stats", requireAuth, requireGym, getMyStats);
-router.get("/status/:user_id", requireAuth, requireGym, getCheckinStatus);
+router.post("/checkin", requireGym, requireAuth, createCheckin);
+router.get("/stats", requireGym, requireAuth, getMyStats);
+router.get("/status/:user_id", requireGym, requireAuth, getCheckinStatus);
 
 
 

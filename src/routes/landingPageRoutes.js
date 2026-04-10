@@ -7,8 +7,8 @@ import { requireGym } from "../middleware/gym.middleware.js";
 
 const router = express.Router();
 
-router.get("/", viewHomePage);
-router.get("/", getSessions);
+router.get("/",requireGym, viewHomePage);
+router.get("/", requireGym, getSessions);
 
 
 

@@ -1,12 +1,25 @@
 import bcrypt from "bcrypt";
 import { User } from "../models/user.model.js";
+import { db } from "../config/db.js";
 
 export const seedAdmin = async () => {
   try {
 
     const email = process.env.ADMIN_EMAIL;
     const password = process.env.ADMIN_PASSWORD;
-    const gymId = process.env.ADMIN_GYM_ID;
+    const gymSlug = process.env.ADMIN_GYM_SLUG;
+
+    const gymResult = await db.query(
+        "SELECT id FROM gyms WHERE slug = $1",
+        [gymSlug]
+      );
+
+      if (!gymResult.rows.length) {
+        console.log("Gym not found for seeding.");
+        return;
+      }
+
+      const gymId = gymResult.rows[0].id;
 
     // 🚨 If env values are removed, skip seeding
     if (!email || !password) {
@@ -35,7 +48,7 @@ export const seedAdmin = async () => {
       email: process.env.ADMIN_EMAIL,
       password: hashedPassword,
       role: "admin",
-      gymId
+      gym_id: gymId,
 
     });
 

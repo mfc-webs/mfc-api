@@ -5,57 +5,23 @@ export const requireAuth = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-      return handleAuthError(req, res, "You must login first.");
+      return res.status(401).json({ error: "You must login first." });
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    console.log("REQ.USER:", req.user);
-console.log("REQ.GYMID:", req.gymId, typeof req.gymId);
-    
+    // ✅ Attach user
     req.user = decoded;
 
-
-    // if (!req.gymId) {
-    //   return res.status(403).json({ error: "No gym context" });
-    // }
+    // ✅ CRITICAL: Ensure user belongs to this gym
+    if (decoded.gymId !== req.gymId) {
+      return res.status(403).json({
+        error: "Access denied: wrong gym context"
+      });
+    }
 
     next();
   } catch (err) {
-     return res.status(401).json({ error: "Invalid token" });
+    return res.status(401).json({ error: "Invalid token" });
   }
 };
-
-
-export const attachUser = (req, res, next) => {
-
-  const token = req.cookies.token;
-
-  if (!token) {
-    req.user = null;
-    return next();
-  }
-
-  try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded;
-  } catch {
-    req.user = null;
-  }
-
-  next();
-};
-
-
-// function handleAuthError(req, res, message) {
-//   if (req.originalUrl.startsWith("/api")) {
-//     return res.status(401).json({
-//       success: false,
-//       message
-//     });
-//   }
-
-//   return res.status(401).render("errors/auth-error.html", {
-//     message
-//   });
-// }

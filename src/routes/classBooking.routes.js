@@ -8,7 +8,7 @@ const router = express.Router();
 
 // class bookings
 
-router.post("/book", requireAuth, requireGym, createBooking);
-router.get("/my-bookings", requireAuth, requireGym, getMyBookings);
+router.post("/book", requireGym, requireAuth, createBooking);
+router.get("/my-bookings", requireGym, requireAuth, getMyBookings);
 
 export default router;

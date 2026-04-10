@@ -1,13 +1,57 @@
-export const requireGym = (req, res, next) => {
-  try {
-    const gymId = req.user?.gymId;
+import { db } from "../config/db.js";
 
-    if (!gymId) {
-      return res.status(403).json({ error: "Unauthorized: gym context missing" });
+
+export const requireGym = async (req, res, next) => {
+  try {
+    const host = req.headers.host; 
+    // e.g. goldsgym.yourapp.com OR www.goldsgym.com
+
+    let gym;
+
+    // 1. Check custom domain first (future-proof)
+    const customDomainResult = await db.query(
+      "SELECT * FROM gyms WHERE slug = $1",
+      [host]
+    );
+
+    if (host.includes("localhost")) {
+  const defaultGym = await db.query(
+    "SELECT * FROM gyms LIMIT 1"
+  );
+
+  req.gym = defaultGym.rows[0];
+  req.gymId = req.gym.id;
+
+  return next();
+}
+
+    if (customDomainResult.rows.length) {
+      gym = customDomainResult.rows[0];
+    } else {
+
+      
+      // 2. Fallback to subdomain
+      const subdomain = host.split('.')[0];
+
+      if (!subdomain || subdomain === "www") {
+        return res.status(400).json({ error: "Gym not specified" });
+      }
+
+      const subdomainResult = await db.query(
+        "SELECT * FROM gyms WHERE slug = $1",
+        [subdomain]
+      );
+
+      if (!subdomainResult.rows.length) {
+        return res.status(404).json({ error: "Gym not found" });
+      }
+
+      gym = subdomainResult.rows[0];
     }
 
-    // attach gymId to request
-    req.gymId = gymId;
+    // Attach FULL gym object (not just ID)
+    req.gym = gym;
+    req.gymId = gym.id;
 
     next();
   } catch (err) {

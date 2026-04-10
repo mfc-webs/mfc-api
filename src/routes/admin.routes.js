@@ -15,13 +15,13 @@ import { requireGym } from "../middleware/gym.middleware.js";
 const router = Router();
 
 
-router.use("/admin", requireAuth, requireGym, requireAdmin);
+router.use("/admin", requireGym, requireAuth, requireAdmin);
 
 // - - - admin dashboard - - - // 
 
 //// ADMIN PAGES
 router.get("/class-activities", getClassActivities);
-router.get("/all-members", requireGym, viewAllMembers);
+router.get("/all-members", viewAllMembers);
 router.get("/member-details/:id", viewMemberDetails);
 
 //// class types APIs

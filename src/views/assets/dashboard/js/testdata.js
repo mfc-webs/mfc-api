@@ -2,6 +2,7 @@ let currentPage = 1;
 const limit = 10;
 let stats = {};
 let members = [];
+const role = 'member';
 
 
 async function fetchMembers(page = 1) {
@@ -9,7 +10,7 @@ async function fetchMembers(page = 1) {
   const tier = tierFilter.value || "";
 
   const res = await fetch(
-    `/admin/api/members?page=${page}&limit=${limit}&search=${search}&tier=${tier}`
+    `/admin/api/members?page=${page}&limit=${limit}&search=${search}&tier=${tier}&role=${role}`
   );
 
   if (!res.ok) {

@@ -8,13 +8,13 @@ import { requireGym } from "../middleware/gym.middleware.js";
 
 const router = Router();
 
-router.get("/signup", getSignUpForm);  
-router.post("/signup", signUp);
+router.get("/signup",requireGym, getSignUpForm);  
+router.post("/signup",requireGym, signUp);
 
 
-router.get("/login", redirectLoggedIn, loginForm);        
-router.post("/logged-in", loginMember);
+router.get("/login",requireGym, redirectLoggedIn, loginForm);        
+router.post("/logged-in",requireGym, loginMember);
 
-router.get("/logout", logoutMember)
+router.get("/logout",requireGym, logoutMember)
 
 export default router;

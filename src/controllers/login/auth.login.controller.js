@@ -15,7 +15,7 @@ const signToken = (user) =>
       sub: user.id, 
       role: user.role, 
       email: user.email,
-      gymId: user.gym_id 
+      gymId: user.gym_id
     },
     process.env.JWT_SECRET,
     { 
@@ -36,7 +36,7 @@ export const loginForm = (req, res) => {
 // working
 export const loginMember = async (req, res) => {
   try {
-    const { email, password, gymId } = req.body;
+    const { email, password } = req.body;
 
     if (!email || !password) return res.status(400).json({ message: "Email and password required" });
 
@@ -44,12 +44,14 @@ export const loginMember = async (req, res) => {
       `SELECT id, firstname, lastname, email, role, password, gym_id
        FROM public.users
        WHERE email = $1
+       AND gym_id = $2
+     
        LIMIT 1`,
-      [email.toLowerCase()]
+      [email.toLowerCase(), req.gymId]
     );
 
-    console.log("REQ.GYMID SOURCE:", req.user?.gym_id);
-console.log("DB RESULT:", result.rows);
+    console.log("Resolved gym:", req.gymId);
+    console.log("DB RESULT:", result.rows);
 
     // ✅ Check if user exists
     const user = result.rows[0];
@@ -98,6 +100,7 @@ console.log("DB RESULT:", result.rows);
     });
     
   } catch (err) {
+    console.log("err msg:", err);
     return res.status(500).json({ 
      success: false,
      message: "Something went wrong!"
