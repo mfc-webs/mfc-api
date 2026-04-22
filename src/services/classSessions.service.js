@@ -5,14 +5,16 @@ function calcEndAt(startAt, durationMinutes) {
   return new Date(new Date(startAt).getTime() + durationMinutes * 60000); // ms
 }
 
-export const createClassSession = async (data) => {
+export const createClassSession = async (data, gymId) => {
   try {
     // get class_type info
     const classType = await db.query(
-      `SELECT id, default_duration_minutes, description 
+      `SELECT id, default_duration_minutes, description, gym_id 
       FROM class_types 
-      WHERE id = $1 LIMIT 1`,
-      [data.class_type_id]
+      WHERE id = $1 
+      AND gym_id = $2
+      LIMIT 1`,
+      [data.class_type_id, gymId]
     );
 
     if (!classType.rows[0]) throw new Error("Class type not found");
@@ -34,9 +36,10 @@ export const createClassSession = async (data) => {
         created_at,
         updated_at,
         waitlist_enabled,
-        cancellation_deadline_hours
+        cancellation_deadline_hours,
+        gym_id
       )
-      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW(),NOW(),$9,$10)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,NOW(),NOW(),$9,$10,$11)
       RETURNING *
     `;
 
@@ -50,7 +53,8 @@ export const createClassSession = async (data) => {
       data.location,                 
       data.status || "scheduled",     
       data.waitlist_enabled || false,
-      data.cancellation_deadline_hours || 24 
+      data.cancellation_deadline_hours || 24,
+      gymId 
     ];
 
     const result = await db.query(query, values);
@@ -63,7 +67,7 @@ export const createClassSession = async (data) => {
   }
 };
 
-export const getAllSessions = async () => {
+export const getAllSessions = async (gymId) => {
   const query = `
     SELECT
       s.id,
@@ -73,20 +77,25 @@ export const getAllSessions = async () => {
       s.location,
       s.status,
       s.trainer_id,
+      s.gym_id,
       c.name AS class_name,
       c.description,
-      c.default_duration_minutes
+      c.default_duration_minutes,
+      c.gym_id
     FROM class_sessions s
-    JOIN class_types c ON c.id = s.class_type_id
+    JOIN class_types c 
+    ON c.id = s.class_type_id
+    AND c.gym_id = s.gym_id
+    WHERE s.gym_id = $1
     ORDER BY s.starts_at ASC
   `;
 
-  const result = await db.query(query);
+  const result = await db.query(query, [gymId]);
 
   return result.rows;
 };
 
-export const getUpcomingSessions = async () => {
+export const getUpcomingSessions = async (gymId) => {
   const query = `
     SELECT
       s.id,
@@ -96,23 +105,66 @@ export const getUpcomingSessions = async () => {
       s.location,
       s.status,
       s.trainer_id,
-
+      s.gym_id,
+      
       c.name AS class_name,
       c.description,
-
+      c.gym_id,
       to_char(s.starts_at, 'DD Mon') AS class_date,
       to_char(s.starts_at, 'HH24:MI') AS class_time
-
     FROM class_sessions s
-    JOIN class_types c ON c.id = s.class_type_id
-
+    JOIN class_types c 
+      ON c.id = s.class_type_id
+     AND c.gym_id = s.gym_id
     WHERE s.starts_at >= NOW()
-    AND s.status = 'scheduled'
-
+      AND s.status = 'scheduled'
+      AND s.gym_id = $1
     ORDER BY s.starts_at ASC
     LIMIT 5
   `;
 
-  const { rows } = await db.query(query);
+  const { rows } = await db.query(query, [gymId]);
   return rows;
+};
+
+export const deleteSession = async (id, gymId) => {
+  const result = await db.query(
+    `DELETE FROM class_sessions 
+     WHERE id = $1 AND gym_id = $2`,
+    [id, gymId]
+  );
+
+  return result.rowCount; // 👈 important
+};
+
+export const updateSession = async (id, data, gymId) => {
+  const query = `
+    UPDATE class_sessions
+    SET
+      class_type_id = $1,
+      starts_at = $2,
+      start_time = $3,
+      capacity = $4,
+      location = $5,
+      status = $6,
+      updated_at = NOW()
+    WHERE id = $7
+      AND gym_id = $8
+    RETURNING *
+  `;
+
+  const values = [
+    data.class_type_id,
+    new Date(`${data.date} ${data.time}`),
+    data.time,
+    data.capacity,
+    data.location,
+    data.status,
+    id,
+    gymId
+  ];
+
+  const { rows } = await db.query(query, values);
+
+  return rows[0]; // undefined if not found
 };

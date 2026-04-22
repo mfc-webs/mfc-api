@@ -10,10 +10,11 @@ export const viewKiosk = async (req, res) => {
 export const searchMembersController = async (req, res) => {
   try {
     const { q } = req.query;
+    const gymId = req.gymId;
 
     if (!q) return res.json([]);
 
-    const results = await searchMembers(q);
+    const results = await searchMembers(q, gymId);
 
     res.json(results);
 

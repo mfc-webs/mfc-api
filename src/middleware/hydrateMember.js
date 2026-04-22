@@ -5,11 +5,13 @@ import * as physiqueService  from '../services/physiqueLifestyleService.js';
 export const hydrateMember = async (req, res, next) => {
   try {
     const userId = req.user?.sub;
+    const gymId = req.gymId;
+
     if (!userId) return res.redirect("/login");
 
-    const member = await getMemberWithProfile(userId);
-    const dietary = await dietaryService.getDietaryInfo(req.user.sub);
-    const physique = await physiqueService.getByMemberphysiqueInfo(req.user.sub);
+    const member = await getMemberWithProfile(userId, gymId);
+    const dietary = await dietaryService.getDietaryInfo(req.user.sub, gymId);
+    const physique = await physiqueService.getByMemberphysiqueInfo(req.user.sub, gymId);
 
     member.dietary = dietary; // ✅ attach dietary info
     member.physique = physique; // ✅ attach physique info

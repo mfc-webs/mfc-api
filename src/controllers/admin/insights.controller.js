@@ -13,6 +13,7 @@ import {
 
 export const viewAdminInsights = async (req, res, next) => {
   try {
+    const gymId = req.gymId; // ✅ correct
 
     const checkinsPage = parseInt(req.query.checkinsPage) || 1;
     const inactivePage = parseInt(req.query.inactivePage) || 1;
@@ -21,6 +22,7 @@ export const viewAdminInsights = async (req, res, next) => {
 
     const checkinsOffset = (checkinsPage - 1) * limit;
     const inactiveOffset = (inactivePage - 1) * limit;
+
 
    const [
   summary,
@@ -32,19 +34,21 @@ export const viewAdminInsights = async (req, res, next) => {
   checkedIns,
   totalCheckIns,
   inactiveUsers,
-  totalInactiveUsers 
+  totalInactiveUsers,
 ] = await Promise.all([
-  getSummaryStats(),
-  getGoalStats(),
-  getAttendanceTrend(),
-  getActiveUsers(),                
-  getAtRiskUsers(),
-  getAvgVisits(),
-   getTodayCheckIns(limit, checkinsOffset),
-  getTodayCheckInsCount(),
-  getInactiveUsers(limit, inactiveOffset),
-  getInactiveUsersCount()
+  getSummaryStats(gymId),
+  getGoalStats(gymId),
+  getAttendanceTrend(gymId),
+  getActiveUsers(gymId),                
+  getAtRiskUsers(gymId),
+  getAvgVisits(gymId),
+   getTodayCheckIns(gymId, limit, checkinsOffset),
+  getTodayCheckInsCount(gymId),
+  getInactiveUsers(gymId, limit, inactiveOffset),
+  getInactiveUsersCount(gymId)
 ]);
+
+
 
     const totalCheckinPages = Math.ceil(totalCheckIns / limit);
     const totalInactivePages = Math.ceil(totalInactiveUsers / limit);
@@ -69,6 +73,8 @@ export const viewAdminInsights = async (req, res, next) => {
       inactivePage,
       totalInactivePages
     });
+
+
   } catch (err) {
     next(err);
   }

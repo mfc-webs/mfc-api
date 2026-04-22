@@ -16,7 +16,9 @@ return res.render("dashboard/member-nutrition", {
 export async function getMemberDietary(req, res) {
   try {
     const userId = req.user.sub;
-    const dietary = await dietaryService.getDietaryInfo(userId);
+    const gymId = req.gymId;
+
+    const dietary = await dietaryService.getDietaryInfo(userId, gymId);
     res.json({ success: true, dietary });
   } catch (err) {
     console.error('Dietary info error:', err);
@@ -34,7 +36,9 @@ export async function updateMemberDietary(req, res) {
     }
 
     const userId = req.user.sub;
-    const dietary = await dietaryService.updateDietaryInfo(userId, req.body);
+        const gymId = req.gymId;
+
+    const dietary = await dietaryService.updateDietaryInfo(userId, req.body, gymId);
 
     res.json({
       success: true,

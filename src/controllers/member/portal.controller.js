@@ -3,7 +3,9 @@ import { getUpcomingSessions } from '../../services/classSessions.service.js';
 
 export const viewMemberPortal = async (req, res, next) =>  { 
    try {
-    const sessions = await getUpcomingSessions();
+    
+    const gymId = req.gymId;
+    const sessions = await getUpcomingSessions(gymId);
 
     res.render("dashboard/member-portal", {
       activePage: "portal",
