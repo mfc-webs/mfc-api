@@ -3,18 +3,27 @@ import * as physiqueService from '../../services/physiqueLifestyleService.js';
 export async function getPhysiqueLifestyle(req, res) {
   try {
     const userId = req.user.sub;
-    const physique = await physiqueService.getByMemberphysiqueInfo(userId);
+    const gymId = req.gymId;
+
+    if (!req.user || !req.user.sub) {
+      return res.status(401).json({
+        success: false,
+        message: "User not authenticated."
+      });
+    }
+
+    const physique = await physiqueService.getByMemberphysiqueInfo(userId, gymId);
     res.json({ success: true, physique });
   } catch (err) {
-    console.error('Dietary info error:', err);
-    res.status(500).json({ success: false, message: 'Error fetching dietary info.' });
+    console.error('Physique  info error:', err);
+    res.status(500).json({ success: false, message: 'Error fetching Physique info.' });
   }
 }
 
 export async function updatePhysiqueLifestyle(req, res) {
   try {
     const userId = req.user.sub;
-    
+    const gymId = req.gymId;
     
     const payload = {
       primary_goal: req.body.primary_goal || null,
@@ -33,10 +42,10 @@ export async function updatePhysiqueLifestyle(req, res) {
       exercise_frequency: req.body.exercise_frequency || null,
       sitting_hours: req.body.sitting_hours || null,
       current_activities: req.body.current_activities || [],
-      training_styles: req.body.training_styles || []
+      training_styles: req.body.training_styles || [],
     };
 
-    const physique = await physiqueService.updateMemeberPhysique(userId, payload);
+    const physique = await physiqueService.updateMemberPhysique(userId, payload, gymId);
 
 
     res.json({ success: true,
@@ -46,8 +55,8 @@ export async function updatePhysiqueLifestyle(req, res) {
 
   } catch (err) {
     console.error("PhysiqueLifestyle Save Error FULL:", err);
-  console.error("Error message:", err.message);
-  console.error("Stack:", err.stack);
+    console.error("Error message:", err.message);
+    console.error("Stack:", err.stack);
 
   res.status(500).json({
     success: false,

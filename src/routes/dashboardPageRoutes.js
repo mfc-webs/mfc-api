@@ -4,7 +4,7 @@ import express from "express";
 import { viewMemberPortal } from "../controllers/member/portal.controller.js";
 import { viewMemberActivities } from "../controllers/member/activities.controller.js";
 import { getMemberDietary, updateMemberDietary, viewMemberNutrition } from "../controllers/member/nutrition.controller.js";
-import { deleteEmergencyContact, getEmergencyContacts, updateEmsDetails, updateHealthRecord, updatepersonalDetails, viewMemberPersonalDetails } from "../controllers/member/personalDetails.controller.js";
+import { deleteEmergencyContact, getEmergencyContacts, updateEmsDetails, updateHealthRecord, updatePersonalDetails, viewMemberPersonalDetails } from "../controllers/member/personalDetails.controller.js";
 import { viewEditProfile, updateMemberProfile, updatePassword } from "../controllers/member/editProfile.controller.js";
 import { viewMemberBlling } from "../controllers/member/billing.controller.js";
 import { viewMemberReports } from "../controllers/member/reports.controller.js";
@@ -13,15 +13,16 @@ import { uploadProfilePic } from "../middleware/uploadProfilePic.js";
 import { getPhysiqueLifestyle, updatePhysiqueLifestyle } from "../controllers/member/physiqueLifestyleController.js";
 import { hydrateMember } from "../middleware/hydrateMember.js";
 import { getMyStats } from "../controllers/member/attendance.controller.js";
+import { requireGym } from "../middleware/gym.middleware.js";
 
 const router = express.Router();
 
-router.use("/member", requireAuth, hydrateMember); 
+router.use("/member", requireGym, requireAuth, hydrateMember); 
 //// - - - member dashboard update routes - - - //
 
 // update member's personal details View
 router.get("/personal-details", requireAuth, viewMemberPersonalDetails);
-router.post("/member-personal-details-update", requireAuth, updatepersonalDetails)
+router.post("/member-personal-details-update", requireAuth, updatePersonalDetails)
 router.get("/member-emergency-contacts", requireAuth, getEmergencyContacts);
 router.post("/member-emergency-contact-update", requireAuth, updateEmsDetails)
 router.delete("/member-emergency-contact/:id", requireAuth, deleteEmergencyContact);

@@ -1,9 +1,4 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
 import { db } from "../../config/db.js";
-
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export const viewMemberPersonalDetails = async (req, res, next) => {
     return res.render("dashboard/member-personal-details", {
@@ -15,10 +10,12 @@ export const viewMemberPersonalDetails = async (req, res, next) => {
 
 // - - Update personal details updates 
 
-export const updatepersonalDetails = async (req, res,) => {
+export const updatePersonalDetails = async (req, res,) => {
   try {
 
     const userId = req.user?.sub;
+    const gymId = req.gymId;
+
     const whatsapp_number = req.body?.whatsapp_number || null;
     const alt_phone = req.body?.alt_phone || null;
     const birthdate = req.body?.birthDate || null;
@@ -32,9 +29,9 @@ export const updatepersonalDetails = async (req, res,) => {
 
   await db.query(
     `
-    INSERT INTO public.member_contact_details (user_id, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes, gender, birthdate)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-    ON CONFLICT (user_id)
+    INSERT INTO public.member_contact_details (user_id, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes, gender, birthdate, gym_id)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+    ON CONFLICT (user_id, gym_id)
     DO UPDATE SET
     whatsapp_number = EXCLUDED.whatsapp_number, 
     alt_phone = EXCLUDED.alt_phone, 
@@ -47,7 +44,7 @@ export const updatepersonalDetails = async (req, res,) => {
     birthdate = EXCLUDED.birthdate,
     updated_at = NOW()
     `,
-    [userId, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes, gender, birthdate]
+    [userId, whatsapp_number, alt_phone, street_address, city, province, postal_code, notes, gender, birthdate, gymId]
   );
     return res.status(200).json({ ok: true, message: "Personal details updated" });
   } catch (err) {
@@ -65,6 +62,7 @@ export const updateEmsDetails = async (req, res) => {
 
   try {
     const userId = req.user?.sub;
+    const gymId = req.gymId;
 
     const ecname = req.body?.ecname || null;
     const relationship = req.body?.relationship || null;
@@ -80,15 +78,15 @@ export const updateEmsDetails = async (req, res) => {
     await client.query(
       `
       DELETE FROM member_emergency_contacts
-      WHERE user_id = $1 AND priority = $2
+      WHERE user_id = $1 AND priority = $2 AND gym_id = $3
       `,
-      [userId, priority]
+      [userId, priority, gymId]
     );
 
     // 2. Check if phone already exists for this user
     const { rows: existing } = await client.query(
-      `SELECT id FROM member_emergency_contacts WHERE user_id = $1 AND phone = $2`,
-      [userId, phone]
+      `SELECT id FROM member_emergency_contacts WHERE user_id = $1 AND phone = $2 AND gym_id = $3`,
+      [userId, phone, gymId]
     );
     if (existing.length > 0) {
       await client.query("ROLLBACK");
@@ -99,17 +97,14 @@ export const updateEmsDetails = async (req, res) => {
     await client.query(
       `
       INSERT INTO member_emergency_contacts
-      (user_id, ecname, relationship, phone, priority, ems_notes, created_at, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW())
+      (user_id, ecname, relationship, phone, priority, ems_notes, created_at, updated_at, gym_id)
+      VALUES ($1, $2, $3, $4, $5, $6, NOW(), NOW(), $7)
       `,
-      [userId, ecname, relationship, phone, priority, ems_notes]
+      [userId, ecname, relationship, phone, priority, ems_notes, gymId]
     );
 
     
-
     await client.query("COMMIT");
-
-    console.log("emergency:", req.body);
 
     return res.status(200).json({
       ok: true,
@@ -133,15 +128,17 @@ export const updateEmsDetails = async (req, res) => {
 export const getEmergencyContacts = async (req, res) => {
   try {
     const userId = req.user?.sub;
+    const gymId = req.gymId;
 
     const { rows } = await db.query(
       `
-      SELECT id, ecname, relationship, phone, priority, ems_notes
+      SELECT id, ecname, relationship, phone, priority, ems_notes, gym_id
       FROM member_emergency_contacts
       WHERE user_id = $1
+      AND gym_id = $2
       ORDER BY priority DESC
       `,
-      [userId]
+      [userId, gymId]
     );
 
     return res.status(200).json({
@@ -164,13 +161,14 @@ export const deleteEmergencyContact = async (req, res) => {
   try {
     const userId = req.user?.sub;
     const contactId = req.params.id;
+    const gymId = req.gymId;
 
     await db.query(
       `
       DELETE FROM member_emergency_contacts
-      WHERE id = $1 AND user_id = $2
+      WHERE id = $1 AND user_id = $2 AND gym_id = $3
       `,
-      [contactId, userId]
+      [contactId, userId, gymId]
     );
 
     return res.status(200).json({ ok: true });
@@ -188,6 +186,7 @@ export const updateHealthRecord = async (req, res) => {
 
   try {
     const userId = req.user?.sub;
+    const gymId = req.gymId;
 
     const medical_conditions = req.body?.medicalConditions || null;
     const injuries = req.body?.injuries || null;
@@ -198,17 +197,12 @@ export const updateHealthRecord = async (req, res) => {
     await client.query("BEGIN");
 
     // Check if record exists
-    const { rows } = await client.query(
-      `SELECT id FROM member_health_records WHERE user_id = $1`,
-      [userId]
-    );
-
-        await client.query(
+      await client.query(
       `
       INSERT INTO member_health_records
-      (user_id, medical_conditions, injuries, health_notes, consent_share_trainer, medication, updated_at)
-      VALUES ($1, $2, $3, $4, $5, $6, NOW())
-      ON CONFLICT (user_id)
+      (user_id, medical_conditions, injuries, health_notes, consent_share_trainer, medication, updated_at, gym_id)
+      VALUES ($1, $2, $3, $4, $5, $6, NOW(), $7)
+      ON CONFLICT (user_id, gym_id)
       DO UPDATE SET
         medical_conditions = EXCLUDED.medical_conditions,
         injuries = EXCLUDED.injuries,
@@ -217,7 +211,7 @@ export const updateHealthRecord = async (req, res) => {
         medication = EXCLUDED.medication,
         updated_at = NOW()
       `,
-      [userId, medical_conditions, injuries, health_notes, consent_share_trainer, medication]
+      [userId, medical_conditions, injuries, health_notes, consent_share_trainer, medication, gymId]
     );
 
     await client.query("COMMIT");

@@ -17,6 +17,7 @@ export const signUp = async (req, res) => {
 
   try {
     const { firstname, lastname, phone, email, password } = req.body;
+    const gymId = req.gymId;
 
     if (!firstname || !lastname || !phone || !email || !password) {
       return res.status(400).json({ 
@@ -26,12 +27,12 @@ export const signUp = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const query = `
-      INSERT INTO users (firstname, lastname, phone, email, password)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, firstname, lastname, phone, email;
+      INSERT INTO users (firstname, lastname, phone, email, password, gym_id)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING id, firstname, lastname, phone, email, gym_id;
     `;
 
-    const values = [firstname, lastname, phone, email, hashedPassword];
+    const values = [firstname, lastname, phone, email, hashedPassword, gymId];
 
     const result = await db.query(query, values);
 

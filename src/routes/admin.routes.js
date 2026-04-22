@@ -8,13 +8,14 @@ import { createClassSession, deleteSession, editSession } from "../controllers/a
 import { viewAdminInsights } from "../controllers/admin/insights.controller.js";
 import { searchMembersController, viewKiosk } from "../controllers/admin/searchMember.controller.js";
 import { createCheckin } from "../controllers/admin/attendance.controller.js";
+import { requireGym } from "../middleware/gym.middleware.js";
 
 
 
 const router = Router();
 
 
-router.use("/admin", requireAuth, requireAdmin);
+router.use("/admin", requireGym, requireAuth, requireAdmin);
 
 // - - - admin dashboard - - - // 
 

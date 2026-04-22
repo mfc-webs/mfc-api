@@ -6,14 +6,14 @@ export const createBooking = async (req, res) => {
   try {
 
     const { session_id } = req.body;
-
     const user_id = req.user?.sub;
+    const gymId = req.gymId;
 
     if (!user_id) {
       return res.status(401).json({ error: "Not authenticated" });
     }
 
-    await bookingService.createBooking(session_id, user_id);
+    await bookingService.createBooking(session_id, user_id, gymId);
 
     res.json({
       ok: true,
@@ -43,18 +43,28 @@ export const createBooking = async (req, res) => {
 export const getMyBookings = async (req,res)=>{
 
   const user_id = req.user?.sub;
+  const gymId = req.gymId;
 
-  const result = await db.query(`
-    SELECT 
-      s.id,
-      c.name AS class_name,
-      TO_CHAR(s.starts_at,'FMDay') AS day,
-      TO_CHAR(s.starts_at,'HH24:MI') AS time
-    FROM class_bookings b
-    JOIN class_sessions s ON s.id = b.session_id
-    JOIN class_types c ON c.id = s.class_type_id
-    WHERE b.user_id = $1
-  `,[user_id]);
+ const result = await db.query(
+  `
+  SELECT 
+    s.id,
+    s.gym_id,
+    c.name AS class_name,
+    TO_CHAR(s.starts_at,'FMDay') AS day,
+    TO_CHAR(s.starts_at,'HH24:MI') AS time
+  FROM class_bookings b
+  JOIN class_sessions s 
+    ON s.id = b.session_id
+    AND s.gym_id = $2
+  JOIN class_types c 
+    ON c.id = s.class_type_id
+    AND c.gym_id = $2
+  WHERE b.user_id = $1
+    AND b.gym_id = $2
+  `,
+  [user_id, gymId]
+);
 
   res.json(result.rows);
 
