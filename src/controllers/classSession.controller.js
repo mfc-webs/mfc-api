@@ -15,7 +15,7 @@ export const getSessions = async (req, res) => {
       s.location,
       s.gym_id,
       c.name AS class_name,
-      (b.id IS NOT NULL) AS enrolled,
+      (b.id IS NOT NULL) AS enrolled
     FROM class_sessions s
     JOIN class_types c 
     ON s.class_type_id = c.id

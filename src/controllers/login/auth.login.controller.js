@@ -47,11 +47,9 @@ export const loginMember = async (req, res) => {
        AND gym_id = $2
      
        LIMIT 1`,
-      [email.toLowerCase(), req.gymId]
+      [email, req.gymId]
     );
 
-    console.log("Resolved gym:", req.gymId);
-    console.log("DB RESULT:", result.rows);
 
     // ✅ Check if user exists
     const user = result.rows[0];

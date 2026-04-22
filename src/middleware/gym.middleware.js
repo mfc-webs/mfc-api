@@ -14,16 +14,23 @@ export const requireGym = async (req, res, next) => {
       [host]
     );
 
-    if (host.includes("localhost")) {
-  const defaultGym = await db.query(
-    "SELECT * FROM gyms LIMIT 1"
-  );
+   if (host.includes("localhost")) {
+        const slug = req.headers["x-gym-slug"] || "gymshack"; // fallback
 
-  req.gym = defaultGym.rows[0];
-  req.gymId = req.gym.id;
+        const gymResult = await db.query(
+          "SELECT * FROM gyms WHERE slug = $1",
+          [slug]
+        );
 
-  return next();
-}
+        if (!gymResult.rows.length) {
+          return res.status(404).json({ error: "Gym not found (dev mode)" });
+        }
+
+        req.gym = gymResult.rows[0];
+        req.gymId = req.gym.id;
+
+        return next();
+      }
 
     if (customDomainResult.rows.length) {
       gym = customDomainResult.rows[0];

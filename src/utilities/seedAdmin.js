@@ -7,15 +7,15 @@ export const seedAdmin = async () => {
 
     const email = process.env.ADMIN_EMAIL;
     const password = process.env.ADMIN_PASSWORD;
-    const gymSlug = process.env.ADMIN_GYM_SLUG;
+    const slug = process.env.ADMIN_GYM_SLUG;
 
     const gymResult = await db.query(
         "SELECT id FROM gyms WHERE slug = $1",
-        [gymSlug]
+        [slug]
       );
 
       if (!gymResult.rows.length) {
-        console.log("Gym not found for seeding.");
+        console.log("Gym not found for seeding. Current try:", slug);
         return;
       }
 
@@ -31,7 +31,7 @@ export const seedAdmin = async () => {
     const existingAdmin = await User.findOne(email, gymId);
 
     if (existingAdmin) {
-      console.log("Admin already exists.");
+      console.log("Admin already exists for:", slug);
       return;
     }
 
@@ -42,13 +42,13 @@ export const seedAdmin = async () => {
 
 
     await User.create({
-      firstname: "Sir",
-      lastname: "Mango",
+      firstname: "Siren",
+      lastname: "Man",
       phone: "0672845741",
       email: process.env.ADMIN_EMAIL,
       password: hashedPassword,
       role: "admin",
-      gym_id: gymId,
+      gymId: gymId,
 
     });
 

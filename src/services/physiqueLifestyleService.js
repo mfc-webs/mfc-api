@@ -1,6 +1,6 @@
 import { db } from '../config/db.js';
 
-export async function getByMemberPhysiqueInfo(userId, gymId) {
+export async function getByMemberphysiqueInfo(userId, gymId) {
   const { rows } = await db.query(
     `
     SELECT *
